@@ -18,6 +18,7 @@ import com.ta.finalexam.Constant.HomeType;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.HomeResponse;
 import com.ta.finalexam.api.Request.HomeRequest;
+import com.ta.finalexam.callback.OnClickRecycleView;
 import com.ta.finalexam.callback.OnMapClick;
 
 import java.io.UnsupportedEncodingException;
@@ -114,8 +115,18 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         vAdapter.setOnMapCallBack(new OnMapClick() {
             @Override
             public void onMapClick(HomeBean homeBean) {
-
                 goToMapAddress(homeBean);
+            }
+        });
+        vAdapter.setOnClickCallBack(new OnClickRecycleView() {
+            @Override
+            public void onFollowResponse() {
+
+            }
+
+            @Override
+            public void onFavouriteResponse() {
+
             }
         });
     }
@@ -138,4 +149,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         }
     }
 
+    private void getFollow() {
+
+    }
 }

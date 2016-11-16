@@ -16,7 +16,7 @@ import vn.app.base.api.volley.core.ObjectApiRequest;
  */
 
 public class HomeRequest extends ObjectApiRequest<HomeResponse> {
-    List<HomeBean> homeBeanList;
+    HomeBean homeBean;
     private int type;
     private long lastQuerryTime;
     private int num;

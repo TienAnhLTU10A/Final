@@ -59,7 +59,7 @@
         android:gravity="center"
         android:text="Isle of Man, UK"
         android:textColor="@color/white"
-        android:textSize="8dp" />
+        android:textSize="10dp" />
 
     <TextView
         android:id="@+id/tvCaption"
