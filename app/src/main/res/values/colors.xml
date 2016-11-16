@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF7E68D3</color>
+    <color name="colorPrimaryDark">#FF7E68D3</color>
+    <color name="colorAccent">#FF4BC0FE</color>
+
+    <color name="linemenu">#2c2449</color>
+
+    <color name="black_transparent">#a0211845</color>
+    <color name="color_btn_follow_bg">#ec2677</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="color_btn_fap">#4bc0fe</color>
+    <color name="edittext_stroke">#FFB2A3E4</color>
+
+    <color name="color_switch_ocean">#FF4BC0FE</color>
+    <color name="color_switch_inactive_grey">#FFC2C2C2</color>
+
+    <color name="color_drawer_header">#FF594993</color>
+    <color name="color_drawer_backgroud">#FF2C2449</color>
+    <color name="color_drawer_decorate">#FFABA3C8</color>
+
+
+
+
+</resources>
