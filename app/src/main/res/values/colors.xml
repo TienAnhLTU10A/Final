@@ -19,6 +19,10 @@
     <color name="color_drawer_backgroud">#FF2C2449</color>
     <color name="color_drawer_decorate">#FFABA3C8</color>
 
+    <color name="purple">#7e68d2</color>
+    <color name="colorPrimary_purple">#7e68d3</color>
+    <color name="colorPurpleTransparent">#a07d67d2</color>
+    <color name="color_btn_skip_bg">#4bc1fe</color>
 
 
 
