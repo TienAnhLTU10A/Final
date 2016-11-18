@@ -18,4 +18,11 @@ public class DetailData {
     @SerializedName("created_at")
     @Expose
     public Integer createdAt;
+
+    public String username;
+
+    public DetailData(String username, String comment) {
+        this.username = username;
+        this.comment = comment;
+    }
 }

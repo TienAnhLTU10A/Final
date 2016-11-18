@@ -43,8 +43,7 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
     TextView tvLocation;
     @BindView(R.id.imageView_like_detail_header)
     FloatingActionButton fabFavorite;
-    @BindView(R.id.btn_follow_detail_header)
-    Button btn_follow;
+   
 
     boolean mFollow, mFavourites;
     int hashtash;
@@ -76,13 +75,13 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
 
 
         if (imageDetailBean.user.isFollowing) {
-            btn_follow.setSelected(true);
-            btn_follow.setBackgroundResource(R.drawable.btn_following);
-            btn_follow.setText("Following");
+            btnFollow.setSelected(true);
+            btnFollow.setBackgroundResource(R.drawable.btn_following);
+            btnFollow.setText("Following");
         } else {
-            btn_follow.setSelected(false);
-            btn_follow.setBackgroundResource(R.drawable.btn_un_following);
-            btn_follow.setText("Follow");
+            btnFollow.setSelected(false);
+            btnFollow.setBackgroundResource(R.drawable.btn_un_following);
+            btnFollow.setText("Follow");
         }
         mFollow = imageDetailBean.user.isFollowing;
 

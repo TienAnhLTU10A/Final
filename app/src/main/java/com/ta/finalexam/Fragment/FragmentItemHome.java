@@ -12,12 +12,14 @@ import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.ta.finalexam.Adapter.HomeAdapter;
+import com.ta.finalexam.Bean.DetailBean.ImageDetailBean;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HomeType;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.HomeResponse;
 import com.ta.finalexam.api.Request.HomeRequest;
+import com.ta.finalexam.callback.GoToDetail;
 import com.ta.finalexam.callback.OnMapClick;
 
 import java.io.UnsupportedEncodingException;
@@ -26,6 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.IntentUtil;
 
 /**
@@ -116,6 +119,13 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             public void onMapClick(HomeBean homeBean) {
 
                 goToMapAddress(homeBean);
+            }
+        });
+        vAdapter.setImageClicked(new GoToDetail() {
+            @Override
+            public void onImageClicked(HomeBean homeBean) {
+                ImageDetailBean imageDetailBean = new ImageDetailBean(homeBean);
+                FragmentUtil.pushFragment(getActivity(), DetailFragment.newInstance(imageDetailBean), null);
             }
         });
     }

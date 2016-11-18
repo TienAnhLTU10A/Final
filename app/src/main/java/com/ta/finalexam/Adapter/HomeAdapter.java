@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import com.ta.finalexam.Adapter.ViewHolder.HomeViewHolder;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.R;
+import com.ta.finalexam.callback.GoToDetail;
 import com.ta.finalexam.callback.OnMapClick;
 
 import java.util.List;
@@ -19,9 +20,14 @@ import vn.app.base.adapter.AdapterWithItemClick;
 public class HomeAdapter extends AdapterWithItemClick<HomeViewHolder> {
     List<HomeBean> homeBeanList;
     OnMapClick onMapCallBack;
+    GoToDetail imageClicked;
 
     public void setOnMapCallBack(OnMapClick onMapCallBack) {
         this.onMapCallBack = onMapCallBack;
+    }
+
+    public void setImageClicked (GoToDetail imageClicked) {
+        this.imageClicked = imageClicked;
     }
 
     public HomeAdapter(List<HomeBean> homeBeanList) {
@@ -36,7 +42,7 @@ public class HomeAdapter extends AdapterWithItemClick<HomeViewHolder> {
 
     @Override
     public void onBindViewHolder(HomeViewHolder holder, int position) {
-        holder.bind(homeBeanList.get(position) , onMapCallBack);
+        holder.bind(homeBeanList.get(position) , onMapCallBack, imageClicked);
     }
 
     @Override

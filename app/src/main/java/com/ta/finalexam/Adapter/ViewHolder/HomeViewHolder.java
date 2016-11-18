@@ -10,13 +10,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.maps.model.LatLng;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
+import com.ta.finalexam.Fragment.FollowlistFragment;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.RoundedCornersTransformation;
+import com.ta.finalexam.callback.GoToDetail;
 import com.ta.finalexam.callback.OnMapClick;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.adapter.viewholder.OnClickViewHolder;
+import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.StringUtil;
 
 /**
@@ -27,6 +30,7 @@ public class HomeViewHolder extends OnClickViewHolder {
     public static int sCorner = 15;
     public static int sMargin = 2;
     OnMapClick onMapCallBack;
+    GoToDetail imageClicked;
     private HomeBean homeBean;
 
     @BindView(R.id.ivAvatar)
@@ -60,8 +64,9 @@ public class HomeViewHolder extends OnClickViewHolder {
         super(itemView);
     }
 
-    public void bind(HomeBean homeBean , OnMapClick onMapClick) {
+    public void bind(HomeBean homeBean , OnMapClick onMapClick, GoToDetail goToDetail) {
         this.onMapCallBack = onMapClick;
+        this.imageClicked = goToDetail;
         this.homeBean = homeBean;
         Glide.with(itemView.getContext()).load(homeBean.user.avatar)
                 .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(),sCorner,sMargin)).into(ivUserPhoto);
@@ -106,7 +111,10 @@ public class HomeViewHolder extends OnClickViewHolder {
 
     @OnClick(R.id.ivPhotoPreview)
     public void gotoDetailScreen() {
-        //goi framentdetail
+        if (imageClicked != null){
+            imageClicked.onImageClicked(homeBean);
+        }
+
     }
 
 }
