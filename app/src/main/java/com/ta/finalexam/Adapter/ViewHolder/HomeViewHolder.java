@@ -103,4 +103,10 @@ public class HomeViewHolder extends OnClickViewHolder {
             onMapCallBack.onMapClick(homeBean);
         }
     }
+
+    @OnClick(R.id.ivPhotoPreview)
+    public void gotoDetailScreen() {
+        //goi framentdetail
+    }
+
 }

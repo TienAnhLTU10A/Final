@@ -2,7 +2,7 @@ package com.ta.finalexam.api.Request;
 
 import com.android.volley.Request;
 import com.ta.finalexam.Constant.ApiConstance;
-import com.ta.finalexam.api.TutorialResponse;
+import com.ta.finalexam.api.FollowlistResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,15 +10,13 @@ import java.util.Map;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.constant.ApiParam;
 
-
 /**
- * Created by Veteran Commander on 10/21/2016.
+ * Created by Veteran Commander on 11/16/2016.
  */
 
-public class TutRequest extends ObjectApiRequest<TutorialResponse> {
+public class FollowlistRequest extends ObjectApiRequest<FollowlistResponse> {
 
-
-
+    public static final String URLFOLLOWLIST = "https://polar-plains-86888.herokuapp.com/api/followlist";
     @Override
     public boolean isRequiredAuthorization() {
         return true;
@@ -26,19 +24,13 @@ public class TutRequest extends ObjectApiRequest<TutorialResponse> {
 
     @Override
     public String getRequestURL() {
-        return ApiConstance.URLTUT;
+        return URLFOLLOWLIST;
     }
 
     @Override
     public boolean isRequiredAccessToken() {
         return false;
     }
-
-    @Override
-    public Map<String, String> getRequestParams() {
-        return null;
-    }
-
 
     @Override
     public Map<String, String> getRequestHeaders() {
@@ -48,8 +40,13 @@ public class TutRequest extends ObjectApiRequest<TutorialResponse> {
     }
 
     @Override
-    public Class<TutorialResponse> getResponseClass() {
-        return TutorialResponse.class;
+    public Map<String, String> getRequestParams() {
+        return null;
+    }
+
+    @Override
+    public Class<FollowlistResponse> getResponseClass() {
+        return FollowlistResponse.class;
     }
 
     @Override

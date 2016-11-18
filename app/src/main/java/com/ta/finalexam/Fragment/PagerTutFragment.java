@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ta.finalexam.Bean.TutorialBean.TutorialBean;
-import com.ta.finalexam.Bean.TutorialBean.User;
+import com.ta.finalexam.Bean.UserBean;
 import com.ta.finalexam.R;
 
 import butterknife.BindView;
@@ -40,7 +40,7 @@ public class PagerTutFragment extends NoHeaderFragment {
     public static final String TUT_SHOWAVA = "ShowAva";
     public static final String TUT_IMG = "Image";
 
-    public static PagerTutFragment newInstance(TutorialBean tutorialBean, User user) {
+    public static PagerTutFragment newInstance(TutorialBean tutorialBean, UserBean user) {
         PagerTutFragment newFragment = new PagerTutFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TUT_AVA, user.avatar);

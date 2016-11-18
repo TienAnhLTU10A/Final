@@ -1,11 +1,13 @@
-package com.ta.finalexam.Bean.HomeBean;
+package com.ta.finalexam.Bean;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+/**
+ * Created by Veteran Commander on 11/18/2016.
+ */
 
-
+public class MemberBean {
     @SerializedName("_id")
     @Expose
     public String id;
@@ -18,5 +20,4 @@ public class User {
     @SerializedName("is_following")
     @Expose
     public Boolean isFollowing;
-
 }

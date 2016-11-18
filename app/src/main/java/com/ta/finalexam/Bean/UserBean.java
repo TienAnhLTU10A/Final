@@ -1,4 +1,4 @@
-package com.ta.finalexam.Bean.TutorialBean;
+package com.ta.finalexam.Bean;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Veteran Commander on 11/16/2016.
  */
 
-public class User {
+public class UserBean {
     @SerializedName("_id")
     @Expose
     public String id;

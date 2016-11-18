@@ -36,6 +36,19 @@ public class ApiConstance {
     public static final String HASHTAG = "HASHTAG";
     public static final String IMAGE = "IMAGE";
 
+    //Tutorial
+    public static final String URLTUT = "https://polar-plains-86888.herokuapp.com/api/tutorial";
+
+    //Nearby
+    public static final String URLNEARBY = "https://polar-plains-86888.herokuapp.com/api/nearby";
+    public static final String LATNEAR = "lat";
+    public static final String LONGNEAR = "long";
+    //Detail
+    public static final String URLCOMMENTLIST = "https://polar-plains-86888.herokuapp.com/api/commentlist";
+    public static final String URLCOMMENT = "https://polar-plains-86888.herokuapp.com/api/comment";
+    public static final String IMAGEID = "imageId";
+    public static final String COMMENT = "comment";
+
 }
 
 

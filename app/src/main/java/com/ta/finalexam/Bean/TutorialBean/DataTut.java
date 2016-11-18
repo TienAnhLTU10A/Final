@@ -2,6 +2,7 @@ package com.ta.finalexam.Bean.TutorialBean;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ta.finalexam.Bean.UserBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,5 +17,5 @@ public class DataTut {
     public List<TutorialBean> tutorial = new ArrayList<TutorialBean>();
     @SerializedName("user")
     @Expose
-    public User user;
+    public UserBean user;
 }

@@ -11,9 +11,11 @@ import android.widget.Toast;
 import com.ta.finalexam.Bean.HeaderControlBean;
 import com.ta.finalexam.Bean.TutorialBean.TutorialBean;
 import com.ta.finalexam.Constant.HeaderOption;
+import com.ta.finalexam.Fragment.FollowlistFragment;
 import com.ta.finalexam.Fragment.FragmentHome;
 import com.ta.finalexam.Fragment.FragmentImageUpload;
 import com.ta.finalexam.Fragment.FragmentMenu;
+import com.ta.finalexam.Fragment.NearbyFragment;
 import com.ta.finalexam.Fragment.TutorialFragment;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -74,8 +76,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     @Override
     public void initView() {
 
-//        setUpInitScreen(FragmentHome.newInstance(), null);
-        setUpInitScreen(TutorialFragment.newInstance(), null);
+        setUpInitScreen(FragmentHome.newInstance(), null);
     }
 
     @Override
@@ -193,9 +194,11 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 break;
             case 4:
                 //TODO nearby
+                FragmentUtil.pushFragment(getSupportFragmentManager(), NearbyFragment.newInstance(), null);
                 break;
             case 5:
                 //TODO Follow
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FollowlistFragment.newInstance(), null);
                 break;
             case 6:
                 UserManager.clearUserData();
