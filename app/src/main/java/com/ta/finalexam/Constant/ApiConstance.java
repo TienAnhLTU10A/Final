@@ -18,9 +18,20 @@ public class ApiConstance {
     public static final String TOKEN_CODE = "1fc4747d2677949478c144ab5324787c";
     public static final String TOKEN = "TOKEN";
 
+    //Login + register
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String API_BASE_URL ="https://polar-plains-86888.herokuapp.com/";
+    public static final String LOGIN = API_BASE_URL + "api/login";
+    public static final String REGISTER = API_BASE_URL + "api/regist";
+
     public static final int CAMERA_REQUEST_CODE = 977;
     public static final int CAMERA_REQQUEST_CROP = 927;
     public static final String PHOTO_FILE_NAME = "photo.jpg";
+
+    public static final int REQUEST_CODE_PICKPHOTO = 99;
+    public static final int REQUEST_CODE_TAKEPHOTO= 100;
+    public static final String AVATAR_PHOTO = "photo_avatar.jpg";
 
     //ImageUpload Time
     public static final long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */

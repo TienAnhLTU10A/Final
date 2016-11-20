@@ -24,6 +24,14 @@
     <color name="colorPurpleTransparent">#a07d67d2</color>
     <color name="color_btn_skip_bg">#4bc1fe</color>
 
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlue">#4ac1fe</color>
+    <color name="colorTrong">#00ffffff</color>
+    <color name="colorPurpleDam">#a0211845</color>
+    <color name="colorPurple">#7d67d2</color>
+    <color name="colorBlueDam">#6d9ff2</color>
+    <color name="colorRed">#e72573</color>
+
 
 
 </resources>

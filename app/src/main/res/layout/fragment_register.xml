@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imgBg"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/login_bg" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPurpleTransparent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="130dp"
+        android:id="@+id/lnUser"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/tvUser"
+            android:hint="Username"
+            android:layout_marginTop="30dp"
+            style="@style/register_tv"/>
+
+        <EditText
+            style="@style/register_et"
+            android:id="@+id/etUser"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/lnEmail"
+        android:paddingTop="15dp"
+        android:layout_marginTop="230dp">
+        <TextView
+            android:id="@+id/tvEmail"
+            style="@style/register_tv"
+            android:hint="Email" />
+
+        <EditText
+            style="@style/register_et"
+            android:id="@+id/etEmail"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lnPass"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:layout_below="@id/lnEmail">
+        <TextView
+            android:id="@+id/tvPass"
+            style="@style/register_tv"
+            android:hint="Password" />
+
+        <EditText
+            style="@style/register_et"
+            android:id="@+id/etPass"
+            android:layout_marginTop="5dp"
+            android:inputType="textPassword"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lnConfirm"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:layout_below="@id/lnPass">
+        <TextView
+            android:id="@+id/tvConfirm"
+            android:hint="Confirm Password"
+            android:textSize="20dp"
+            style="@style/register_tv"/>
+
+        <EditText
+            style="@style/register_et"
+            android:id="@+id/etConfirm"
+            android:layout_marginTop="5dp"
+            android:inputType="textPassword"/>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="SIGN UP"
+        android:textColorHint="@color/colorWhite"
+        android:background="@color/colorBlue"
+        android:id="@+id/btnSignUp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@id/lnConfirm"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/placeholer_avatar"
+        android:layout_marginTop="30dp"
+        android:id="@+id/ivAvatar"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
+
+
+
+</RelativeLayout>

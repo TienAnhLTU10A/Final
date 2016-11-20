@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import vn.app.base.api.volley.core.ObjectApiRequest;
+import vn.app.base.util.SharedPrefUtils;
 
 /**
  * Created by kooryy2 on 10/31/2016.
@@ -54,7 +55,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     @Override
     public Map<String, String> getRequestHeaders() {
         Map<String, String> header = new HashMap<>();
-        header.put(ApiConstance.TOKEN, ApiConstance.TOKEN_CODE);
+        header.put(ApiConstance.TOKEN, SharedPrefUtils.getAccessToken());
         return header;
     }
 

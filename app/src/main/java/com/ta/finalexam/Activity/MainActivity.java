@@ -15,6 +15,7 @@ import com.ta.finalexam.Fragment.FollowlistFragment;
 import com.ta.finalexam.Fragment.FragmentHome;
 import com.ta.finalexam.Fragment.FragmentImageUpload;
 import com.ta.finalexam.Fragment.FragmentMenu;
+import com.ta.finalexam.Fragment.LoginFragment;
 import com.ta.finalexam.Fragment.NearbyFragment;
 import com.ta.finalexam.Fragment.TutorialFragment;
 import com.ta.finalexam.R;
@@ -76,7 +77,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     @Override
     public void initView() {
 
-        setUpInitScreen(FragmentHome.newInstance(), null);
+        setUpInitScreen(LoginFragment.newInstance(), null);
     }
 
     @Override
