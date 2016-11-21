@@ -8,6 +8,7 @@ import java.util.Map;
 
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.core.ObjectApiRequest;
+import vn.app.base.util.SharedPrefUtils;
 
 /**
  * Created by Veteran Commander on 11/18/2016.
@@ -40,7 +41,7 @@ public class CommentRequest extends ObjectApiRequest<BaseResponse> {
     @Override
     public Map<String, String> getRequestHeaders() {
         Map<String, String> header = new HashMap<>();
-        header.put(ApiConstance.TOKEN, ApiConstance.TOKEN_CODE);
+        header.put(ApiConstance.TOKEN, SharedPrefUtils.getAccessToken());
         return header;
     }
 

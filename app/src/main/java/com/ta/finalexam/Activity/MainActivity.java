@@ -17,6 +17,7 @@ import com.ta.finalexam.Fragment.FragmentImageUpload;
 import com.ta.finalexam.Fragment.FragmentMenu;
 import com.ta.finalexam.Fragment.LoginFragment;
 import com.ta.finalexam.Fragment.NearbyFragment;
+import com.ta.finalexam.Fragment.RegisterFragment;
 import com.ta.finalexam.Fragment.TutorialFragment;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -76,8 +77,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @Override
     public void initView() {
-
-        setUpInitScreen(LoginFragment.newInstance(), null);
+//        setUpInitScreen(LoginFragment.newInstance(), null);
+        setUpInitScreen(RegisterFragment.newInstance(), null);
     }
 
     @Override
@@ -202,8 +203,9 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FollowlistFragment.newInstance(), null);
                 break;
             case 6:
-                UserManager.clearUserData();
                 //TODO LOGOUT
+                UserManager.clearUserData();
+                FragmentUtil.pushFragment(getSupportFragmentManager(), LoginFragment.newInstance(), null);
                 break;
         }
     }

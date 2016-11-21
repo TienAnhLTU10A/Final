@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import vn.app.base.api.volley.core.ObjectApiRequest;
+import vn.app.base.util.SharedPrefUtils;
 
 /**
  * Created by Veteran Commander on 11/18/2016.
@@ -41,7 +42,7 @@ public class NearbyRequest extends ObjectApiRequest<NearbyResponse> {
     @Override
     public Map<String, String> getRequestHeaders() {
         Map<String, String> header = new HashMap<>();
-        header.put(ApiConstance.TOKEN, ApiConstance.TOKEN_CODE);
+        header.put(ApiConstance.TOKEN, SharedPrefUtils.getAccessToken());
         return header;
     }
 

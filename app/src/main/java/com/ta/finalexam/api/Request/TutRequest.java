@@ -9,6 +9,7 @@ import java.util.Map;
 
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.constant.ApiParam;
+import vn.app.base.util.SharedPrefUtils;
 
 
 /**
@@ -43,7 +44,7 @@ public class TutRequest extends ObjectApiRequest<TutorialResponse> {
     @Override
     public Map<String, String> getRequestHeaders() {
         Map<String,String> newHeader = new HashMap<>();
-        newHeader.put(ApiParam.TOKEN, ApiConstance.TOKEN_CODE);
+        newHeader.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
         return newHeader;
     }
 

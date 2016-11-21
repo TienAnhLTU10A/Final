@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.api.volley.bean.ErrorMessage;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.util.DebugLog;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.KeyboardUtil;
@@ -34,7 +35,7 @@ public class LoginFragment extends NoHeaderFragment {
     String user;
     String pass;
 
-    LoginResponse loginResponse;
+
     @BindView(R.id.etLogin)
     EditText etLogin;
 
@@ -97,8 +98,13 @@ public class LoginFragment extends NoHeaderFragment {
         loginRequest.setRequestCallBack(new ApiObjectCallBack<LoginResponse>() {
             @Override
             public void onSuccess(LoginResponse data) {
-                loginResponse = data;
-                handleLoginSuccess(data);
+                if (data.status == 1) {
+                    DebugLog.i("Token lay dc " + data.data.token);
+                    SharedPrefUtils.saveAccessToken(data.data.token);
+                    DebugLog.i("Token la" + SharedPrefUtils.getAccessToken());
+                    UserManager.saveCurrentUser(data.data);
+                    FragmentUtil.pushFragment(getActivity(), new FragmentHome(), null);
+                } else Toast.makeText(getActivity(), "Fail roi", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -111,13 +117,5 @@ public class LoginFragment extends NoHeaderFragment {
         loginRequest.execute();
         KeyboardUtil.hideKeyboard(getActivity());
         showCoverNetworkLoading();
-    }
-
-    private void handleLoginSuccess(LoginResponse loginResponse) {
-        if (loginResponse.dataBean != null) {
-            SharedPrefUtils.saveAccessToken(loginResponse.token);
-            UserManager.saveCurrentUser(loginResponse.dataBean);
-            FragmentUtil.replaceFragment(getActivity(), new FragmentHome(), null);
-        }
     }
 }
