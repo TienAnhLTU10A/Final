@@ -186,9 +186,7 @@ public class RegisterFragment extends NoHeaderFragment {
 
     private void takePhoto() {
         Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        uri = Uri.fromFile(creatFileUri(getActivity()));
         getCamera.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(ApiConstance.AVATAR_PHOTO));
-        getCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         if (getCamera.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(getCamera, ApiConstance.REQUEST_CODE_TAKEPHOTO);
         }
