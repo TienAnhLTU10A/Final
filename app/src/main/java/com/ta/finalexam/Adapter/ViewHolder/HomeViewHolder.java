@@ -1,6 +1,5 @@
 package com.ta.finalexam.Adapter.ViewHolder;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -8,9 +7,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.maps.model.LatLng;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
-import com.ta.finalexam.Fragment.FollowlistFragment;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.RoundedCornersTransformation;
 import com.ta.finalexam.callback.GoToDetail;
@@ -19,7 +16,6 @@ import com.ta.finalexam.callback.OnMapClick;
 import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.adapter.viewholder.OnClickViewHolder;
-import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.StringUtil;
 
 /**

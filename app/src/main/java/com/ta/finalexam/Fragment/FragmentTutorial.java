@@ -20,12 +20,12 @@ import vn.app.base.api.volley.callback.ApiObjectCallBack;
  * Created by Veteran Commander on 10/21/2016.
  */
 
-public class TutorialFragment extends NoHeaderFragment {
+public class FragmentTutorial extends NoHeaderFragment {
     DataTut dataTut;
     TutViewPagerAdapter tutViewPagerAdapter;
 
-    public static TutorialFragment newInstance() {
-        TutorialFragment newFragment = new TutorialFragment();
+    public static FragmentTutorial newInstance() {
+        FragmentTutorial newFragment = new FragmentTutorial();
         return newFragment;
     }
 

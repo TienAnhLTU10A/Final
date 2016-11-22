@@ -42,7 +42,7 @@ import static java.lang.String.valueOf;
  * Created by Veteran Commander on 10/17/2016.
  */
 
-public class NearbyFragment extends HeaderFragment implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,
+public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,
                                                                 GoogleApiClient.OnConnectionFailedListener {
     private GoogleMap mMap;
 
@@ -67,8 +67,8 @@ public class NearbyFragment extends HeaderFragment implements OnMapReadyCallback
 //    @BindView(R.id.map)
 //    SupportMapFragment mapFragment;
 
-    public static NearbyFragment newInstance() {
-        NearbyFragment newFragment = new NearbyFragment();
+    public static FragmentNearby newInstance() {
+        FragmentNearby newFragment = new FragmentNearby();
         return newFragment;
     }
 
@@ -202,6 +202,7 @@ public class NearbyFragment extends HeaderFragment implements OnMapReadyCallback
                 DebugLog.e(message);
             }
         });
+        nearbyRequest.execute();
     }
 
     @Override

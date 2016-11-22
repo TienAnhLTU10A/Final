@@ -29,7 +29,9 @@
         android:layout_below="@+id/imgLogo"
         android:layout_marginTop="50dp"
         android:id="@+id/etLogin"
-        android:lines="1"/>
+        android:inputType="text"
+        android:lines="1"
+        android:imeOptions="actionNext"/>
 
     <EditText
         style="@style/login_et_bg"
@@ -38,7 +40,8 @@
         android:inputType="textPassword"
         android:layout_below="@id/etLogin"
         android:layout_marginTop="20dp"
-        android:lines="1"/>
+        android:lines="1"
+        android:imeOptions="actionDone"/>
 
     <Button
         android:layout_width="match_parent"

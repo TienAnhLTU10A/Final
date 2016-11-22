@@ -9,16 +9,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ta.finalexam.Bean.HeaderControlBean;
-import com.ta.finalexam.Bean.TutorialBean.TutorialBean;
 import com.ta.finalexam.Constant.HeaderOption;
-import com.ta.finalexam.Fragment.FollowlistFragment;
+import com.ta.finalexam.Fragment.FragmentFollowlist;
 import com.ta.finalexam.Fragment.FragmentHome;
 import com.ta.finalexam.Fragment.FragmentImageUpload;
+import com.ta.finalexam.Fragment.FragmentLogin;
 import com.ta.finalexam.Fragment.FragmentMenu;
-import com.ta.finalexam.Fragment.LoginFragment;
-import com.ta.finalexam.Fragment.NearbyFragment;
-import com.ta.finalexam.Fragment.RegisterFragment;
-import com.ta.finalexam.Fragment.TutorialFragment;
+import com.ta.finalexam.Fragment.FragmentNearby;
+import com.ta.finalexam.Fragment.FragmentRegister;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
 
@@ -77,8 +75,13 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @Override
     public void initView() {
-//        setUpInitScreen(LoginFragment.newInstance(), null);
-        setUpInitScreen(RegisterFragment.newInstance(), null);
+        if (UserManager.getCurrentUser() == null) {
+            setUpInitScreen(FragmentLogin.newInstance(), null);
+        } else {
+            setUpInitScreen(FragmentHome.newInstance(), null);
+        }
+
+
     }
 
     @Override
@@ -183,7 +186,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                Toast.makeText(this,"aaaaa", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "aaaaa", Toast.LENGTH_LONG).show();
                 break;
             case 1:
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
@@ -196,16 +199,16 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 break;
             case 4:
                 //TODO nearby
-                FragmentUtil.pushFragment(getSupportFragmentManager(), NearbyFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentNearby.newInstance(), null);
                 break;
             case 5:
                 //TODO Follow
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FollowlistFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentFollowlist.newInstance(), null);
                 break;
             case 6:
                 //TODO LOGOUT
                 UserManager.clearUserData();
-                FragmentUtil.pushFragment(getSupportFragmentManager(), LoginFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
         }
     }

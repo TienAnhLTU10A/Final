@@ -18,7 +18,7 @@ import vn.app.base.util.StringUtil;
  * Created by Veteran Commander on 10/21/2016.
  */
 
-public class PagerTutFragment extends NoHeaderFragment {
+public class FragmentPagerTut extends NoHeaderFragment {
 
     @BindView(R.id.iv_tut_ava)
     CircleImageView ivAvatar;
@@ -40,8 +40,8 @@ public class PagerTutFragment extends NoHeaderFragment {
     public static final String TUT_SHOWAVA = "ShowAva";
     public static final String TUT_IMG = "Image";
 
-    public static PagerTutFragment newInstance(TutorialBean tutorialBean, UserBean user) {
-        PagerTutFragment newFragment = new PagerTutFragment();
+    public static FragmentPagerTut newInstance(TutorialBean tutorialBean, UserBean user) {
+        FragmentPagerTut newFragment = new FragmentPagerTut();
         Bundle bundle = new Bundle();
         bundle.putString(TUT_AVA, user.avatar);
         bundle.putString(TUT_TITLE, tutorialBean.title);

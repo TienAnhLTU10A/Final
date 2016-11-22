@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.ta.finalexam.Bean.DetailBean.ImageDetailBean;
+import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.RoundedCornersTransformation;
 
@@ -43,7 +43,7 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
     TextView tvLocation;
     @BindView(R.id.imageView_like_detail_header)
     FloatingActionButton fabFavorite;
-   
+
 
     boolean mFollow, mFavourites;
     int hashtash;
@@ -53,28 +53,28 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
     }
 
 
-    public void bind(ImageDetailBean imageDetailBean){
-        ImageLoader.loadImage(itemView.getContext(),imageDetailBean.image.url,ivContent);
-        Glide.with(itemView.getContext()).load(imageDetailBean.user.avatar)
+    public void bind(HomeBean homeBean){
+        ImageLoader.loadImage(itemView.getContext(),homeBean.image.url,ivContent);
+        Glide.with(itemView.getContext()).load(homeBean.user.avatar)
                 .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(),sCorner,sMargin)).into(ivAvatar);
-        hashtash = imageDetailBean.image.hashtag.size();
+        hashtash = homeBean.image.hashtag.size();
         for (int i = 0; i < hashtash; i++) {
-            StringUtil.displayText(imageDetailBean.image.hashtag.get(i), tvHashtag);
+            StringUtil.displayText(homeBean.image.hashtag.get(i), tvHashtag);
         }
 
-        StringUtil.displayText(imageDetailBean.image.location, tvLocation);
-        StringUtil.displayText(imageDetailBean.user.username, tvUserName);
-        StringUtil.displayText(imageDetailBean.image.caption, tvLabel);
+        StringUtil.displayText(homeBean.image.location, tvLocation);
+        StringUtil.displayText(homeBean.user.username, tvUserName);
+        StringUtil.displayText(homeBean.image.caption, tvLabel);
 
-        if (imageDetailBean.image.isFavourite) {
+        if (homeBean.image.isFavourite) {
             fabFavorite.setImageResource(R.drawable.icon_favourite);
         } else {
             fabFavorite.setImageResource(R.drawable.icon_no_favourite);
         }
-        mFavourites = imageDetailBean.image.isFavourite;
+        mFavourites = homeBean.image.isFavourite;
 
 
-        if (imageDetailBean.user.isFollowing) {
+        if (homeBean.user.isFollowing) {
             btnFollow.setSelected(true);
             btnFollow.setBackgroundResource(R.drawable.btn_following);
             btnFollow.setText("Following");
@@ -83,7 +83,7 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
             btnFollow.setBackgroundResource(R.drawable.btn_un_following);
             btnFollow.setText("Follow");
         }
-        mFollow = imageDetailBean.user.isFollowing;
+        mFollow = homeBean.user.isFollowing;
 
     }
 }

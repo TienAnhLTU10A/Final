@@ -33,6 +33,8 @@
         <EditText
             style="@style/register_et"
             android:id="@+id/etUser"
+            android:inputType="text"
+            android:imeOptions="actionNext"
             android:layout_marginTop="5dp" />
     </LinearLayout>
 
@@ -52,6 +54,8 @@
         <EditText
             style="@style/register_et"
             android:id="@+id/etEmail"
+            android:inputType="text"
+            android:imeOptions="actionNext"
             android:layout_marginTop="5dp" />
     </LinearLayout>
 
@@ -70,6 +74,7 @@
         <EditText
             style="@style/register_et"
             android:id="@+id/etPass"
+            android:imeOptions="actionNext"
             android:layout_marginTop="5dp"
             android:inputType="textPassword"/>
     </LinearLayout>
@@ -90,6 +95,7 @@
         <EditText
             style="@style/register_et"
             android:id="@+id/etConfirm"
+            android:imeOptions="actionDone"
             android:layout_marginTop="5dp"
             android:inputType="textPassword"/>
     </LinearLayout>
@@ -106,7 +112,7 @@
         android:layout_marginLeft="50dp"
         android:layout_below="@id/lnConfirm"/>
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/placeholer_avatar"
@@ -115,8 +121,12 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-
-
-
+    <!--&lt;!&ndash; Image Cropper fill the remaining available height &ndash;&gt;-->
+    <!--<com.theartofdev.edmodo.cropper.CropImageView-->
+        <!--xmlns:custom="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/cropImageView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"/>-->
 
 </RelativeLayout>

@@ -8,15 +8,13 @@ import android.widget.ImageView;
 
 import com.ta.finalexam.Adapter.ImageDetailListAdapter;
 import com.ta.finalexam.Bean.DetailBean.DetailData;
-import com.ta.finalexam.Bean.DetailBean.ImageDetailBean;
-import com.ta.finalexam.Bean.HomeBean.Image;
+import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.CommentListResponse;
 import com.ta.finalexam.api.Request.CommentListRequest;
 import com.ta.finalexam.api.Request.CommentRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,7 +28,7 @@ import vn.app.base.util.DebugLog;
  * Created by Veteran Commander on 10/19/2016.
  */
 
-public class DetailFragment extends BaseHeaderListFragment {
+public class FragmentDetail extends BaseHeaderListFragment {
 
     @BindView(R.id.edt_send_cm)
     EditText edtSendCm;
@@ -59,15 +57,15 @@ public class DetailFragment extends BaseHeaderListFragment {
 
     }
 
-    ImageDetailBean slImage;
+    HomeBean slImage;
 
     ImageDetailListAdapter imageDetailListAdapter;
 
     List<DetailData> commentList;
 
-    public static DetailFragment newInstance(ImageDetailBean imageDetailBean) {
-        DetailFragment newFragment = new DetailFragment();
-        newFragment.slImage = imageDetailBean;
+    public static FragmentDetail newInstance(HomeBean homeBean) {
+        FragmentDetail newFragment = new FragmentDetail();
+        newFragment.slImage = homeBean;
         return newFragment;
 
     }

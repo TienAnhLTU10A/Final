@@ -6,6 +6,7 @@ import com.ta.finalexam.Adapter.ViewHolder.DetailHeaderViewHolder;
 import com.ta.finalexam.Adapter.ViewHolder.DetailItemViewHolder;
 import com.ta.finalexam.Bean.DetailBean.DetailData;
 import com.ta.finalexam.Bean.DetailBean.ImageDetailBean;
+import com.ta.finalexam.Bean.HomeBean.HomeBean;
 
 import vn.app.base.adapter.HeaderAdapterWithItemClick;
 import vn.app.base.adapter.viewholder.OnClickViewHolder;
@@ -15,7 +16,7 @@ import vn.app.base.util.UiUtil;
  * Created by Veteran Commander on 10/26/2016.
  */
 
-public class ImageDetailListAdapter extends HeaderAdapterWithItemClick<OnClickViewHolder,ImageDetailBean,DetailData,String> {
+public class ImageDetailListAdapter extends HeaderAdapterWithItemClick<OnClickViewHolder,HomeBean,DetailData,String> {
 
 
     @Override

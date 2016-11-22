@@ -1,9 +1,12 @@
 package com.ta.finalexam.Fragment;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ta.finalexam.R;
@@ -17,7 +20,6 @@ import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import vn.app.base.api.volley.bean.ErrorMessage;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.DialogUtil;
@@ -30,7 +32,7 @@ import vn.app.base.util.StringUtil;
  * Created by 3543 on 10/14/2016.
  */
 
-public class LoginFragment extends NoHeaderFragment {
+public class FragmentLogin extends NoHeaderFragment {
 
     String user;
     String pass;
@@ -48,9 +50,9 @@ public class LoginFragment extends NoHeaderFragment {
     @BindView(R.id.btnCreateAccount)
     Button btnCreate;
 
-    public static LoginFragment newInstance() {
-        LoginFragment loginFragment = new LoginFragment();
-        return loginFragment;
+    public static FragmentLogin newInstance() {
+        FragmentLogin fragmentLogin = new FragmentLogin();
+        return fragmentLogin;
     }
 
     @Override
@@ -60,6 +62,17 @@ public class LoginFragment extends NoHeaderFragment {
 
     @Override
     protected void initView(View root) {
+        super.initView(root);
+        etPass.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    login();
+                    return true;
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -74,7 +87,7 @@ public class LoginFragment extends NoHeaderFragment {
 
     @OnClick(R.id.btnCreateAccount)
     public void goToRegisterFragment() {
-        FragmentUtil.pushFragment(getActivity(), RegisterFragment.newInstance(), null);
+        FragmentUtil.pushFragment(getActivity(), FragmentRegister.newInstance(), null);
     }
 
     @OnClick(R.id.btnLogin)
@@ -117,5 +130,9 @@ public class LoginFragment extends NoHeaderFragment {
         loginRequest.execute();
         KeyboardUtil.hideKeyboard(getActivity());
         showCoverNetworkLoading();
+    }
+    @OnClick(R.id.btnCreateAccount)
+    public void gotoRegister(){
+        FragmentUtil.pushFragment(getActivity(), new FragmentRegister(), null);
     }
 }

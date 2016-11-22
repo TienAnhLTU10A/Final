@@ -83,6 +83,18 @@ public class FragmentMenu extends CommonFragment  {
         selectItem(2);
     }
 
+    @OnClick(R.id.menu_4)
+    public void onFavourite(){selectItem(3);}
+
+    @OnClick(R.id.menu_5)
+    public void onNearby(){selectItem(4);}
+
+    @OnClick(R.id.menu_6)
+    public void onFollow(){selectItem(5);}
+
+    @OnClick(R.id.menu_7)
+    public void onLogout(){selectItem(6);}
+
     @Override
     protected void getArgument(Bundle bundle) {
 
@@ -112,18 +124,23 @@ public class FragmentMenu extends CommonFragment  {
     public View getMenuByPosition(int position) {
         switch (position) {
             case 0:
+                //UserProfile
                 return menu_1;
             case 1:
+                //Home
                 return menu_2;
             case 2:
+                //Post Image
                 return menu_3;
             case 3:
+                //
                 return menu_4;
             case 4:
                 return menu_5;
             case 5:
                 return menu_6;
             case 6:
+                //Logout
                 return menu_7;
             default:
                 return null;

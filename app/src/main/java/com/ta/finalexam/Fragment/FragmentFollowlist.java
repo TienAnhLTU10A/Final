@@ -22,12 +22,12 @@ import vn.app.base.util.DebugLog;
  * Created by Veteran Commander on 10/14/2016.
  */
 
-public class FollowlistFragment extends BaseHeaderListFragment {
+public class FragmentFollowlist extends BaseHeaderListFragment {
 //    List<Member> memberFollowList;
     FollowListAdapter followListAdapter;
 
-    public static FollowlistFragment newInstance(){
-        FollowlistFragment newFragment = new FollowlistFragment();
+    public static FragmentFollowlist newInstance(){
+        FragmentFollowlist newFragment = new FragmentFollowlist();
         return newFragment;
     }
 
@@ -101,6 +101,7 @@ public class FollowlistFragment extends BaseHeaderListFragment {
                 DebugLog.e("Error" + failCode + message);
             }
         });
+        followlistRequest.execute();
     }
 
     private void handleFollowlistdata(List<MemberBean> dataFollowList){

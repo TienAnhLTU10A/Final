@@ -124,8 +124,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         vAdapter.setImageClicked(new GoToDetail() {
             @Override
             public void onImageClicked(HomeBean homeBean) {
-                ImageDetailBean imageDetailBean = new ImageDetailBean(homeBean);
-                FragmentUtil.pushFragment(getActivity(), DetailFragment.newInstance(imageDetailBean), null);
+                FragmentUtil.pushFragment(getActivity(), FragmentDetail.newInstance(homeBean), null);
             }
         });
     }
