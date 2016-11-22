@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,6 +38,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.api.volley.callback.SimpleRequestCallBack;
+import vn.app.base.util.DebugLog;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.StringUtil;
 
@@ -59,8 +62,6 @@ public class FragmentRegister extends NoHeaderFragment {
     File imageAvatar;
 
     Uri fileUri;
-
-    String imagepath;
 
     RegisterRequest registerRequest;
 
@@ -131,21 +132,20 @@ public class FragmentRegister extends NoHeaderFragment {
             return;
         }
         if (imageAvatar == null) {
-            registerRequest = new RegisterRequest(userId, pass, email, new SimpleRequestCallBack() {
-                @Override
-                public void onResponse(boolean success, String message) {
+            try {
+                creatFilefromDrawable(R.drawable.placeholer_avatar);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-                }
-            });
-
-        } else {
-            registerRequest = new RegisterRequest(userId, pass, email, imageAvatar, new SimpleRequestCallBack() {
-                @Override
-                public void onResponse(boolean success, String message) {
-
-                }
-            });
         }
+        registerRequest = new RegisterRequest(userId, pass, email, imageAvatar, new SimpleRequestCallBack() {
+            @Override
+            public void onResponse(boolean success, String message) {
+
+            }
+        });
+
 
         registerRequest.execute();
 
@@ -169,7 +169,6 @@ public class FragmentRegister extends NoHeaderFragment {
         }
         final File root = new File(externalFile[0] + File.separator + "InstagramFake" + File.separator);
         root.mkdir();
-        imagepath = root.getAbsolutePath();
         final String fname = REGISTER_PHOTO;
         final File sdImageMainDirectory = new File(root, fname);
         if (sdImageMainDirectory.exists()) {
@@ -179,15 +178,41 @@ public class FragmentRegister extends NoHeaderFragment {
     }
 
     private File creatFilefromBitmap(Bitmap bitmap) throws IOException {
-        OutputStream fOut = null;
-        imageAvatar = new File(imagepath, "avatarCropped.jpg");
-        fOut = new FileOutputStream(imageAvatar);
+
+        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
+        imageDir.mkdir();
+        imageAvatar = new File(imageDir, "avatarCropped.jpg");
+        DebugLog.i("Duong dan" + imageDir);
+        OutputStream fOut = new FileOutputStream(imageAvatar);
         Bitmap getBitmap = bitmap;
         getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
         fOut.flush();
         fOut.close();
-        MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), imageAvatar.getAbsolutePath(), imageAvatar.getName(), imageAvatar.getName());
+//        MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), imageAvatar.getAbsolutePath(), imageAvatar.getName(), imageAvatar.getName());
         return imageAvatar;
+    }
+
+    private File creatFilefromDrawable(int drawableID) throws IOException {
+        Drawable drawable = getResources().getDrawable(drawableID);
+        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
+        imageDir.mkdir();
+        imageAvatar = new File(imageDir, "avatarDefault.jpg");
+        DebugLog.i("Duong dan" + imageDir);
+        OutputStream fOut = new FileOutputStream(imageAvatar);
+        Bitmap getBitmap = ((BitmapDrawable) drawable).getBitmap();
+        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+        fOut.flush();
+        fOut.close();
+//        MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), imageAvatar.getAbsolutePath(), imageAvatar.getName(), imageAvatar.getName());
+        return imageAvatar;
+    }
+
+    private boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -196,7 +221,7 @@ public class FragmentRegister extends NoHeaderFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ApiConstance.REQUEST_CODE_TAKEPHOTO && resultCode == RESULT_OK) {
             //Start cropImage Activity
-            CropImage.activity(fileUri).start(getContext(), this);
+            CropImage.activity(fileUri).setAspectRatio(1, 1).start(getContext(), this);
 
         }
         //Get result from cropImage Activity
@@ -206,7 +231,8 @@ public class FragmentRegister extends NoHeaderFragment {
                 Uri resultUri = result.getUri();
                 try {
                     //lay bitmap tu uri result
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), resultUri);
+//                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), resultUri);
+                    Bitmap bitmap = decodeFromFile(resultUri.getPath(), 800, 800);
                     creatFilefromBitmap(bitmap);
                     ivAvatar.setImageBitmap(bitmap);
 
@@ -219,6 +245,24 @@ public class FragmentRegister extends NoHeaderFragment {
         }
 
 
+    }
+
+    public Bitmap decodeFromFile(String path, int width, int height) {
+        try {
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, o);
+            int scale = 1;
+            while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height)
+                scale *= 2;
+
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeFile(path, o2);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

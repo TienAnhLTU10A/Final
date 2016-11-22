@@ -1,5 +1,9 @@
 package com.ta.finalexam.api.Request;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
@@ -9,11 +13,15 @@ import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.api.RegisterResponse;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.api.volley.core.UploadBinaryApiRequest;
+import vn.app.base.util.DebugLog;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
@@ -29,13 +37,14 @@ public class RegisterRequest extends UploadBinaryApiRequest<RegisterResponse> {
 
     public SimpleRequestCallBack simpleRequestCallBack;
 
-    public RegisterRequest(String username, String password, String email,SimpleRequestCallBack simpleRequestCallBack) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.simpleRequestCallBack = simpleRequestCallBack;
-
-    }
+//    public RegisterRequest(String username, String password, String email,SimpleRequestCallBack simpleRequestCallBack) {
+//        this.username = username;
+//        this.password = password;
+//        this.email = email;
+//        this.simpleRequestCallBack = simpleRequestCallBack;
+//
+//
+//    }
 
     public RegisterRequest(String username, String password, String email, File imageAvatar, SimpleRequestCallBack simpleRequestCallBack) {
         this.username = username;
@@ -45,7 +54,7 @@ public class RegisterRequest extends UploadBinaryApiRequest<RegisterResponse> {
         this.simpleRequestCallBack = simpleRequestCallBack;
 
         Map<String, File> fileMap = new HashMap<>();
-        fileMap.put("image", imageAvatar);
+        fileMap.put("avatar", imageAvatar);
         setRequestFiles(fileMap);
     }
 
@@ -98,4 +107,6 @@ public class RegisterRequest extends UploadBinaryApiRequest<RegisterResponse> {
         }
         simpleRequestCallBack.onResponse(false, message);
     }
+
+
 }
