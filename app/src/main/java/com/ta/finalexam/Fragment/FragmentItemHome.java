@@ -154,10 +154,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
                 }
             }
 
-            @Override
-            public void onImageClicked(HomeBean homeBean) {
-                FragmentUtil.pushFragment(getActivity(), FragmentDetail.newInstance(homeBean), null);
-            }
+
         });
     }
 

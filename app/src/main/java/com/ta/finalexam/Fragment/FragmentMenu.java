@@ -14,13 +14,25 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.manager.UserManager;
 
+import butterknife.BindView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.fragment.CommonFragment;
+import vn.app.base.imageloader.ImageLoader;
 
-public class FragmentMenu extends CommonFragment  {
+public class FragmentMenu extends CommonFragment {
+
+    @BindView(R.id.tvUserName)
+    TextView tvUserName_Nav;
+
+    @BindView(R.id.menu_avatar)
+    CircleImageView menu_Avatar;
+
 
     private NavigationDrawerCallbacks mCallbacks;
 
@@ -68,19 +80,42 @@ public class FragmentMenu extends CommonFragment  {
     }
 
     @Override
-    protected void initView(View root) {}
+    protected void initView(View root) {
+    }
 
     @OnClick(R.id.menu_1)
-    public void onChange(){
+    public void onChange() {
         selectItem(0);
     }
+
     @OnClick(R.id.menu_2)
-    public void onHome(){
+    public void onHome() {
         selectItem(1);
     }
+
     @OnClick(R.id.menu_3)
-    public void onUpload(){
+    public void onUpload() {
         selectItem(2);
+    }
+
+    @OnClick(R.id.menu_4)
+    public void onFavourite() {
+        selectItem(3);
+    }
+
+    @OnClick(R.id.menu_5)
+    public void onNearby() {
+        selectItem(4);
+    }
+
+    @OnClick(R.id.menu_6)
+    public void onFollow() {
+        selectItem(5);
+    }
+
+    @OnClick(R.id.menu_4)
+    public void onLogout() {
+        selectItem(6);
     }
 
     @Override
@@ -90,7 +125,10 @@ public class FragmentMenu extends CommonFragment  {
 
     @Override
     protected void initData() {
-
+        if (UserManager.getCurrentUser() != null) {
+            tvUserName_Nav.setText(UserManager.getCurrentUser().username);
+            ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
+        }
     }
 
     public boolean isDrawerOpen() {
