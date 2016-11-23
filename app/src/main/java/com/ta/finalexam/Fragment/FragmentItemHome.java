@@ -4,7 +4,6 @@ package com.ta.finalexam.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,14 +11,14 @@ import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.ta.finalexam.Adapter.HomeAdapter;
-import com.ta.finalexam.Bean.DetailBean.ImageDetailBean;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.ApiConstance;
-import com.ta.finalexam.Constant.HomeType;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.HomeResponse;
+import com.ta.finalexam.api.Request.FavouritesRequest;
+import com.ta.finalexam.api.Request.FollowRequest;
 import com.ta.finalexam.api.Request.HomeRequest;
-import com.ta.finalexam.callback.GoToDetail;
+import com.ta.finalexam.callback.OnClickRecycleView;
 import com.ta.finalexam.callback.OnMapClick;
 
 import java.io.UnsupportedEncodingException;
@@ -27,6 +26,7 @@ import java.net.URLDecoder;
 import java.util.List;
 
 import butterknife.BindView;
+import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.IntentUtil;
@@ -35,17 +35,24 @@ import vn.app.base.util.IntentUtil;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentItemHome extends BaseHeaderListFragment {
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
+    public static final int FOLLOWING = 1;
+    public static final int UN_FOLLOWING = 0;
+    public int maxItem = 10;
+    public int FOLLOWSTATUS;
+
+    public static final int FAVOURITE = 1;
+    public static final int UN_FAVOURITE = 0;
+    public int FAVOURITESTATUS;
+
+    private List<HomeBean> homeBeanList;
+    private HomeAdapter vAdapter;
+    int type;
 
     @BindView(R.id.recycerList)
     RecyclerView rvList;
 
     LatLng pictureLocation;
-
-    private List<HomeBean> homeBeanList;
-    private HomeAdapter vAdapter;
-    int type;
+    HomeBean homeBean;
 
     public FragmentItemHome() {
 
@@ -54,8 +61,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     public static FragmentItemHome newInstance(int type) {
         FragmentItemHome fragmentItemHome = new FragmentItemHome();
         Bundle bundle = new Bundle();
-        bundle.putInt(ApiConstance.TYPE, HomeType.NEW);
-        bundle.putInt(ApiConstance.TYPE, HomeType.FOLLOW);
+        bundle.putInt(ApiConstance.TYPE, type);
         return fragmentItemHome;
     }
 
@@ -74,11 +80,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     @Override
     protected void getArgument(Bundle bundle) {
         type = bundle.getInt(ApiConstance.TYPE);
-        if (type == HomeType.NEW) {
-            getHome(true, type);
-        } else if (type == HomeType.FOLLOW) {
-            getHome(true, type);
-        }
+        getHome(true, type);
     }
 
     @Override
@@ -90,17 +92,24 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     protected void initData() {
         if (homeBeanList == null) {
             getHome(false, type);
+        } else {
+            handleHomeData(homeBeanList);
         }
     }
 
     private void getHome(final boolean isRefresh, int type) {
-        HomeRequest homeRequest = new HomeRequest(type);
+        showCoverNetworkLoading();
+        HomeRequest homeRequest = new HomeRequest(type, maxItem, homeBean);
         homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
             @Override
             public void onSuccess(HomeResponse data) {
                 initialResponseHandled();
-                homeBeanList = data.data;
-                handleHome();
+                handleHomeData(data.data);
+                for (int i = 0; i < maxItem; i++) {
+                    homeBeanList.add(data.data.get(i));
+                }
+                vAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -111,21 +120,43 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         homeRequest.execute();
     }
 
-    private void handleHome() {
+    @Override
+    protected void onLoadingMore(int currentPage) {
+        super.onLoadingMore(currentPage);
+    }
+
+    private void handleHomeData(List<HomeBean> inHomeBeanList) {
+        this.homeBeanList = inHomeBeanList;
         vAdapter = new HomeAdapter(homeBeanList);
         rvList.setAdapter(vAdapter);
         vAdapter.setOnMapCallBack(new OnMapClick() {
             @Override
             public void onMapClick(HomeBean homeBean) {
-
                 goToMapAddress(homeBean);
             }
         });
-        vAdapter.setImageClicked(new GoToDetail() {
+        vAdapter.setOnClickCallBack(new OnClickRecycleView() {
+            @Override
+            public void onFollowResponse(HomeBean homeBean) {
+                if (FOLLOWSTATUS == FOLLOWING) {
+                    getFollow(FOLLOWSTATUS, homeBean);
+                } else if (FOLLOWSTATUS == UN_FOLLOWING) {
+                    getFollow(FOLLOWSTATUS, homeBean);
+                }
+            }
+
+            @Override
+            public void onFavouriteResponse(HomeBean homeBean) {
+                if (FAVOURITESTATUS == FAVOURITE) {
+                    getFavourites(FAVOURITESTATUS, homeBean);
+                } else if (FAVOURITESTATUS == UN_FAVOURITE) {
+                    getFavourites(FAVOURITESTATUS, homeBean);
+                }
+            }
+
             @Override
             public void onImageClicked(HomeBean homeBean) {
-                ImageDetailBean imageDetailBean = new ImageDetailBean(homeBean);
-                FragmentUtil.pushFragment(getActivity(), DetailFragment.newInstance(imageDetailBean), null);
+                FragmentUtil.pushFragment(getActivity(), FragmentDetail.newInstance(homeBean), null);
             }
         });
     }
@@ -148,4 +179,43 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         }
     }
 
+    private void getFollow(final int mStatus, HomeBean homeBean) {
+        showCoverNetworkLoading();
+        FollowRequest followRequest = new FollowRequest(homeBean.user.id, mStatus);
+        followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+            @Override
+            public void onSuccess(BaseResponse data) {
+                hideCoverNetworkLoading();
+                FOLLOWSTATUS = mStatus;
+                vAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFail(int failCode, String message) {
+                hideCoverNetworkLoading();
+            }
+        });
+        followRequest.execute();
+    }
+
+    private void getFavourites(final int fStatus, HomeBean homeBean) {
+        showCoverNetworkLoading();
+        FavouritesRequest favouritesRequest = new FavouritesRequest(homeBean.image.id, fStatus);
+        favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+            @Override
+            public void onSuccess(BaseResponse data) {
+                hideCoverNetworkLoading();
+                FAVOURITESTATUS = fStatus;
+                if (data.status == 1) {
+                    vAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFail(int failCode, String message) {
+                hideCoverNetworkLoading();
+            }
+        });
+        favouritesRequest.execute();
+    }
 }

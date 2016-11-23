@@ -2,6 +2,7 @@ package com.ta.finalexam.Bean.ImageUploadBean;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ta.finalexam.Bean.HomeBean.Image;
 import com.ta.finalexam.Bean.HomeBean.User;
 
 /**

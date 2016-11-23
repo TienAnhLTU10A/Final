@@ -1,5 +1,7 @@
 package com.ta.finalexam.Activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -9,27 +11,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ta.finalexam.Bean.HeaderControlBean;
-import com.ta.finalexam.Bean.TutorialBean.TutorialBean;
 import com.ta.finalexam.Constant.HeaderOption;
-import com.ta.finalexam.Fragment.FollowlistFragment;
+import com.ta.finalexam.Fragment.FragmentFollowlist;
 import com.ta.finalexam.Fragment.FragmentHome;
 import com.ta.finalexam.Fragment.FragmentImageUpload;
+import com.ta.finalexam.Fragment.FragmentLogin;
 import com.ta.finalexam.Fragment.FragmentMenu;
-import com.ta.finalexam.Fragment.LoginFragment;
-import com.ta.finalexam.Fragment.NearbyFragment;
-import com.ta.finalexam.Fragment.RegisterFragment;
-import com.ta.finalexam.Fragment.TutorialFragment;
+import com.ta.finalexam.Fragment.FragmentNearby;
+import com.ta.finalexam.Fragment.FragmentProfile;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.activity.CommonActivity;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
-public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks {
+public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks, FragmentProfile.UpdateProfileCallBack {
+
+    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
 
     @BindView(R.id.toolbar)
     RelativeLayout rlToolbar;
@@ -77,8 +82,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @Override
     public void initView() {
-//        setUpInitScreen(LoginFragment.newInstance(), null);
-        setUpInitScreen(RegisterFragment.newInstance(), null);
+
+        setUpInitScreen(FragmentLogin.newInstance(), null);
     }
 
     @Override
@@ -174,16 +179,31 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
         fragmentMenu.setUp(R.id.nagigation_drawer, drawerLayout);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        imagePickerUtil.handleResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ImagePickerUtil.PICTURE_PICKER_REQUEST_CODE)
+            imagePickerUtil.createImageFile(this);
+
+        }
+    }
+
     @OnClick(R.id.headerBack)
-    public void onBack() {
+    public void Back() {
         FragmentUtil.popBackStack(this);
+    }
+
+    @OnClick(R.id.tv_update)
+    public void updateProfile() {
+
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                Toast.makeText(this,"aaaaa", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "aaaaa", Toast.LENGTH_LONG).show();
                 break;
             case 1:
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
@@ -196,18 +216,24 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 break;
             case 4:
                 //TODO nearby
-                FragmentUtil.pushFragment(getSupportFragmentManager(), NearbyFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentNearby.newInstance(), null);
                 break;
             case 5:
                 //TODO Follow
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FollowlistFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentFollowlist.newInstance(), null);
                 break;
             case 6:
                 //TODO LOGOUT
                 UserManager.clearUserData();
-                FragmentUtil.pushFragment(getSupportFragmentManager(), LoginFragment.newInstance(), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
         }
+    }
+
+    @Override
+    public void onClickUpdate(File avatar) {
+        FragmentProfile fragmentProfile = new FragmentProfile();
+        fragmentProfile.updateProfile(avatar);
     }
 }
 

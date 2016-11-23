@@ -8,15 +8,13 @@ import android.widget.ImageView;
 
 import com.ta.finalexam.Adapter.ImageDetailListAdapter;
 import com.ta.finalexam.Bean.DetailBean.DetailData;
-import com.ta.finalexam.Bean.DetailBean.ImageDetailBean;
-import com.ta.finalexam.Bean.HomeBean.Image;
+import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.CommentListResponse;
 import com.ta.finalexam.api.Request.CommentListRequest;
 import com.ta.finalexam.api.Request.CommentRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,7 +28,7 @@ import vn.app.base.util.DebugLog;
  * Created by Veteran Commander on 10/19/2016.
  */
 
-public class DetailFragment extends BaseHeaderListFragment {
+public class FragmentDetail extends BaseHeaderListFragment {
 
     @BindView(R.id.edt_send_cm)
     EditText edtSendCm;
@@ -41,7 +39,7 @@ public class DetailFragment extends BaseHeaderListFragment {
     @OnClick(R.id.img_send)
     public void onSendClicked() {
         if (edtSendCm.getText().toString() !=""){
-            CommentRequest commentRequest = new CommentRequest(slImage.image.id,edtSendCm.getText().toString());
+            CommentRequest commentRequest = new CommentRequest(homeBean.image.id,edtSendCm.getText().toString());
             commentRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                 @Override
                 public void onSuccess(BaseResponse data) {
@@ -59,15 +57,15 @@ public class DetailFragment extends BaseHeaderListFragment {
 
     }
 
-    ImageDetailBean slImage;
+    HomeBean homeBean;
 
     ImageDetailListAdapter imageDetailListAdapter;
 
     List<DetailData> commentList;
 
-    public static DetailFragment newInstance(ImageDetailBean imageDetailBean) {
-        DetailFragment newFragment = new DetailFragment();
-        newFragment.slImage = imageDetailBean;
+    public static FragmentDetail newInstance(HomeBean homeBean) {
+        FragmentDetail newFragment = new FragmentDetail();
+        newFragment.homeBean = homeBean;
         return newFragment;
 
     }
@@ -94,11 +92,9 @@ public class DetailFragment extends BaseHeaderListFragment {
     protected void initData() {
         getCommentList();
         imageDetailListAdapter = new ImageDetailListAdapter();
-        imageDetailListAdapter.setHeader(slImage);
+        imageDetailListAdapter.setHeader(homeBean);
         imageDetailListAdapter.setItems(commentList);
         rvList.setAdapter(imageDetailListAdapter);
-
-
     }
 
     @Override
@@ -117,7 +113,7 @@ public class DetailFragment extends BaseHeaderListFragment {
     }
 
     private void getCommentList(){
-        CommentListRequest commentListRequest = new CommentListRequest(slImage.image.id);
+        CommentListRequest commentListRequest = new CommentListRequest(homeBean.image.id);
         commentListRequest.setRequestCallBack(new ApiObjectCallBack<CommentListResponse>() {
             @Override
             public void onSuccess(CommentListResponse data) {

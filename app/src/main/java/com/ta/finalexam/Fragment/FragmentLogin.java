@@ -17,7 +17,6 @@ import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import vn.app.base.api.volley.bean.ErrorMessage;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.DialogUtil;
@@ -30,7 +29,7 @@ import vn.app.base.util.StringUtil;
  * Created by 3543 on 10/14/2016.
  */
 
-public class LoginFragment extends NoHeaderFragment {
+public class FragmentLogin extends NoHeaderFragment {
 
     String user;
     String pass;
@@ -48,9 +47,9 @@ public class LoginFragment extends NoHeaderFragment {
     @BindView(R.id.btnCreateAccount)
     Button btnCreate;
 
-    public static LoginFragment newInstance() {
-        LoginFragment loginFragment = new LoginFragment();
-        return loginFragment;
+    public static FragmentLogin newInstance() {
+        FragmentLogin fragmentLogin = new FragmentLogin();
+        return fragmentLogin;
     }
 
     @Override

@@ -181,7 +181,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
             if (!mediaStoreDir.exists() && !mediaStoreDir.mkdir()) {
                 Log.d(APP_TAG, "Failed to creat folder");
             }
-            return Uri.fromFile(new File(mediaStoreDir.getPath() + File.separator + fileName + File.separator));
+            return Uri.fromFile(new File(mediaStoreDir.getPath() + File.separator + fileName));
         }
         return null;
     }
@@ -193,6 +193,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
 
     public void uploadImage(String caption, String mlong, String lat, String location,
                             String hashtag, File image) {
+        showCoverNetworkLoading();
         Log.e("X _ initData", "caption :" + caption);
         Log.e("X _ initData", "mlong :" + mlong);
         Log.e("X _ initData", "lat :" + lat);
