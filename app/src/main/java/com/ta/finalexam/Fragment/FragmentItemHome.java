@@ -35,17 +35,24 @@ import vn.app.base.util.IntentUtil;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentItemHome extends BaseHeaderListFragment {
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
+    public static final int FOLLOWING = 1;
+    public static final int UN_FOLLOWING = 0;
+    public int maxItem = 10;
+    public int FOLLOWSTATUS;
+
+    public static final int FAVOURITE = 1;
+    public static final int UN_FAVOURITE = 0;
+    public int FAVOURITESTATUS;
+
+    private List<HomeBean> homeBeanList;
+    private HomeAdapter vAdapter;
+    int type;
 
     @BindView(R.id.recycerList)
     RecyclerView rvList;
 
     LatLng pictureLocation;
-
-    private List<HomeBean> homeBeanList;
-    private HomeAdapter vAdapter;
-    int type;
+    HomeBean homeBean;
 
     public FragmentItemHome() {
 
@@ -74,11 +81,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     @Override
     protected void getArgument(Bundle bundle) {
         type = bundle.getInt(ApiConstance.TYPE);
-        if (type == HomeType.NEW) {
-            getHome(true, type);
-        } else if (type == HomeType.FOLLOW) {
-            getHome(true, type);
-        }
+        getHome(true, type);
     }
 
     @Override
@@ -90,17 +93,24 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     protected void initData() {
         if (homeBeanList == null) {
             getHome(false, type);
+        } else {
+            handleHomeData(homeBeanList);
         }
     }
 
     private void getHome(final boolean isRefresh, int type) {
-        HomeRequest homeRequest = new HomeRequest(type);
+        showCoverNetworkLoading();
+        HomeRequest homeRequest = new HomeRequest(type, maxItem, homeBean);
         homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
             @Override
             public void onSuccess(HomeResponse data) {
                 initialResponseHandled();
-                homeBeanList = data.data;
-                handleHome();
+                handleHomeData(data.data);
+                for (int i = 0; i < maxItem; i++) {
+                    homeBeanList.add(data.data.get(i));
+                }
+                vAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -111,7 +121,13 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         homeRequest.execute();
     }
 
-    private void handleHome() {
+    @Override
+    protected void onLoadingMore(int currentPage) {
+        super.onLoadingMore(currentPage);
+    }
+
+    private void handleHomeData(List<HomeBean> inHomeBeanList) {
+        this.homeBeanList = inHomeBeanList;
         vAdapter = new HomeAdapter(homeBeanList);
         rvList.setAdapter(vAdapter);
         vAdapter.setOnMapCallBack(new OnMapClick() {
@@ -121,11 +137,26 @@ public class FragmentItemHome extends BaseHeaderListFragment {
                 goToMapAddress(homeBean);
             }
         });
-        vAdapter.setImageClicked(new GoToDetail() {
+        vAdapter.setOnClickCallBack(new OnClickRecycleView() {
             @Override
-            public void onImageClicked(HomeBean homeBean) {
-                FragmentUtil.pushFragment(getActivity(), FragmentDetail.newInstance(homeBean), null);
+            public void onFollowResponse(HomeBean homeBean) {
+                if (FOLLOWSTATUS == FOLLOWING) {
+                    getFollow(FOLLOWSTATUS, homeBean);
+                } else if (FOLLOWSTATUS == UN_FOLLOWING) {
+                    getFollow(FOLLOWSTATUS, homeBean);
+                }
             }
+
+            @Override
+            public void onFavouriteResponse(HomeBean homeBean) {
+                if (FAVOURITESTATUS == FAVOURITE) {
+                    getFavourites(FAVOURITESTATUS, homeBean);
+                } else if (FAVOURITESTATUS == UN_FAVOURITE) {
+                    getFavourites(FAVOURITESTATUS, homeBean);
+                }
+            }
+
+
         });
     }
 
@@ -147,4 +178,43 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         }
     }
 
+    private void getFollow(final int mStatus, HomeBean homeBean) {
+        showCoverNetworkLoading();
+        FollowRequest followRequest = new FollowRequest(homeBean.user.id, mStatus);
+        followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+            @Override
+            public void onSuccess(BaseResponse data) {
+                hideCoverNetworkLoading();
+                FOLLOWSTATUS = mStatus;
+                vAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFail(int failCode, String message) {
+                hideCoverNetworkLoading();
+            }
+        });
+        followRequest.execute();
+    }
+
+    private void getFavourites(final int fStatus, HomeBean homeBean) {
+        showCoverNetworkLoading();
+        FavouritesRequest favouritesRequest = new FavouritesRequest(homeBean.image.id, fStatus);
+        favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+            @Override
+            public void onSuccess(BaseResponse data) {
+                hideCoverNetworkLoading();
+                FAVOURITESTATUS = fStatus;
+                if (data.status == 1) {
+                    vAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFail(int failCode, String message) {
+                hideCoverNetworkLoading();
+            }
+        });
+        favouritesRequest.execute();
+    }
 }

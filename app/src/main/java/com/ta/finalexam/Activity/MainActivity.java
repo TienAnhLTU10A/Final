@@ -1,5 +1,7 @@
 package com.ta.finalexam.Activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -17,17 +19,24 @@ import com.ta.finalexam.Fragment.FragmentLogin;
 import com.ta.finalexam.Fragment.FragmentMenu;
 import com.ta.finalexam.Fragment.FragmentNearby;
 import com.ta.finalexam.Fragment.FragmentRegister;
+import com.ta.finalexam.Fragment.FragmentNearby;
+import com.ta.finalexam.Fragment.FragmentProfile;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.activity.CommonActivity;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
-public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks {
+public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks, FragmentProfile.UpdateProfileCallBack {
+
+    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
 
     @BindView(R.id.toolbar)
     RelativeLayout rlToolbar;
@@ -178,8 +187,13 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     }
 
     @OnClick(R.id.headerBack)
-    public void onBack() {
+    public void Back() {
         FragmentUtil.popBackStack(this);
+    }
+
+    @OnClick(R.id.tv_update)
+    public void updateProfile() {
+
     }
 
     @Override

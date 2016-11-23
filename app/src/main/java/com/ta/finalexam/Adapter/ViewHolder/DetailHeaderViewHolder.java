@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.ta.finalexam.Bean.DetailBean.ImageDetailBean;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.RoundedCornersTransformation;
@@ -15,6 +16,8 @@ import butterknife.BindView;
 import vn.app.base.adapter.viewholder.OnClickViewHolder;
 import vn.app.base.imageloader.ImageLoader;
 import vn.app.base.util.StringUtil;
+
+import static com.ta.finalexam.R.id.btnFollow;
 
 /**
  * Created by Veteran Commander on 10/26/2016.
@@ -32,7 +35,7 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
     @BindView(R.id.tvName_detail_header)
     TextView tvUserName;
     @BindView(R.id.btn_follow_detail_header)
-    Button btnFollow;
+    Button btn_follow_detail_header;
     @BindView(R.id.ivPhotoCover_detail_header)
     ImageView ivContent;
     @BindView(R.id.tvLabel_detail_header)
@@ -43,7 +46,7 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
     TextView tvLocation;
     @BindView(R.id.imageView_like_detail_header)
     FloatingActionButton fabFavorite;
-
+   
 
     boolean mFollow, mFavourites;
     int hashtash;
@@ -75,13 +78,13 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
 
 
         if (homeBean.user.isFollowing) {
-            btnFollow.setSelected(true);
-            btnFollow.setBackgroundResource(R.drawable.btn_following);
-            btnFollow.setText("Following");
+            btn_follow_detail_header.setSelected(true);
+            btn_follow_detail_header.setBackgroundResource(R.drawable.btn_following);
+            btn_follow_detail_header.setText("Following");
         } else {
-            btnFollow.setSelected(false);
-            btnFollow.setBackgroundResource(R.drawable.btn_un_following);
-            btnFollow.setText("Follow");
+            btn_follow_detail_header.setSelected(false);
+            btn_follow_detail_header.setBackgroundResource(R.drawable.btn_un_following);
+            btn_follow_detail_header.setText("Follow");
         }
         mFollow = homeBean.user.isFollowing;
 

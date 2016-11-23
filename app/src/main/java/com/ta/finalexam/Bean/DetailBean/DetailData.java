@@ -25,4 +25,5 @@ public class DetailData {
         this.username = username;
         this.comment = comment;
     }
+
 }

@@ -1,10 +1,9 @@
 package com.ta.finalexam.Fragment;
 
 import android.app.Activity;
-
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,11 +11,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
@@ -31,8 +30,12 @@ import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.Request.ImageUploadRequest;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,9 +44,10 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.util.BitmapUtil;
+import vn.app.base.util.DebugLog;
 import vn.app.base.util.FragmentUtil;
 
-import static com.ta.finalexam.Constant.ApiConstance.PHOTO_FILE_NAME;
+import static com.ta.finalexam.Fragment.RegisterFragment.REGISTER_PHOTO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,10 +76,10 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
 
     double mlong, lat;
     String location;
-    File mediaStoreDir;
     private Uri fileUri;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
+    File imageAvatar;
 
     public FragmentImageUpload() {
     }
@@ -139,7 +143,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
 
     @OnClick(R.id.btnPost)
     public void onPost() {
-        uploadImage(etCaption.getText().toString(), String.valueOf(mlong), String.valueOf(lat), location, etHashTag.getText().toString(), mediaStoreDir);
+        uploadImage(etCaption.getText().toString(), String.valueOf(mlong), String.valueOf(lat), location, etHashTag.getText().toString(), imageAvatar);
     }
 
     @OnCheckedChanged(R.id.switchCompat)
@@ -152,47 +156,73 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
     }
 
     private void onLauchCamera() {
-        Intent mIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        mIntent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(ApiConstance.PHOTO_FILE_NAME));
-        if (mIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(mIntent, ApiConstance.CAMERA_REQUEST_CODE);
-        }
+        Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        fileUri = Uri.fromFile(creatFileUri(getActivity()));
+        getCamera.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        startActivityForResult(getCamera, ApiConstance.REQUEST_CODE_TAKEPHOTO);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ApiConstance.CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) ;
-        fileUri = getPhotoFileUri(PHOTO_FILE_NAME);
-        Bitmap bitmap = BitmapUtil.decodeFromFile(fileUri.getPath(), 2016, 1134);
-        // sua loi anh preview nam ngang
-        if (bitmap.getWidth() > bitmap.getHeight()) {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        if (requestCode == ApiConstance.REQUEST_CODE_TAKEPHOTO && resultCode == Activity.RESULT_OK) {
+            //Start cropImage Activity
+            CropImage.activity(fileUri).setAspectRatio(16, 9).start(getContext(), this);
         }
-        ivPhotoPreview.setImageBitmap(bitmap);
-    }
+        //Get result from cropImage Activity
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Uri resultUri = result.getUri();
+                try {
+                    //lay bitmap tu uri result
+                    Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 900, 900);
+                    creatFilefromBitmap(bitmap);
+                    ivPhotoPreview.setImageBitmap(bitmap);
 
-    public Uri getPhotoFileUri(String fileName) {
-        if (isExternalStorageAvailable()) {
-            mediaStoreDir = new File
-                    (getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Picture");
-            if (!mediaStoreDir.exists() && !mediaStoreDir.mkdir()) {
-                Log.d(APP_TAG, "Failed to creat folder");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
-            return Uri.fromFile(new File(mediaStoreDir.getPath() + File.separator + fileName + File.separator));
         }
-        return null;
     }
 
-    private boolean isExternalStorageAvailable() {
-        String state = Environment.getExternalStorageState();
-        return state.equals(Environment.MEDIA_MOUNTED);
+    //tao file uri
+    public File creatFileUri(Context context) {
+        File[] externalFile = ContextCompat.getExternalFilesDirs(context, null);
+        if (externalFile == null) {
+            externalFile = new File[]{context.getExternalFilesDir(null)};
+        }
+        final File root = new File(externalFile[0] + File.separator + "InstagramFaker" + File.separator);
+        root.mkdir();
+        final String fname = REGISTER_PHOTO;
+        final File sdImageMainDirectory = new File(root, fname);
+        if (sdImageMainDirectory.exists()) {
+            sdImageMainDirectory.delete();
+        }
+        return sdImageMainDirectory;
+    }
+
+    //Tao file tu Bitmap
+    private File creatFilefromBitmap(Bitmap bitmap) throws IOException {
+
+        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
+        imageDir.mkdir();
+        imageAvatar = new File(imageDir, "avatarCropped.jpg");
+        DebugLog.i("Duong dan" + imageDir);
+        OutputStream fOut = new FileOutputStream(imageAvatar);
+        Bitmap getBitmap = bitmap;
+        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+        fOut.flush();
+        fOut.close();
+        return imageAvatar;
     }
 
     public void uploadImage(String caption, String mlong, String lat, String location,
                             String hashtag, File image) {
+        showCoverNetworkLoading();
         Log.e("X _ initData", "caption :" + caption);
         Log.e("X _ initData", "mlong :" + mlong);
         Log.e("X _ initData", "lat :" + lat);

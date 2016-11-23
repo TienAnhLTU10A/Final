@@ -39,7 +39,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
     @OnClick(R.id.img_send)
     public void onSendClicked() {
         if (edtSendCm.getText().toString() !=""){
-            CommentRequest commentRequest = new CommentRequest(slImage.image.id,edtSendCm.getText().toString());
+            CommentRequest commentRequest = new CommentRequest(homeBean.image.id,edtSendCm.getText().toString());
             commentRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                 @Override
                 public void onSuccess(BaseResponse data) {
@@ -57,7 +57,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
     }
 
-    HomeBean slImage;
+    HomeBean homeBean;
 
     ImageDetailListAdapter imageDetailListAdapter;
 
@@ -65,7 +65,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
     public static FragmentDetail newInstance(HomeBean homeBean) {
         FragmentDetail newFragment = new FragmentDetail();
-        newFragment.slImage = homeBean;
+        newFragment.homeBean = homeBean;
         return newFragment;
 
     }
@@ -92,11 +92,9 @@ public class FragmentDetail extends BaseHeaderListFragment {
     protected void initData() {
         getCommentList();
         imageDetailListAdapter = new ImageDetailListAdapter();
-        imageDetailListAdapter.setHeader(slImage);
+        imageDetailListAdapter.setHeader(homeBean);
         imageDetailListAdapter.setItems(commentList);
         rvList.setAdapter(imageDetailListAdapter);
-
-
     }
 
     @Override
@@ -115,7 +113,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
     }
 
     private void getCommentList(){
-        CommentListRequest commentListRequest = new CommentListRequest(slImage.image.id);
+        CommentListRequest commentListRequest = new CommentListRequest(homeBean.image.id);
         commentListRequest.setRequestCallBack(new ApiObjectCallBack<CommentListResponse>() {
             @Override
             public void onSuccess(CommentListResponse data) {
