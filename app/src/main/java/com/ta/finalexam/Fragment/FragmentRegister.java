@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.StringEncryption;
+import com.ta.finalexam.Ulities.manager.UserManager;
+import com.ta.finalexam.api.RegisterResponse;
 import com.ta.finalexam.api.Request.RegisterRequest;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -38,8 +40,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.api.volley.callback.SimpleRequestCallBack;
+import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.DialogUtil;
+import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
 import static android.app.Activity.RESULT_OK;
@@ -131,6 +136,7 @@ public class FragmentRegister extends NoHeaderFragment {
             DialogUtil.showOkBtnDialog(getActivity(), getString(R.string.missing_input_title), getString(R.string.missing_input_message)).setCancelable(true);
             return;
         }
+
         if (imageAvatar == null) {
             try {
                 creatFilefromDrawable(R.drawable.placeholer_avatar);
@@ -139,21 +145,17 @@ public class FragmentRegister extends NoHeaderFragment {
             }
 
         }
-        registerRequest = new RegisterRequest(userId, pass, email, imageAvatar, new SimpleRequestCallBack() {
-            @Override
-            public void onResponse(boolean success, String message) {
-
-            }
-        });
-
-
+        registerRequest = new RegisterRequest(userId, pass, email, imageAvatar,getActivity());
         registerRequest.execute();
-
+        showCoverNetworkLoading();
 
     }
 
 
+
+
     @OnClick(R.id.ivAvatar)
+    //Goi intent chup anh
     public void picture() {
         Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         fileUri = Uri.fromFile(creatFileUri(getActivity()));
@@ -161,13 +163,13 @@ public class FragmentRegister extends NoHeaderFragment {
         startActivityForResult(getCamera, ApiConstance.REQUEST_CODE_TAKEPHOTO);
     }
 
-
+    //Tao fileUri
     public File creatFileUri(Context context) {
         File[] externalFile = ContextCompat.getExternalFilesDirs(context, null);
         if (externalFile == null) {
             externalFile = new File[]{context.getExternalFilesDir(null)};
         }
-        final File root = new File(externalFile[0] + File.separator + "InstagramFake" + File.separator);
+        final File root = new File(externalFile[0] + File.separator + "InstagramFaker" + File.separator);
         root.mkdir();
         final String fname = REGISTER_PHOTO;
         final File sdImageMainDirectory = new File(root, fname);
@@ -177,6 +179,7 @@ public class FragmentRegister extends NoHeaderFragment {
         return sdImageMainDirectory;
     }
 
+    //Tao file tu Bitmap
     private File creatFilefromBitmap(Bitmap bitmap) throws IOException {
 
         File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
@@ -188,9 +191,9 @@ public class FragmentRegister extends NoHeaderFragment {
         getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
         fOut.flush();
         fOut.close();
-//        MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), imageAvatar.getAbsolutePath(), imageAvatar.getName(), imageAvatar.getName());
         return imageAvatar;
     }
+
 
     private File creatFilefromDrawable(int drawableID) throws IOException {
         Drawable drawable = getResources().getDrawable(drawableID);
@@ -222,7 +225,6 @@ public class FragmentRegister extends NoHeaderFragment {
         if (requestCode == ApiConstance.REQUEST_CODE_TAKEPHOTO && resultCode == RESULT_OK) {
             //Start cropImage Activity
             CropImage.activity(fileUri).setAspectRatio(1, 1).start(getContext(), this);
-
         }
         //Get result from cropImage Activity
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -231,8 +233,7 @@ public class FragmentRegister extends NoHeaderFragment {
                 Uri resultUri = result.getUri();
                 try {
                     //lay bitmap tu uri result
-//                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), resultUri);
-                    Bitmap bitmap = decodeFromFile(resultUri.getPath(), 800, 800);
+                    Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 800, 800);
                     creatFilefromBitmap(bitmap);
                     ivAvatar.setImageBitmap(bitmap);
 
@@ -247,23 +248,6 @@ public class FragmentRegister extends NoHeaderFragment {
 
     }
 
-    public Bitmap decodeFromFile(String path, int width, int height) {
-        try {
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(path, o);
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height)
-                scale *= 2;
-
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeFile(path, o2);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
 
 

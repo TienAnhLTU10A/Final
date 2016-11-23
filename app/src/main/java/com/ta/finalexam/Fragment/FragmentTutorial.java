@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.relex.circleindicator.CircleIndicator;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.util.FragmentUtil;
 
 /**
  * Created by Veteran Commander on 10/21/2016.
@@ -38,8 +39,8 @@ public class FragmentTutorial extends NoHeaderFragment {
 
     @OnClick(R.id.btn_tut_skip)
     public void onSkip() {
-        Toast.makeText(getActivity(), btnSkip.getText().toString(), Toast.LENGTH_SHORT).show();
         //go to home screen
+        FragmentUtil.pushFragment(getActivity(), new FragmentHome(), null);
     }
 
     @Override

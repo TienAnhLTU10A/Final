@@ -92,6 +92,7 @@ public class FragmentLogin extends NoHeaderFragment {
 
     @OnClick(R.id.btnLogin)
     public void login() {
+        DebugLog.e("Token hien tai la :" + SharedPrefUtils.getAccessToken());
         user = etLogin.getText().toString().trim();
         try {
             pass = StringEncryption.SHA1(etPass.getText().toString().trim());
