@@ -36,7 +36,7 @@ public class HomeViewHolder extends OnClickViewHolder {
     @BindView(R.id.ivAvatar)
     ImageView ivUserPhoto;
 
-    @BindView(btnFollow)
+    @BindView(R.id.btnFollow)
     Button btn_follow;
 
     @BindView(R.id.tvNameHome)
@@ -135,10 +135,4 @@ public class HomeViewHolder extends OnClickViewHolder {
         }
     }
 
-    @OnClick(R.id.ivPhotoPreview)
-    public void gotoDetailScreen() {
-        if (onClickCallBack != null) {
-            onClickCallBack.onImageClicked(homeBean);
-        }
-    }
 }
