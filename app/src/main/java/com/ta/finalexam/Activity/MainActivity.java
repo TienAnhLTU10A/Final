@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ta.finalexam.Bean.HeaderControlBean;
 import com.ta.finalexam.Constant.HeaderOption;
@@ -17,10 +18,10 @@ import com.ta.finalexam.Fragment.FragmentImageUpload;
 import com.ta.finalexam.Fragment.FragmentLogin;
 import com.ta.finalexam.Fragment.FragmentMenu;
 import com.ta.finalexam.Fragment.FragmentNearby;
+import com.ta.finalexam.Fragment.FragmentNearby;
 import com.ta.finalexam.Fragment.FragmentProfile;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
-import com.ta.finalexam.callback.OnUserInteractive;
 
 import java.io.File;
 
@@ -32,10 +33,9 @@ import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
-public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks {
+public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks{
 
     ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
-    FragmentProfile.UpdateProfileCallBack updateProfileCallBack;
 
     @BindView(R.id.toolbar)
     RelativeLayout rlToolbar;
@@ -88,6 +88,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
         } else {
             setUpInitScreen(FragmentHome.newInstance(), null);
         }
+
+
     }
 
     @Override
@@ -183,16 +185,6 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
         fragmentMenu.setUp(R.id.nagigation_drawer, drawerLayout);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        imagePickerUtil.handleResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == ImagePickerUtil.PICTURE_PICKER_REQUEST_CODE)
-                imagePickerUtil.createImageFile(this);
-
-        }
-    }
-
     @OnClick(R.id.headerBack)
     public void Back() {
         FragmentUtil.popBackStack(this);
@@ -207,7 +199,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(""), null);
+                Toast.makeText(this, "aaaaa", Toast.LENGTH_LONG).show();
                 break;
             case 1:
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
@@ -232,16 +224,6 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
         }
-    }
-
-    @OnClick(R.id.tv_update)
-    public void onClickUpdate(File avatar) {
-        if (updateProfileCallBack != null) {
-            updateProfileCallBack.onClickUpdate(avatar);
-        }
-    }
-    public void setUpdateProfileCallBack(FragmentProfile.UpdateProfileCallBack updateProfileCallBack) {
-        this.updateProfileCallBack = updateProfileCallBack;
     }
 }
 

@@ -73,7 +73,7 @@ public class FragmentLogin extends NoHeaderFragment {
 
     @OnClick(R.id.btnCreateAccount)
     public void goToRegisterFragment() {
-        FragmentUtil.pushFragment(getActivity(), RegisterFragment.newInstance(), null);
+        FragmentUtil.pushFragment(getActivity(), FragmentRegister.newInstance(), null);
     }
 
     @OnClick(R.id.btnLogin)
