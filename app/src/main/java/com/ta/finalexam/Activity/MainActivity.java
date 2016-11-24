@@ -3,6 +3,7 @@ package com.ta.finalexam.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,9 +19,8 @@ import com.ta.finalexam.Fragment.FragmentImageUpload;
 import com.ta.finalexam.Fragment.FragmentLogin;
 import com.ta.finalexam.Fragment.FragmentMenu;
 import com.ta.finalexam.Fragment.FragmentNearby;
-import com.ta.finalexam.Fragment.FragmentRegister;
-import com.ta.finalexam.Fragment.FragmentNearby;
 import com.ta.finalexam.Fragment.FragmentProfile;
+import com.ta.finalexam.Fragment.FragmentRegister;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
 
@@ -34,7 +34,7 @@ import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
-public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks, FragmentProfile.UpdateProfileCallBack {
+public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks{
 
     ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
 
@@ -225,6 +225,10 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
         }
+    }
+
+    public TextView getTvDelete(){
+        return tvDelete;
     }
 }
 

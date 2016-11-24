@@ -8,4 +8,5 @@ import com.ta.finalexam.Bean.HomeBean.HomeBean;
 
 public interface OnMapClick {
     void onMapClick(HomeBean homeBean);
+    void onPhotoClick(HomeBean homeBean);
 }

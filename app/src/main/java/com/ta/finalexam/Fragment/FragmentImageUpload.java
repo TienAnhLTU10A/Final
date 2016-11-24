@@ -47,7 +47,7 @@ import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.FragmentUtil;
 
-import static com.ta.finalexam.Fragment.RegisterFragment.REGISTER_PHOTO;
+import static com.ta.finalexam.Fragment.FragmentRegister.REGISTER_PHOTO;
 
 /**
  * A simple {@link Fragment} subclass.

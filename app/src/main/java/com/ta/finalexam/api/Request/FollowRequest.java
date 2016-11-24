@@ -3,28 +3,27 @@ package com.ta.finalexam.api.Request;
 import com.android.volley.Request;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.ApiConstance;
-import com.ta.finalexam.api.HomeResponse;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
- * Created by kooryy2 on 10/31/2016.
+ * Created by kooryy2 on 11/16/2016.
  */
 
-public class HomeRequest extends ObjectApiRequest<HomeResponse> {
-    HomeBean homeBean;
-    private int type;
-    private int num;
+public class FollowRequest extends ObjectApiRequest<BaseResponse> {
 
-    public HomeRequest(int type, int num, HomeBean homeBean) {
-        this.type = type;
-        this.num = num;
-        this.homeBean = homeBean;
+    HomeBean homeBean;
+    private String userID;
+    private int isFollow ;
+
+    public FollowRequest(String userID, int isFollow) {
+        this.userID = userID;
+        this.isFollow = isFollow;
     }
 
     @Override
@@ -34,7 +33,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
 
     @Override
     public String getRequestURL() {
-        return ApiConstance.URL_HOME;
+        return ApiConstance.URL_FOLLOW;
     }
 
     @Override
@@ -44,26 +43,22 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
 
     @Override
     public Map<String, String> getRequestParams() {
-        Map<String, String> params = new HashMap<>();
-        params.put(ApiConstance.TYPE, String.valueOf(type));
-        if (homeBean != null){
-            params.put(ApiConstance.LAST_QUERY_TIMESTAMP, String.valueOf(homeBean.image.createdAt));
-        }
-        params.put(ApiConstance.NUM, String.valueOf(num));
-        return params;
+        Map<String,String> param = new HashMap<>();
+        param.put(ApiConstance.USERID , userID );
+        param.put(ApiConstance.FOLLOW_STATUS , String.valueOf(isFollow));
+        return param;
     }
 
     @Override
     public Map<String, String> getRequestHeaders() {
-        Map<String, String> header = new HashMap<>();
+        Map<String , String> header = new HashMap<>();
         header.put(ApiConstance.TOKEN, SharedPrefUtils.getAccessToken());
         return header;
     }
 
-
     @Override
-    public Class<HomeResponse> getResponseClass() {
-        return HomeResponse.class;
+    public Class<BaseResponse> getResponseClass() {
+        return BaseResponse.class;
     }
 
     @Override

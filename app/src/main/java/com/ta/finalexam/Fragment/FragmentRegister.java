@@ -44,6 +44,7 @@ import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.SharedPrefUtils;
 import vn.app.base.util.StringUtil;
 
@@ -157,8 +158,9 @@ public class FragmentRegister extends NoHeaderFragment {
     @OnClick(R.id.ivAvatar)
     //Goi intent chup anh
     public void picture() {
+        ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
         Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        fileUri = Uri.fromFile(creatFileUri(getActivity()));
+        fileUri = Uri.fromFile(imagePickerUtil.createFileUri(getActivity()));
         getCamera.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
         startActivityForResult(getCamera, ApiConstance.REQUEST_CODE_TAKEPHOTO);
     }

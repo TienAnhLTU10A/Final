@@ -13,9 +13,14 @@ import android.view.View;
 
 import com.ta.finalexam.Adapter.UserProfileListAdapter;
 import com.ta.finalexam.Bean.ImageListBean.ImageListBean;
+import com.ta.finalexam.Bean.ProfileBean.UserBean.ProfileBean;
+import com.ta.finalexam.Bean.UserBean;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.manager.UserManager;
+import com.ta.finalexam.api.ImageListResponse;
 import com.ta.finalexam.api.ProfileResponse;
+import com.ta.finalexam.api.Request.ImageListProfileUserRequest;
 import com.ta.finalexam.api.Request.ProfileUserRequest;
 import com.ta.finalexam.api.Request.UpdateProfileRequest;
 
@@ -32,6 +37,8 @@ import vn.app.base.util.FragmentUtil;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentProfile extends BaseHeaderListFragment {
+    public static final String USER_ID = "USER_ID";
+
     UpdateProfileCallBack mCallBack;
     @BindView(R.id.recycerList)
     RecyclerView rvList;
@@ -41,24 +48,28 @@ public class FragmentProfile extends BaseHeaderListFragment {
 
     @BindView(R.id.fabCamera)
     FloatingActionButton fabCamera;
-
+    List<ProfileBean> profileBeanList;
     List<ImageListBean> imageListBean;
+    String userId;
+    UserBean userBean;
 
     UserProfileListAdapter mAdapter;
-
-    String userId;
 
     public FragmentProfile() {
     }
 
-    public static FragmentProfile newInstance() {
+    public static FragmentProfile newInstance(String userId) {
         FragmentProfile fragmentProfile = new FragmentProfile();
+        Bundle bundle = new Bundle();
+        if (userId != null) {
+            bundle.putString(USER_ID, userId);
+        }
         return fragmentProfile;
     }
 
     @Override
     protected void getArgument(Bundle bundle) {
-
+        userId = bundle.getString(USER_ID);
     }
 
     @Override
@@ -112,8 +123,13 @@ public class FragmentProfile extends BaseHeaderListFragment {
 
     }
 
-    private void getProfileUser() {
-        ProfileUserRequest profileUserRequest = new ProfileUserRequest(userId);
+    private void getProfileUserHeader() {
+        ProfileUserRequest profileUserRequest;
+        if (userId.equalsIgnoreCase(UserManager.getCurrentUser().id)) {
+            profileUserRequest = new ProfileUserRequest("");
+        } else {
+            profileUserRequest = new ProfileUserRequest(userId);
+        }
         profileUserRequest.setRequestCallBack(new ApiObjectCallBack<ProfileResponse>() {
             @Override
             public void onSuccess(ProfileResponse data) {
@@ -128,7 +144,28 @@ public class FragmentProfile extends BaseHeaderListFragment {
         profileUserRequest.execute();
     }
 
-    private void handleProfileUser() {
+    private void getImageListProfileUser() {
+        ImageListProfileUserRequest imageListProfileUserRequest;
+        if (userId.equalsIgnoreCase(UserManager.getCurrentUser().id)) {
+            imageListProfileUserRequest = new ImageListProfileUserRequest("");
+        } else {
+            imageListProfileUserRequest = new ImageListProfileUserRequest(userId);
+        }
+        imageListProfileUserRequest.setRequestCallBack(new ApiObjectCallBack<ImageListResponse>() {
+            @Override
+            public void onSuccess(ImageListResponse data) {
+                initialResponseHandled();
+            }
+
+            @Override
+            public void onFail(int failCode, String message) {
+                initialNetworkError();
+            }
+        });
+        imageListProfileUserRequest.execute();
+    }
+
+    private void handleProfileUserHeader() {
 
     }
 
