@@ -29,7 +29,9 @@
         android:layout_below="@+id/imgLogo"
         android:layout_marginTop="50dp"
         android:id="@+id/etLogin"
-        android:lines="1"/>
+        android:inputType="text"
+        android:lines="1"
+        android:imeOptions="actionNext"/>
 
     <EditText
         style="@style/login_et_bg"

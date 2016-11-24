@@ -113,7 +113,7 @@ public class FragmentMenu extends CommonFragment {
         selectItem(5);
     }
 
-    @OnClick(R.id.menu_4)
+    @OnClick(R.id.menu_7)
     public void onLogout() {
         selectItem(6);
     }

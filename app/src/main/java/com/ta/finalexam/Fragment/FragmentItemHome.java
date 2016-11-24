@@ -134,6 +134,11 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             public void onMapClick(HomeBean homeBean) {
                 goToMapAddress(homeBean);
             }
+
+            @Override
+            public void onPhotoClick(HomeBean homeBean) {
+                FragmentUtil.pushFragment(getActivity(), FragmentDetail.newInstance(homeBean),null);
+            }
         });
         vAdapter.setOnClickCallBack(new OnClickRecycleView() {
             @Override

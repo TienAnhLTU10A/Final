@@ -2,7 +2,7 @@ package com.ta.finalexam.api;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.ta.finalexam.Bean.DetailBean.DetailData;
+import com.ta.finalexam.Bean.DetailBean.CommentListData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,5 +16,5 @@ import vn.app.base.api.response.BaseResponse;
 public class CommentListResponse extends BaseResponse {
     @SerializedName("data")
     @Expose
-    public List<DetailData> data = new ArrayList<DetailData>();
+    public List<CommentListData> data = new ArrayList<CommentListData>();
 }

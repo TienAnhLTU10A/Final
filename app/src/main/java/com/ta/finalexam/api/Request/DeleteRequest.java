@@ -1,7 +1,6 @@
 package com.ta.finalexam.api.Request;
 
 import com.android.volley.Request;
-import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.ApiConstance;
 
 import java.util.HashMap;
@@ -12,18 +11,15 @@ import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
- * Created by kooryy2 on 11/16/2016.
+ * Created by Veteran Commander on 11/24/2016.
  */
 
-public class FollowRequest extends ObjectApiRequest<BaseResponse> {
+public class DeleteRequest extends ObjectApiRequest<BaseResponse> {
 
-    HomeBean homeBean;
-    private String userID;
-    private int isFollow ;
+    String imageId;
 
-    public FollowRequest(String userID, int isFollow) {
-        this.userID = userID;
-        this.isFollow = isFollow;
+    public DeleteRequest(String imageId) {
+        this.imageId = imageId;
     }
 
     @Override
@@ -33,7 +29,7 @@ public class FollowRequest extends ObjectApiRequest<BaseResponse> {
 
     @Override
     public String getRequestURL() {
-        return ApiConstance.URL_FOLLOW;
+        return ApiConstance.URLDELETE;
     }
 
     @Override
@@ -42,18 +38,17 @@ public class FollowRequest extends ObjectApiRequest<BaseResponse> {
     }
 
     @Override
-    public Map<String, String> getRequestParams() {
-        Map<String,String> param = new HashMap<>();
-        param.put(ApiConstance.USERID , userID );
-        param.put(ApiConstance.FOLLOW_STATUS , String.valueOf(isFollow));
-        return param;
+    public Map<String, String> getRequestHeaders() {
+        Map<String, String> header = new HashMap<>();
+        header.put(ApiConstance.TOKEN, SharedPrefUtils.getAccessToken());
+        return header;
     }
 
     @Override
-    public Map<String, String> getRequestHeaders() {
-        Map<String , String> header = new HashMap<>();
-        header.put(ApiConstance.TOKEN, SharedPrefUtils.getAccessToken());
-        return header;
+    public Map<String, String> getRequestParams() {
+        Map<String, String> params = new HashMap<>();
+        params.put(ApiConstance.IMAGEID,imageId);
+        return params;
     }
 
     @Override

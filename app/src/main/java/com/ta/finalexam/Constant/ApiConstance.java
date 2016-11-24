@@ -54,6 +54,7 @@ public class ApiConstance {
     public static final String IMAGEID = "imageId";
     public static final String COMMENT = "comment";
     public static final String USERID = "userId";
+    public static final String URLDELETE = "https://polar-plains-86888.herokuapp.com/api/image/delete";
 
     //Follow & Favourite
     public static final String FAVOURITE_STATUS = "isFavourite";

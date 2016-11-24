@@ -3,6 +3,7 @@ package com.ta.finalexam.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.ta.finalexam.Fragment.FragmentMenu;
 import com.ta.finalexam.Fragment.FragmentNearby;
 import com.ta.finalexam.Fragment.FragmentNearby;
 import com.ta.finalexam.Fragment.FragmentProfile;
+import com.ta.finalexam.Fragment.FragmentRegister;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
 
@@ -84,6 +86,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     @Override
     public void initView() {
         if (UserManager.getCurrentUser() == null) {
+//            setUpInitScreen(FragmentRegister.newInstance(), null);
             setUpInitScreen(FragmentLogin.newInstance(), null);
         } else {
             setUpInitScreen(FragmentHome.newInstance(), null);
@@ -224,6 +227,10 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
         }
+    }
+
+    public TextView getTvDelete(){
+        return tvDelete;
     }
 }
 

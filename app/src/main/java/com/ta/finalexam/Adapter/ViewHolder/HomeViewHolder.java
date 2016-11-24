@@ -125,6 +125,10 @@ public class HomeViewHolder extends OnClickViewHolder {
     @OnClick(R.id.ivPhotoPreview)
     public void openDetail() {
         //TODO Chuyển Màn Detail
+        if (onMapCallBack != null) {
+            onMapCallBack.onPhotoClick(homeBean);
+        }
+
     }
 
     @OnClick(btnFollow)
