@@ -18,14 +18,4 @@ public class CommentListData {
     @SerializedName("created_at")
     @Expose
     public Integer createdAt;
-
-    public String username;
-
-    public String dummycomment;
-
-    public CommentListData(String username, String comment) {
-        this.username = username;
-        this.dummycomment = comment;
-    }
-
 }

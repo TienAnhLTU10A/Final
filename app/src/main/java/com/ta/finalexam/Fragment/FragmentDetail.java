@@ -96,6 +96,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
     @Override
     protected void getArgument(Bundle bundle) {
         homeBean = bundle.getParcelable(IMAGE);
+        getDummyData();
     }
 
     @Override
@@ -133,11 +134,9 @@ public class FragmentDetail extends BaseHeaderListFragment {
             }
         });
 
-        getCommentList();
-        imageDetailListAdapter = new ImageDetailListAdapter();
-        imageDetailListAdapter.setHeader(homeBean);
-        imageDetailListAdapter.setItems(commentListDummy);
-        rvList.setAdapter(imageDetailListAdapter);
+        //getCommentList();
+
+
     }
 
     @Override
@@ -156,10 +155,6 @@ public class FragmentDetail extends BaseHeaderListFragment {
     }
 
     private void getCommentList(){
-        commentListDummy = new ArrayList<>();
-        commentListDummy.add(new CommentListData("TienAnh","ACACACACAC"));
-        commentListDummy.add(new CommentListData("TienAnh","ACACACACAC"));
-        commentListDummy.add(new CommentListData("TienAnh","ACACACACAC"));
         CommentListRequest commentListRequest = new CommentListRequest(homeBean.image.id);
         commentListRequest.setRequestCallBack(new ApiObjectCallBack<CommentListResponse>() {
             @Override
@@ -167,12 +162,28 @@ public class FragmentDetail extends BaseHeaderListFragment {
                 initialResponseHandled();
                 commentList = data.data;
             }
-
             @Override
             public void onFail(int failCode, String message) {
                 DebugLog.e(message);
             }
         });
+        imageDetailListAdapter = new ImageDetailListAdapter();
+        imageDetailListAdapter.setHeader(homeBean);
+        imageDetailListAdapter.setItems(commentList);
+        rvList.setAdapter(imageDetailListAdapter);
+    }
+
+    private void getDummyData(){
+        commentListDummy = new ArrayList<>();
+        CommentListData dummyData = new CommentListData();
+        for (int i = 0; i < 5; i++) {
+            dummyData.comment = "AHAHAHAHAHAHA";
+            commentListDummy.add(dummyData);
+        }
+        imageDetailListAdapter = new ImageDetailListAdapter();
+        imageDetailListAdapter.setHeader(homeBean);
+        imageDetailListAdapter.setItems(commentListDummy);
+        rvList.setAdapter(imageDetailListAdapter);
     }
 
 

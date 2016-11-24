@@ -32,14 +32,14 @@ public class DetailItemViewHolder extends OnClickViewHolder {
     }
 
     public void bind(CommentListData commentListData){
-        if (commentListData.user.avatar.equals("")){
+        if (commentListData.user == null){
             ivAvatar.setImageResource(R.drawable.dummy_avatar);
-            StringUtil.displayText(commentListData.dummycomment, tvComment);
-        } else {
+        }else {
             Glide.with(itemView.getContext()).load(commentListData.user.avatar)
                     .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(), sCorner, sMargin)).into(ivAvatar);
-            StringUtil.displayText(commentListData.comment, tvComment);
         }
+            StringUtil.displayText(commentListData.comment, tvComment);
+
 
     }
 

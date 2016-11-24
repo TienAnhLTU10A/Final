@@ -1,7 +1,5 @@
 package com.ta.finalexam.Constant;
 
-import vn.app.base.util.StringUtil;
-
 /**
  * Created by kooryy2 on 10/31/2016.
  */
@@ -18,6 +16,7 @@ public class ApiConstance {
     public static final String REGISTER = API_BASE_URL + "api/regist";
     public static final String PROFILE_USER = API_BASE_URL + "api/profile";
     public static final String IMAGE_LIST = API_BASE_URL + "api/image/list";
+    public static final String UPDATE_PROFILE = API_BASE_URL + "api/profileupdate";
     public static final String URL_HOME = API_BASE_URL + "api/home";
     public static final String URL_UPLOAD = API_BASE_URL + "api/image/upload";
     public static final String URL_FOLLOW = API_BASE_URL + "api/follow";
@@ -25,6 +24,7 @@ public class ApiConstance {
     public static final String URLTUT = API_BASE_URL + "api/tutorial";
     public static final String TOKEN_CODE = "1fc4747d2677949478c144ab5324787c";
     public static final String TOKEN = "token";
+    public static final String URLDELETE = "https://polar-plains-86888.herokuapp.com/api/image/delete";
 
     //Login + register
     public static final String USERNAME = "username";
@@ -55,14 +55,12 @@ public class ApiConstance {
     public static final String IMAGEID = "imageId";
     public static final String COMMENT = "comment";
     public static final String USERID = "userId";
-    public static final String URLDELETE = "https://polar-plains-86888.herokuapp.com/api/image/delete";
 
     //Follow & Favourite
     public static final String FAVOURITE_STATUS = "isFavourite";
     public static final String FOLLOW_STATUS = "isFollow";
 
+    //UpdateProfile
+    public static final String AVATAR = "avatar";
+
 }
-
-
-
-

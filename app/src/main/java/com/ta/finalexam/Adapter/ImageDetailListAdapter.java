@@ -4,7 +4,6 @@ import android.view.ViewGroup;
 
 import com.ta.finalexam.Adapter.ViewHolder.DetailHeaderViewHolder;
 import com.ta.finalexam.Adapter.ViewHolder.DetailItemViewHolder;
-import com.ta.finalexam.Bean.DetailBean.ImageDetailBean;
 import com.ta.finalexam.Bean.DetailBean.CommentListData;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
 
@@ -42,4 +41,6 @@ public class ImageDetailListAdapter extends HeaderAdapterWithItemClick<OnClickVi
         CommentListData commentListData = getItem(position);
         ((DetailItemViewHolder) holder).bind(commentListData);
     }
+
+
 }
