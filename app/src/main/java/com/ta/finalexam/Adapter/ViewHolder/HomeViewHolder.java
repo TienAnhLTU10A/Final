@@ -83,7 +83,7 @@ public class HomeViewHolder extends OnClickViewHolder {
         StringUtil.displayText(homeBean.user.username, tvName);
         StringUtil.displayText(homeBean.image.caption, tvLabel);
 
-        if (homeBean.user.isFollowing) {
+        if (homeBean.user.isFollowing == true) {
             btn_follow.setBackgroundResource(R.color.color_btn_follow_bg);
             btn_follow.setText("Following");
         } else {
@@ -138,5 +138,7 @@ public class HomeViewHolder extends OnClickViewHolder {
             onClickCallBack.onFollowResponse(homeBean);
         }
     }
+
+
 
 }

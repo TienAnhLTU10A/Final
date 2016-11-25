@@ -63,4 +63,7 @@ public class ApiConstance {
     //UpdateProfile
     public static final String AVATAR = "avatar";
 
+    //TAG for fragment
+    public static final String TAGHOME = "taghome";
+
 }

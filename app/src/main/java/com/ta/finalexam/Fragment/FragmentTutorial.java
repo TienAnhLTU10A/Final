@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.ta.finalexam.Adapter.TutViewPagerAdapter;
 import com.ta.finalexam.Bean.TutorialBean.DataTut;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.Request.TutRequest;
 import com.ta.finalexam.api.TutorialResponse;
@@ -40,7 +41,7 @@ public class FragmentTutorial extends NoHeaderFragment {
     @OnClick(R.id.btn_tut_skip)
     public void onSkip() {
         //go to home screen
-        FragmentUtil.pushFragment(getActivity(), new FragmentHome(), null);
+        FragmentUtil.pushFragment(getActivity(), FragmentHome.newInstance(), null);
     }
 
     @Override

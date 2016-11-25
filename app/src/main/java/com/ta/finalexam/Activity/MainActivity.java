@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ta.finalexam.Bean.HeaderControlBean;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.Fragment.FragmentFollowlist;
 import com.ta.finalexam.Fragment.FragmentHome;
@@ -87,14 +88,15 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
         if (UserManager.getCurrentUser() == null) {
             setUpInitScreen(FragmentLogin.newInstance(), null);
         } else {
-            setUpInitScreen(FragmentHome.newInstance(), null);
+            setUpInitScreen(FragmentHome.newInstance(),ApiConstance.TAGHOME);
         }
-
 
     }
 
+
     @Override
     public void initData() {
+
     }
 
     @Override
@@ -184,6 +186,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     private void handleMenuSlide() {
         fragmentMenu = (FragmentMenu) getSupportFragmentManager().findFragmentById(R.id.nagigation_drawer);
         fragmentMenu.setUp(R.id.nagigation_drawer, drawerLayout);
+
+
     }
 
     @OnClick(R.id.headerBack)
@@ -204,6 +208,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 break;
             case 1:
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
+
                 break;
             case 2:
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentImageUpload.newInstance(), null);

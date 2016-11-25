@@ -8,10 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
 import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.ImageDetailListAdapter;
 import com.ta.finalexam.Bean.DetailBean.CommentListData;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -19,6 +21,8 @@ import com.ta.finalexam.api.CommentListResponse;
 import com.ta.finalexam.api.Request.CommentListRequest;
 import com.ta.finalexam.api.Request.CommentRequest;
 import com.ta.finalexam.api.Request.DeleteRequest;
+import com.ta.finalexam.api.Request.FollowRequest;
+import com.ta.finalexam.callback.OnDetailClicked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,8 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
     public static final String IMAGE = "image";
 
+    FollowRequest followRequest;
+
     @BindView(R.id.edt_send_cm)
     EditText edtSendCm;
 
@@ -48,7 +54,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
     @OnClick(R.id.img_send)
     public void onSendClicked() {
         if (edtSendCm.getText().toString() !=""){
-            CommentRequest commentRequest = new CommentRequest(homeBean.image.id,edtSendCm.getText().toString());
+            CommentRequest commentRequest = new CommentRequest(selectHomeBean.image.id,edtSendCm.getText().toString());
             commentRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                 @Override
                 public void onSuccess(BaseResponse data) {
@@ -62,11 +68,12 @@ public class FragmentDetail extends BaseHeaderListFragment {
                     DebugLog.e(message);
                 }
             });
+            commentRequest.execute();
         }
 
     }
 
-    HomeBean homeBean;
+    HomeBean selectHomeBean;
 
     ImageDetailListAdapter imageDetailListAdapter;
 
@@ -95,7 +102,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
     @Override
     protected void getArgument(Bundle bundle) {
-        homeBean = bundle.getParcelable(IMAGE);
+        selectHomeBean = bundle.getParcelable(IMAGE);
         getDummyData();
     }
 
@@ -113,14 +120,14 @@ public class FragmentDetail extends BaseHeaderListFragment {
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"Delete",Toast.LENGTH_SHORT);
-                if (homeBean.user.id.equals(UserManager.getCurrentUser().id)){
-                    DeleteRequest deleteRequest = new DeleteRequest(homeBean.image.id);
+                Toast.makeText(getActivity(),"Delete",Toast.LENGTH_SHORT).show();
+                if (selectHomeBean.user.id.equals(UserManager.getCurrentUser().id)){
+                    DeleteRequest deleteRequest = new DeleteRequest(selectHomeBean.image.id);
                     deleteRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                         @Override
                         public void onSuccess(BaseResponse data) {
                             if (data.status == 1){
-                                FragmentUtil.pushFragment(getActivity(),FragmentHome.newInstance(),null);
+                                FragmentUtil.pushFragment(getActivity(),FragmentHome.newInstance(), null);
                             }
                         }
 
@@ -155,7 +162,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
     }
 
     private void getCommentList(){
-        CommentListRequest commentListRequest = new CommentListRequest(homeBean.image.id);
+        CommentListRequest commentListRequest = new CommentListRequest(selectHomeBean.image.id);
         commentListRequest.setRequestCallBack(new ApiObjectCallBack<CommentListResponse>() {
             @Override
             public void onSuccess(CommentListResponse data) {
@@ -168,8 +175,19 @@ public class FragmentDetail extends BaseHeaderListFragment {
             }
         });
         imageDetailListAdapter = new ImageDetailListAdapter();
-        imageDetailListAdapter.setHeader(homeBean);
+        imageDetailListAdapter.setHeader(selectHomeBean);
         imageDetailListAdapter.setItems(commentList);
+        imageDetailListAdapter.setOnDetailClicked(new OnDetailClicked() {
+            @Override
+            public void onFollowDetailClick(HomeBean homeBean) {
+
+            }
+
+            @Override
+            public void onFavouriteDetailClick(HomeBean homeBean) {
+
+            }
+        });
         rvList.setAdapter(imageDetailListAdapter);
     }
 
@@ -181,9 +199,58 @@ public class FragmentDetail extends BaseHeaderListFragment {
             commentListDummy.add(dummyData);
         }
         imageDetailListAdapter = new ImageDetailListAdapter();
-        imageDetailListAdapter.setHeader(homeBean);
+        imageDetailListAdapter.setHeader(selectHomeBean);
         imageDetailListAdapter.setItems(commentListDummy);
+        imageDetailListAdapter.setOnDetailClicked(new OnDetailClicked() {
+            @Override
+            public void onFollowDetailClick(final HomeBean homeBean) {
+                Toast.makeText(getActivity(),"Clecl",Toast.LENGTH_SHORT).show();
+                if (homeBean.user.isFollowing){
+                    //Goi unfollow
+                    followRequest = new FollowRequest(homeBean.user.id,0);
+                    followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                        @Override
+                        public void onSuccess(BaseResponse data) {
+                            if (data.status == 1){
+                                selectHomeBean.user.isFollowing = false;
+                                imageDetailListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(int failCode, String message) {
+
+                        }
+                    });
+                } else {
+                    //Goi follow
+                    followRequest = new FollowRequest(homeBean.user.id,1);
+                    followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                        @Override
+                        public void onSuccess(BaseResponse data) {
+                            if (data.status == 1){
+                                selectHomeBean.user.isFollowing = true;
+                                imageDetailListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(int failCode, String message) {
+
+                        }
+                    });
+                }
+                followRequest.execute();
+            }
+
+
+            @Override
+            public void onFavouriteDetailClick(HomeBean homeBean) {
+
+            }
+        });
         rvList.setAdapter(imageDetailListAdapter);
+
     }
 
 

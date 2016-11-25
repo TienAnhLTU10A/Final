@@ -103,7 +103,7 @@
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/imageView_like_detail_header"
+        android:id="@+id/btn_like_detail_header"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="13dp"

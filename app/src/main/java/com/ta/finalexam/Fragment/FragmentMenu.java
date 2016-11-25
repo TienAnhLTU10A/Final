@@ -1,6 +1,7 @@
 package com.ta.finalexam.Fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
 
@@ -24,6 +26,7 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.fragment.CommonFragment;
 import vn.app.base.imageloader.ImageLoader;
+import vn.app.base.util.FragmentUtil;
 
 public class FragmentMenu extends CommonFragment {
 
@@ -42,7 +45,7 @@ public class FragmentMenu extends CommonFragment {
 
     private int mCurrentSelectPosition = 0;
     private boolean mUserLearnDrawer;
-    private DrawerLayout mDrawerLayout;
+    public DrawerLayout mDrawerLayout;
 
     View contentView;
 
@@ -174,6 +177,10 @@ public class FragmentMenu extends CommonFragment {
         mDrawerLayout = drawerLayout;
         contentView = getActivity().findViewById(R.id.container);
         mDrawerLayout.setScrimColor(Color.TRANSPARENT);
+//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+//        if ((getActivity().getSupportFragmentManager().findFragmentByTag(ApiConstance.TAGHOME).equals(FragmentHome.newInstance()))){
+//
+//        }
 
         ImageView imageDrawer = (ImageView) getActivity().findViewById(R.id.headerMenu);
         imageDrawer.setOnClickListener(new View.OnClickListener() {
@@ -235,6 +242,15 @@ public class FragmentMenu extends CommonFragment {
             }
         });
         setCurrentMenu(0);
+
+    }
+
+    public void unLockMenu(){
+        android.support.v4.app.Fragment crFragment = FragmentUtil.getCurrentFragmentByTag(getActivity(), ApiConstance.TAGHOME);
+        crFragment.getId();
+        FragmentHome fragmentHome = new FragmentHome();
+        fragmentHome.getId();
+
     }
 
     private void selectItem(int position) {
@@ -263,6 +279,8 @@ public class FragmentMenu extends CommonFragment {
                 throw new ClassCastException("Activity must implement NavigationDraweraCallbacks");
             }
         }
+
+
     }
 
 

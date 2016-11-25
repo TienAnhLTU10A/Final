@@ -6,6 +6,8 @@ import com.ta.finalexam.Adapter.ViewHolder.DetailHeaderViewHolder;
 import com.ta.finalexam.Adapter.ViewHolder.DetailItemViewHolder;
 import com.ta.finalexam.Bean.DetailBean.CommentListData;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
+import com.ta.finalexam.callback.OnClickRecycleView;
+import com.ta.finalexam.callback.OnDetailClicked;
 
 import vn.app.base.adapter.HeaderAdapterWithItemClick;
 import vn.app.base.adapter.viewholder.OnClickViewHolder;
@@ -17,6 +19,11 @@ import vn.app.base.util.UiUtil;
 
 public class ImageDetailListAdapter extends HeaderAdapterWithItemClick<OnClickViewHolder, HomeBean, CommentListData, String> {
 
+    OnDetailClicked onDetailClicked;
+
+    public void setOnDetailClicked(OnDetailClicked onDetailClicked) {
+        this.onDetailClicked = onDetailClicked;
+    }
 
     @Override
     protected OnClickViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
@@ -32,7 +39,7 @@ public class ImageDetailListAdapter extends HeaderAdapterWithItemClick<OnClickVi
     protected void onBindHeaderViewHolder(OnClickViewHolder holder, int position) {
         super.onBindHeaderViewHolder(holder, position);
 //        DummyDetail dummyDetail = getItem(0);
-        ((DetailHeaderViewHolder)holder).bind(getHeader());
+        ((DetailHeaderViewHolder)holder).bind(getHeader(),onDetailClicked);
     }
 
     @Override
