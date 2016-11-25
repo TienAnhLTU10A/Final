@@ -16,12 +16,10 @@ import vn.app.base.util.SharedPrefUtils;
  */
 
 public class FollowRequest extends ObjectApiRequest<BaseResponse> {
-
-    HomeBean homeBean;
     private String userID;
     private int isFollow ;
 
-    public FollowRequest(String userID, int isFollow) {
+    public FollowRequest(String userID, int isFollow ) {
         this.userID = userID;
         this.isFollow = isFollow;
     }
@@ -46,7 +44,7 @@ public class FollowRequest extends ObjectApiRequest<BaseResponse> {
         Map<String,String> param = new HashMap<>();
         param.put(ApiConstance.USERID , userID );
         param.put(ApiConstance.FOLLOW_STATUS , String.valueOf(isFollow));
-        return null;
+        return param;
     }
 
     @Override

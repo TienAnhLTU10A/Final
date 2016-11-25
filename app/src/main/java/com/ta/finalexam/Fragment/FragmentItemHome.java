@@ -28,22 +28,13 @@ import java.util.List;
 import butterknife.BindView;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
-import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.IntentUtil;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentItemHome extends BaseHeaderListFragment {
-    public static final int FOLLOWING = 1;
-    public static final int UN_FOLLOWING = 0;
     public int maxItem = 10;
-    public int FOLLOWSTATUS;
-
-    public static final int FAVOURITE = 1;
-    public static final int UN_FAVOURITE = 0;
-    public int FAVOURITESTATUS;
-
     private List<HomeBean> homeBeanList;
     private HomeAdapter vAdapter;
     int type;
@@ -105,9 +96,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             public void onSuccess(HomeResponse data) {
                 initialResponseHandled();
                 handleHomeData(data.data);
-                for (int i = 0; i < maxItem; i++) {
-                    homeBeanList.add(data.data.get(i));
-                }
+//                homeBeanList = data.data;
                 vAdapter.notifyDataSetChanged();
 
             }
@@ -137,24 +126,41 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         });
         vAdapter.setOnClickCallBack(new OnClickRecycleView() {
             @Override
-            public void onFollowResponse(HomeBean homeBean) {
-                if (FOLLOWSTATUS == FOLLOWING) {
-                    getFollow(FOLLOWSTATUS, homeBean);
-                } else if (FOLLOWSTATUS == UN_FOLLOWING) {
-                    getFollow(FOLLOWSTATUS, homeBean);
-                }
+            public void onFollowResponse(String userId, int status) {
+                FollowRequest followRequest = new FollowRequest(userId, status);
+                followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                    @Override
+                    public void onSuccess(BaseResponse data) {
+                        if (data.status == 1) {
+                            vAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    @Override
+                    public void onFail(int failCode, String message) {
+                    }
+                });
+                followRequest.execute();
             }
 
             @Override
-            public void onFavouriteResponse(HomeBean homeBean) {
-                if (FAVOURITESTATUS == FAVOURITE) {
-                    getFavourites(FAVOURITESTATUS, homeBean);
-                } else if (FAVOURITESTATUS == UN_FAVOURITE) {
-                    getFavourites(FAVOURITESTATUS, homeBean);
-                }
+            public void onFavouriteResponse(String imageId, int status) {
+                FavouritesRequest favouritesRequest = new FavouritesRequest(imageId, status);
+                favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                    @Override
+                    public void onSuccess(BaseResponse data) {
+                        hideCoverNetworkLoading();
+                        if (data.status == 1) {
+                            vAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFail(int failCode, String message) {
+
+                    }
+                });
+                favouritesRequest.execute();
             }
-
-
         });
     }
 
@@ -174,45 +180,5 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         } catch (UnsupportedEncodingException e) {
             return location.replace(" ", "+");
         }
-    }
-
-    private void getFollow(final int mStatus, HomeBean homeBean) {
-        showCoverNetworkLoading();
-        FollowRequest followRequest = new FollowRequest(homeBean.user.id, mStatus);
-        followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
-            @Override
-            public void onSuccess(BaseResponse data) {
-                hideCoverNetworkLoading();
-                FOLLOWSTATUS = mStatus;
-                vAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                hideCoverNetworkLoading();
-            }
-        });
-        followRequest.execute();
-    }
-
-    private void getFavourites(final int fStatus, HomeBean homeBean) {
-        showCoverNetworkLoading();
-        FavouritesRequest favouritesRequest = new FavouritesRequest(homeBean.image.id, fStatus);
-        favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
-            @Override
-            public void onSuccess(BaseResponse data) {
-                hideCoverNetworkLoading();
-                FAVOURITESTATUS = fStatus;
-                if (data.status == 1) {
-                    vAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                hideCoverNetworkLoading();
-            }
-        });
-        favouritesRequest.execute();
     }
 }

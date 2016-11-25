@@ -1,8 +1,8 @@
 package com.ta.finalexam.Activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,9 +20,6 @@ import com.ta.finalexam.Fragment.FragmentNearby;
 import com.ta.finalexam.Fragment.FragmentProfile;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
-import com.ta.finalexam.callback.OnUserInteractive;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,7 +32,7 @@ import vn.app.base.util.UiUtil;
 public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks {
 
     ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
-    FragmentProfile.UpdateProfileCallBack updateProfileCallBack;
+//    FragmentProfile.UpdateProfileCallBack updateProfileCallBack;
 
     @BindView(R.id.toolbar)
     RelativeLayout rlToolbar;
@@ -183,16 +180,6 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
         fragmentMenu.setUp(R.id.nagigation_drawer, drawerLayout);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        imagePickerUtil.handleResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == ImagePickerUtil.PICTURE_PICKER_REQUEST_CODE)
-                imagePickerUtil.createImageFile(this);
-
-        }
-    }
-
     @OnClick(R.id.headerBack)
     public void Back() {
         FragmentUtil.popBackStack(this);
@@ -234,14 +221,18 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
         }
     }
 
-    @OnClick(R.id.tv_update)
-    public void onClickUpdate(File avatar) {
-        if (updateProfileCallBack != null) {
-            updateProfileCallBack.onClickUpdate(avatar);
-        }
+    public TextView getTvUpdate() {
+        return tvUpdate;
     }
-    public void setUpdateProfileCallBack(FragmentProfile.UpdateProfileCallBack updateProfileCallBack) {
-        this.updateProfileCallBack = updateProfileCallBack;
-    }
+
+//    @OnClick(R.id.tv_update)
+//    public void onClickUpdate() {
+//        if (updateProfileCallBack != null) {
+//            updateProfileCallBack.onClickUpdate();
+//        }
+//    }
+//    public void setUpdateProfileCallBack(FragmentProfile.UpdateProfileCallBack updateProfileCallBack) {
+//        this.updateProfileCallBack = updateProfileCallBack;
+//    }
 }
 

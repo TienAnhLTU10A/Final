@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import vn.app.base.api.volley.core.ObjectApiRequest;
+import vn.app.base.util.DebugLog;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
@@ -46,7 +47,9 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
         params.put(ApiConstance.TYPE, String.valueOf(type));
-        params.put(ApiConstance.LAST_QUERY_TIMESTAMP, String.valueOf(homeBean.image.createdAt));
+        if (homeBean != null){
+            params.put(ApiConstance.LAST_QUERY_TIMESTAMP, String.valueOf(homeBean.image.createdAt));
+        }
         params.put(ApiConstance.NUM, String.valueOf(num));
         return params;
     }

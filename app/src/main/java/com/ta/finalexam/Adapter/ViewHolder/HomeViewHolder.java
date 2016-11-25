@@ -18,9 +18,6 @@ import butterknife.OnClick;
 import vn.app.base.adapter.viewholder.OnClickViewHolder;
 import vn.app.base.util.StringUtil;
 
-import static com.ta.finalexam.R.id.btnFollow;
-import static com.ta.finalexam.R.id.ivLike;
-
 /**
  * Created by kooryy2 on 10/30/2016.
  */
@@ -28,7 +25,6 @@ import static com.ta.finalexam.R.id.ivLike;
 public class HomeViewHolder extends OnClickViewHolder {
     public static int sCorner = 15;
     public static int sMargin = 2;
-    public static int followStatus = 10;
     OnMapClick onMapCallBack;
     OnClickRecycleView onClickCallBack;
     private HomeBean homeBean;
@@ -36,8 +32,8 @@ public class HomeViewHolder extends OnClickViewHolder {
     @BindView(R.id.ivAvatar)
     ImageView ivUserPhoto;
 
-    @BindView(R.id.btnFollow)
-    Button btn_follow;
+    @BindView(R.id.btnFollow_Home)
+    Button btnFollow_Home;
 
     @BindView(R.id.tvNameHome)
     TextView tvName;
@@ -54,11 +50,11 @@ public class HomeViewHolder extends OnClickViewHolder {
     @BindView(R.id.tvLocation)
     TextView tvLocation;
 
-    @BindView(ivLike)
-    ImageView ivFavourite;
+    @BindView(R.id.ivLike_Home)
+    ImageView ivFavourite_Home;
 
-    boolean mFollow, mFavourites;
     int hashtash;
+    boolean isFollow = false, isFavourite = false;
 
     public HomeViewHolder(View itemView) {
         super(itemView);
@@ -69,7 +65,7 @@ public class HomeViewHolder extends OnClickViewHolder {
         this.onClickCallBack = onClickRecycleView;
         this.homeBean = homeBean;
 
-        Glide.with(itemView.getContext()).load(homeBean.user.avatar)
+        Glide.with(itemView.getContext()).load(homeBean.user.avatar).placeholder(R.drawable.placeholer_avatar)
                 .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(), sCorner, sMargin)).into(ivUserPhoto);
         Glide.with(itemView.getContext()).load(homeBean.image.url).crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL).into(ivPhotoCover);
@@ -79,35 +75,38 @@ public class HomeViewHolder extends OnClickViewHolder {
             StringUtil.displayText(homeBean.image.hashtag.get(i), tvHashTag);
         }
 
-        StringUtil.displayText(homeBean.image.location, tvLocation);
+        String location = homeBean.image.location;
+        location.replace("\n", "");
+        StringUtil.displayText(location, tvLocation);
         StringUtil.displayText(homeBean.user.username, tvName);
         StringUtil.displayText(homeBean.image.caption, tvLabel);
 
-        if (homeBean.user.isFollowing) {
-            btn_follow.setBackgroundResource(R.color.color_btn_follow_bg);
-            btn_follow.setText("Following");
+        if (homeBean.user.isFollowing == true) {
+            btnFollow_Home.setBackgroundResource(R.color.color_btn_follow_bg);
+            btnFollow_Home.setText("Following");
         } else {
-            btn_follow.setBackgroundResource(R.color.txt_gray);
-            btn_follow.setText("Follow");
+            btnFollow_Home.setBackgroundResource(R.color.txt_gray);
+            btnFollow_Home.setText("Follow");
         }
+        isFollow = homeBean.user.isFollowing;
 
         if (homeBean.image.isFavourite) {
-            ivFavourite.setImageResource(R.drawable.icon_favourite);
+            ivFavourite_Home.setImageResource(R.drawable.icon_favourite);
         } else {
-            ivFavourite.setImageResource(R.drawable.icon_no_favourite);
+            ivFavourite_Home.setImageResource(R.drawable.icon_no_favourite);
         }
-        mFavourites = homeBean.image.isFavourite;
+        isFavourite = homeBean.image.isFavourite;
+    }
 
-        if (homeBean.user.isFollowing) {
-            btn_follow.setBackgroundResource(R.drawable.btn_following);
-            btn_follow.setText("Following");
-
-        } else {
-            btn_follow.setBackgroundResource(R.drawable.btn_un_following);
-            btn_follow.setText("Follow");
+    @OnClick(R.id.btnFollow_Home)
+    public void FollowUser() {
+        if (onClickCallBack != null) {
+            if (!isFollow) {
+                onClickCallBack.onFollowResponse(homeBean.user.id, 1);
+            } else {
+                onClickCallBack.onFollowResponse(homeBean.user.id, 0);
+            }
         }
-        mFollow = homeBean.user.isFollowing;
-
     }
 
     @OnClick(R.id.tvLocation)
@@ -127,11 +126,14 @@ public class HomeViewHolder extends OnClickViewHolder {
         //TODO Chuyển Màn Detail
     }
 
-    @OnClick(btnFollow)
-    public void onUserInteractive() {
+
+    @OnClick(R.id.ivLike_Home)
+    public void FavouriteImage() {
         if (onClickCallBack != null) {
-            onClickCallBack.onFavouriteResponse(homeBean);
-            onClickCallBack.onFollowResponse(homeBean);
+            if (!isFavourite)
+                onClickCallBack.onFavouriteResponse(homeBean.image.id, 1);
+        } else {
+            onClickCallBack.onFavouriteResponse(homeBean.image.id, 0);
         }
     }
 

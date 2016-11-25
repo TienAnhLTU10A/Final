@@ -70,11 +70,6 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
     }
 
     @Override
-    protected int getRightIcon() {
-        return HeaderOption.RIGHT_UPDATE;
-    }
-
-    @Override
     public String getScreenTitle() {
         return "Follow";
     }

@@ -1,8 +1,6 @@
 package com.ta.finalexam.Fragment;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,7 +8,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.UserProfileListAdapter;
 import com.ta.finalexam.Bean.ImageListBean.ImageListBean;
 import com.ta.finalexam.Bean.ProfileBean.UserBean.ProfileBean;
@@ -39,7 +40,7 @@ import vn.app.base.util.FragmentUtil;
 public class FragmentProfile extends BaseHeaderListFragment {
     public static final String USER_ID = "USER_ID";
 
-    UpdateProfileCallBack mCallBack;
+    //    UpdateProfileCallBack mCallBack;
     @BindView(R.id.recycerList)
     RecyclerView rvList;
 
@@ -120,7 +121,13 @@ public class FragmentProfile extends BaseHeaderListFragment {
 
     @Override
     protected void initData() {
-
+        TextView tvUpdate = ((MainActivity) getActivity()).getTvUpdate();
+        tvUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "test", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void getProfileUserHeader() {
@@ -184,32 +191,39 @@ public class FragmentProfile extends BaseHeaderListFragment {
         FragmentUtil.pushFragment(getActivity(), FragmentImageUpload.newInstance(), null);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Activity activity = context instanceof Activity ? (Activity) context : null;
-        if (activity != null) {
-            try {
-                mCallBack = (UpdateProfileCallBack) activity;
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Activity must implement UpdateProfileCallBack");
-            }
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallBack = null;
-    }
-
-    /**
-     * Callbacks interface that all activities using this fragment must implement.
-     */
-    public interface UpdateProfileCallBack {
-        /**
-         * Called when an item in the navigation drawer is selected.
-         */
-        void onClickUpdate(File avatar);
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        Activity activity = context instanceof Activity ? (Activity) context : null;
+//        if (activity != null) {
+//            try {
+//                mCallBack = (UpdateProfileCallBack) activity;
+//            } catch (ClassCastException e) {
+//                throw new ClassCastException("Activity must implement UpdateProfileCallBack");
+//            }
+//            ((MainActivity)activity).setUpdateProfileCallBack(new UpdateProfileCallBack() {
+//                @Override
+//                public void onClickUpdate() {
+//
+//                }
+//
+//            });
+//        }
+//    }
+//
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        mCallBack = null;
+//    }
+//
+//    /**
+//     * Callbacks interface that all activities using this fragment must implement.
+//     */
+//    public interface UpdateProfileCallBack {
+//        /**
+//         * Called when an item in the navigation drawer is selected.
+//         */
+//        void onClickUpdate();
+//    }
 }

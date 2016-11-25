@@ -46,6 +46,7 @@ import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.util.BitmapUtil;
 import vn.app.base.util.DebugLog;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 
 import static com.ta.finalexam.Fragment.RegisterFragment.REGISTER_PHOTO;
 
@@ -53,7 +54,6 @@ import static com.ta.finalexam.Fragment.RegisterFragment.REGISTER_PHOTO;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentImageUpload extends HeaderFragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private static final String APP_TAG = FragmentImageUpload.class.getSimpleName();
     @BindView(R.id.ivPhotoHeader)
     ImageView ivPhotoPreview;
 
@@ -156,8 +156,9 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
     }
 
     private void onLauchCamera() {
+        ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
         Intent getCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        fileUri = Uri.fromFile(creatFileUri(getActivity()));
+        fileUri = Uri.fromFile(imagePickerUtil.createFileUri(getActivity()));
         getCamera.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
         startActivityForResult(getCamera, ApiConstance.REQUEST_CODE_TAKEPHOTO);
     }
@@ -188,30 +189,11 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
             }
         }
     }
-
-    //tao file uri
-    public File creatFileUri(Context context) {
-        File[] externalFile = ContextCompat.getExternalFilesDirs(context, null);
-        if (externalFile == null) {
-            externalFile = new File[]{context.getExternalFilesDir(null)};
-        }
-        final File root = new File(externalFile[0] + File.separator + "InstagramFaker" + File.separator);
-        root.mkdir();
-        final String fname = REGISTER_PHOTO;
-        final File sdImageMainDirectory = new File(root, fname);
-        if (sdImageMainDirectory.exists()) {
-            sdImageMainDirectory.delete();
-        }
-        return sdImageMainDirectory;
-    }
-
     //Tao file tu Bitmap
     private File creatFilefromBitmap(Bitmap bitmap) throws IOException {
-
         File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
         imageDir.mkdir();
         imageAvatar = new File(imageDir, "avatarCropped.jpg");
-        DebugLog.i("Duong dan" + imageDir);
         OutputStream fOut = new FileOutputStream(imageAvatar);
         Bitmap getBitmap = bitmap;
         getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
@@ -282,7 +264,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
                 StringBuilder strReturnedAddress = new StringBuilder("");
 
                 for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("");
                 }
                 location = strReturnedAddress.toString();
             }
