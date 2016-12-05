@@ -15,6 +15,7 @@ import vn.app.base.util.StringUtil;
 
 /**
  * Created by Veteran Commander on 10/26/2016.
+ * last fix : 5/12/2016 by TA
  */
 
 public class DetailItemViewHolder extends OnClickViewHolder {
@@ -31,14 +32,14 @@ public class DetailItemViewHolder extends OnClickViewHolder {
         super(itemView);
     }
 
-    public void bind(CommentListData commentListData){
-        if (commentListData.user == null){
+    public void bind(CommentListData commentListData) {
+        if (commentListData.user == null) {
             ivAvatar.setImageResource(R.drawable.dummy_avatar);
-        }else {
+        } else {
             Glide.with(itemView.getContext()).load(commentListData.user.avatar)
                     .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(), sCorner, sMargin)).into(ivAvatar);
         }
-            StringUtil.displayText(commentListData.comment, tvComment);
+        StringUtil.displayText(commentListData.comment, tvComment);
 
 
     }

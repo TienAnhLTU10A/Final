@@ -57,6 +57,6 @@ public class CommentListRequest extends ObjectApiRequest<CommentListResponse> {
 
     @Override
     public int getMethod() {
-        return Request.Method.GET;
+        return Request.Method.POST;
     }
 }

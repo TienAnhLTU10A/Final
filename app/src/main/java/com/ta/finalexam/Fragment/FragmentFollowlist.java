@@ -6,12 +6,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ta.finalexam.Adapter.FollowListAdapter;
+import com.ta.finalexam.Bean.FollowlistBean.User;
 import com.ta.finalexam.Bean.MemberBean;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.FollowlistResponse;
 import com.ta.finalexam.api.Request.FollowlistRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
@@ -20,22 +22,26 @@ import vn.app.base.util.DebugLog;
 
 /**
  * Created by Veteran Commander on 10/14/2016.
+ * last fix : 5/12/2016 by TA
  */
 
 public class FragmentFollowlist extends BaseHeaderListFragment {
-//    List<Member> memberFollowList;
+    List<User> memberFollowList;
     FollowListAdapter followListAdapter;
 
-    public static FragmentFollowlist newInstance(){
+    public FragmentFollowlist() {
+
+    }
+
+    public static FragmentFollowlist newInstance() {
         FragmentFollowlist newFragment = new FragmentFollowlist();
         return newFragment;
     }
 
 
-
     @Override
     protected void onRefreshData() {
-
+        getFollowlistdata();
     }
 
     @Override
@@ -45,7 +51,9 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
 
     @Override
     protected void initData() {
-        getFollowlistdata();
+        if (memberFollowList == null) {
+            getFollowlistdata();
+        }
     }
 
     @Override
@@ -57,6 +65,39 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
     protected void initView(View root) {
         super.initView(root);
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void getFollowlistdata() {
+        showCoverNetworkLoading();
+        FollowlistRequest followlistRequest = new FollowlistRequest();
+        followlistRequest.setRequestCallBack(new ApiObjectCallBack<FollowlistResponse>() {
+            @Override
+            public void onSuccess(FollowlistResponse data) {
+                hideCoverNetworkLoading();
+                memberFollowList = data.data;
+                handleFollowlistdata(memberFollowList);
+            }
+
+            @Override
+            public void onFail(int failCode, String message) {
+                DebugLog.e("Error" + failCode + message);
+            }
+        });
+        followlistRequest.execute();
+    }
+
+    private void handleFollowlistdata(List<User> dataFollowList) {
+        followListAdapter = new FollowListAdapter(dataFollowList);
+        followListAdapter.setOnRecyclerViewItemClick(new OnRecyclerViewItemClick() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //int realpos = position + 1;
+                //Toast.makeText(getActivity(), realpos + "", Toast.LENGTH_SHORT).show();
+                //TODO: chuyen man user
+            }
+        });
+        rvList.setAdapter(followListAdapter);
+
     }
 
     @Override
@@ -71,7 +112,7 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
 
     @Override
     protected int getRightIcon() {
-        return HeaderOption.RIGHT_UPDATE;
+        return HeaderOption.RIGHT_NO_OPTION;
     }
 
     @Override
@@ -81,43 +122,8 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
 
     @Override
     protected boolean isStartWithLoading() {
-        return true;
+        return false;
     }
-
-    private void getFollowlistdata(){
-        FollowlistRequest followlistRequest = new FollowlistRequest();
-        followlistRequest.setRequestCallBack(new ApiObjectCallBack<FollowlistResponse>() {
-            @Override
-            public void onSuccess(FollowlistResponse data) {
-                initialResponseHandled();
-                DebugLog.i("" + data.status);
-                DebugLog.i(data.message);
-//                handleFollowlistdata(data.data);
-
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                DebugLog.e("Error" + failCode + message);
-            }
-        });
-        followlistRequest.execute();
-    }
-
-    private void handleFollowlistdata(List<MemberBean> dataFollowList){
-        followListAdapter = new FollowListAdapter(dataFollowList);
-        followListAdapter.setOnRecyclerViewItemClick(new OnRecyclerViewItemClick() {
-            @Override
-            public void onItemClick(View view, int position) {
-                int realpos = position + 1;
-                Toast.makeText(getActivity(),realpos + "" ,Toast.LENGTH_SHORT).show();
-            }
-        });
-        rvList.setAdapter(followListAdapter);
-
-    }
-
-
 
 
 }

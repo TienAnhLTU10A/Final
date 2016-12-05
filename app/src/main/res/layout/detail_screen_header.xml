@@ -60,11 +60,13 @@
             android:layout_below="@+id/layout_title_detail_header"
             android:layout_marginTop="7dp" />
 
+
         <TextView
             android:id="@+id/tvLocation_detail_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/ivPhotoCover_detail_header"
+            android:layout_marginTop="15dp"
             android:layout_alignLeft="@+id/lnlayout"
             android:layout_marginBottom="18dp"
             android:background="#FF13212D"

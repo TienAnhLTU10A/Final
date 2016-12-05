@@ -25,6 +25,7 @@ import static com.ta.finalexam.R.id.btn_follow_detail_header;
 
 /**
  * Created by Veteran Commander on 10/26/2016.
+ * last fix : 5/12/2016 by TA
  */
 
 public class DetailHeaderViewHolder extends OnClickViewHolder {
@@ -40,6 +41,12 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
 
     @BindView(R.id.ivProfile_detail_header)
     ImageView ivAvatar;
+    @OnClick(R.id.ivProfile_detail_header)
+    public void gotoProfile(){
+        if (onDetailClicked != null) {
+            onDetailClicked.onAvatarClicked(selectedHomeBean);
+        }
+    }
     @BindView(R.id.tvName_detail_header)
     TextView tvUserName;
     @BindView(R.id.btn_follow_detail_header)
@@ -52,6 +59,14 @@ public class DetailHeaderViewHolder extends OnClickViewHolder {
     TextView tvHashtag;
     @BindView(R.id.tvLocation_detail_screen)
     TextView tvLocation;
+    @OnClick(R.id.tvLocation_detail_screen)
+    public void openMapDetailScreen() {
+        if (onDetailClicked != null) {
+            onDetailClicked.onMapClick(selectedHomeBean);
+        }
+    }
+
+
     @BindView(R.id.btn_like_detail_header)
     FloatingActionButton fabFavorite;
    

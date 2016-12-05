@@ -17,5 +17,5 @@ public class CommentListData {
     public String comment;
     @SerializedName("created_at")
     @Expose
-    public Integer createdAt;
+    public String createdAt;
 }
