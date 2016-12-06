@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.StringEncryption;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -30,6 +31,7 @@ import vn.app.base.util.StringUtil;
 
 /**
  * Created by 3543 on 10/14/2016.
+ * last fix by TA 6/12/2016
  */
 
 public class FragmentLogin extends NoHeaderFragment {
@@ -117,7 +119,11 @@ public class FragmentLogin extends NoHeaderFragment {
                     SharedPrefUtils.saveAccessToken(data.data.token);
                     DebugLog.i("Token la" + SharedPrefUtils.getAccessToken());
                     UserManager.saveCurrentUser(data.data);
-                    FragmentUtil.pushFragment(getActivity(), new FragmentHome(), null);
+                    if(SharedPrefUtils.getBoolean(ApiConstance.ISLOGINYET,false) == false){
+                        FragmentUtil.pushFragment(getActivity(), new FragmentTutorial(), null);
+                        SharedPrefUtils.putBoolean(ApiConstance.ISLOGINYET,true);
+                    } else FragmentUtil.pushFragment(getActivity(), new FragmentHome(), null);
+
                 } else Toast.makeText(getActivity(), "Fail roi", Toast.LENGTH_SHORT).show();
 
 

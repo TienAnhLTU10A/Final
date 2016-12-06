@@ -2,6 +2,7 @@ package com.ta.finalexam.Constant;
 
 /**
  * Created by kooryy2 on 10/31/2016.
+ * last fix by TA on 6/12/2016
  */
 
 public class ApiConstance {
@@ -34,6 +35,7 @@ public class ApiConstance {
     public static final int REQUEST_CODE_TAKEPHOTO = 100;
     public static final String PHOTO_FILE_NAME = "photo.jpg";
     public static final String AVATAR_PHOTO = "photo_avatar.jpg";
+    public static final String ISLOGINYET = "isloginyet";
 
     //ImageUpload Request
     public static final String UNKNOW_ERROR = "UNKNOW_ERROR";

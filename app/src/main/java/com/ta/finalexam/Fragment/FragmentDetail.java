@@ -122,7 +122,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
         super.initView(root);
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvList.addItemDecoration(new DividerItemDecoration(getActivity(), null));
-        setCanRefresh(false);
+        setCanRefresh(true);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(),"Delete",Toast.LENGTH_SHORT).show();
-                if (selectHomeBean.user.id.equals(UserManager.getCurrentUser().id)){
+                if (selectHomeBean.user.username.equals(UserManager.getCurrentUser().username)){
                     DeleteRequest deleteRequest = new DeleteRequest(selectHomeBean.image.id);
                     deleteRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                         @Override
@@ -149,6 +149,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
                         }
                     });
+                    deleteRequest.execute();
                 }
 
             }
@@ -187,7 +188,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
 //                    commentList.add(commentListData);
 //                }
                 commentList = data.data;
-                hideCoverNetworkLoading();
+                initialResponseHandled();
                 setRecyclerView(commentList);
             }
             @Override

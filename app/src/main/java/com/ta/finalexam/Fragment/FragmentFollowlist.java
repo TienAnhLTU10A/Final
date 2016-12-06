@@ -58,13 +58,19 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
 
     @Override
     protected boolean isSkipGenerateBaseLayout() {
-        return true;
+        return false;
     }
 
     @Override
     protected void initView(View root) {
         super.initView(root);
+        setCanRefresh(true);
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    @Override
+    public void onRefresh() {
+        getFollowlistdata();
     }
 
     private void getFollowlistdata() {
@@ -73,7 +79,8 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
         followlistRequest.setRequestCallBack(new ApiObjectCallBack<FollowlistResponse>() {
             @Override
             public void onSuccess(FollowlistResponse data) {
-                hideCoverNetworkLoading();
+//                hideCoverNetworkLoading();
+                initialResponseHandled();
                 memberFollowList = data.data;
                 handleFollowlistdata(memberFollowList);
             }
