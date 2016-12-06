@@ -9,13 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.maps.model.LatLng;
 import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.ImageDetailListAdapter;
 import com.ta.finalexam.Bean.DetailBean.CommentListData;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
-import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -140,7 +138,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
                         @Override
                         public void onSuccess(BaseResponse data) {
                             if (data.status == 1){
-                                FragmentUtil.pushFragment(getActivity(),FragmentHome.newInstance(), null);
+                                FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentHome.newInstance(), null);
                             }
                         }
 
@@ -154,9 +152,6 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
             }
         });
-
-
-
 
     }
 
@@ -182,11 +177,6 @@ public class FragmentDetail extends BaseHeaderListFragment {
         commentListRequest.setRequestCallBack(new ApiObjectCallBack<CommentListResponse>() {
             @Override
             public void onSuccess(CommentListResponse data) {
-//                CommentListData commentListData = new CommentListData();
-//                for (int i = 0 ; i <data.data.size(); i ++ ){
-//                    commentListData = data.data.get(i);
-//                    commentList.add(commentListData);
-//                }
                 commentList = data.data;
                 initialResponseHandled();
                 setRecyclerView(commentList);
@@ -246,7 +236,6 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
             @Override
             public void onFavouriteDetailClick(HomeBean homeBean) {
-                //TODO: get favourite request
                 if (homeBean.image.isFavourite){
                     //Goi unfavorite
                     favouritesRequest = new FavouritesRequest(homeBean.image.id,0);
@@ -317,68 +306,5 @@ public class FragmentDetail extends BaseHeaderListFragment {
             return location.replace(" ", "+");
         }
     }
-
-//    private void getDummyData(){
-//        commentListDummy = new ArrayList<>();
-//        CommentListData dummyData = new CommentListData();
-//        for (int i = 0; i < 5; i++) {
-//            dummyData.comment = "AHAHAHAHAHAHA";
-//            commentListDummy.add(dummyData);
-//        }
-//        imageDetailListAdapter = new ImageDetailListAdapter();
-//        imageDetailListAdapter.setHeader(selectHomeBean);
-//        imageDetailListAdapter.setItems(commentListDummy);
-//        imageDetailListAdapter.setOnDetailClicked(new OnDetailClicked() {
-//            @Override
-//            public void onFollowDetailClick(final HomeBean homeBean) {
-//                Toast.makeText(getActivity(),"Clecl",Toast.LENGTH_SHORT).show();
-//                if (homeBean.user.isFollowing){
-//                    //Goi unfollow
-//                    followRequest = new FollowRequest(homeBean.user.id,0);
-//                    followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
-//                        @Override
-//                        public void onSuccess(BaseResponse data) {
-//                            if (data.status == 1){
-//                                selectHomeBean.user.isFollowing = false;
-//                                imageDetailListAdapter.notifyDataSetChanged();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFail(int failCode, String message) {
-//
-//                        }
-//                    });
-//                } else {
-//                    //Goi follow
-//                    followRequest = new FollowRequest(homeBean.user.id,1);
-//                    followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
-//                        @Override
-//                        public void onSuccess(BaseResponse data) {
-//                            if (data.status == 1){
-//                                selectHomeBean.user.isFollowing = true;
-//                                imageDetailListAdapter.notifyDataSetChanged();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFail(int failCode, String message) {
-//
-//                        }
-//                    });
-//                }
-//                followRequest.execute();
-//            }
-//
-//
-//            @Override
-//            public void onFavouriteDetailClick(HomeBean homeBean) {
-//
-//            }
-//        });
-//        rvList.setAdapter(imageDetailListAdapter);
-//
-//    }
-
 
 }

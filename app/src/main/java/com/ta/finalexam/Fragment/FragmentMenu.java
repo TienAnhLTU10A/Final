@@ -177,10 +177,6 @@ public class FragmentMenu extends CommonFragment {
         mDrawerLayout = drawerLayout;
         contentView = getActivity().findViewById(R.id.container);
         mDrawerLayout.setScrimColor(Color.TRANSPARENT);
-//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//        if ((getActivity().getSupportFragmentManager().findFragmentByTag(ApiConstance.TAGHOME).equals(FragmentHome.newInstance()))){
-//
-//        }
 
         ImageView imageDrawer = (ImageView) getActivity().findViewById(R.id.headerMenu);
         imageDrawer.setOnClickListener(new View.OnClickListener() {
@@ -245,13 +241,6 @@ public class FragmentMenu extends CommonFragment {
 
     }
 
-    public void unLockMenu(){
-        android.support.v4.app.Fragment crFragment = FragmentUtil.getCurrentFragmentByTag(getActivity(), ApiConstance.TAGHOME);
-        crFragment.getId();
-        FragmentHome fragmentHome = new FragmentHome();
-        fragmentHome.getId();
-
-    }
 
     private void selectItem(int position) {
 //        if (position != 2 && position != 4 && position != 5) {

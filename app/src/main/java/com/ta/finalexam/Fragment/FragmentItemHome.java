@@ -34,6 +34,7 @@ import vn.app.base.util.IntentUtil;
 
 /**
  * A simple {@link Fragment} subclass.
+ * last fix by TA on 6/12/2016
  */
 public class FragmentItemHome extends BaseHeaderListFragment {
     public static final int FOLLOWING = 1;
@@ -140,7 +141,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
 
             @Override
             public void onPhotoClick(HomeBean homeBean) {
-                FragmentUtil.pushFragment(getActivity(), FragmentDetail.newInstance(homeBean),null);
+                FragmentUtil.pushFragmentWithAnimation(getActivity(), FragmentDetail.newInstance(homeBean),null);
             }
         });
         vAdapter.setOnClickCallBack(new OnClickRecycleView() {

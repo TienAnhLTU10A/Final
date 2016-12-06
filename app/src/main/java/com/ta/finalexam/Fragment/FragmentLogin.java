@@ -120,9 +120,9 @@ public class FragmentLogin extends NoHeaderFragment {
                     DebugLog.i("Token la" + SharedPrefUtils.getAccessToken());
                     UserManager.saveCurrentUser(data.data);
                     if(SharedPrefUtils.getBoolean(ApiConstance.ISLOGINYET,false) == false){
-                        FragmentUtil.pushFragment(getActivity(), new FragmentTutorial(), null);
+                        FragmentUtil.pushFragmentWithAnimation(getActivity(), new FragmentTutorial(), null);
                         SharedPrefUtils.putBoolean(ApiConstance.ISLOGINYET,true);
-                    } else FragmentUtil.pushFragment(getActivity(), new FragmentHome(), null);
+                    } else FragmentUtil.pushFragmentWithAnimation(getActivity(), new FragmentHome(), null);
 
                 } else Toast.makeText(getActivity(), "Fail roi", Toast.LENGTH_SHORT).show();
 

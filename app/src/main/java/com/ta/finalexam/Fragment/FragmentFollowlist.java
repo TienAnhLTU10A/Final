@@ -98,9 +98,8 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
         followListAdapter.setOnRecyclerViewItemClick(new OnRecyclerViewItemClick() {
             @Override
             public void onItemClick(View view, int position) {
-                //int realpos = position + 1;
-                //Toast.makeText(getActivity(), realpos + "", Toast.LENGTH_SHORT).show();
                 //TODO: chuyen man user
+
             }
         });
         rvList.setAdapter(followListAdapter);
