@@ -28,6 +28,10 @@ import vn.app.base.fragment.CommonFragment;
 import vn.app.base.imageloader.ImageLoader;
 import vn.app.base.util.FragmentUtil;
 
+/**
+ * last fix by TA 6/12/2016
+ */
+
 public class FragmentMenu extends CommonFragment {
 
     @BindView(R.id.tvUserName)
