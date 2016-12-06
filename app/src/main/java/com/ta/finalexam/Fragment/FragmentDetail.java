@@ -14,6 +14,7 @@ import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.ImageDetailListAdapter;
 import com.ta.finalexam.Bean.DetailBean.CommentListData;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -127,31 +128,15 @@ public class FragmentDetail extends BaseHeaderListFragment {
     protected void initData() {
         commentList = new ArrayList<>();
         getCommentList();
-        TextView tvDelete = ((MainActivity)getActivity()).getTvDelete();
-        tvDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(),"Delete",Toast.LENGTH_SHORT).show();
-                if (selectHomeBean.user.username.equals(UserManager.getCurrentUser().username)){
-                    DeleteRequest deleteRequest = new DeleteRequest(selectHomeBean.image.id);
-                    deleteRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
-                        @Override
-                        public void onSuccess(BaseResponse data) {
-                            if (data.status == 1){
-                                FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentHome.newInstance(), null);
-                            }
-                        }
-
-                        @Override
-                        public void onFail(int failCode, String message) {
-
-                        }
-                    });
-                    deleteRequest.execute();
-                }
-
-            }
-        });
+//        TextView tvDelete = ((MainActivity)getActivity()).getTvDelete();
+//        tvDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getActivity(),"Delete",Toast.LENGTH_SHORT).show();
+//
+//
+//            }
+//        });
 
     }
 
@@ -307,4 +292,28 @@ public class FragmentDetail extends BaseHeaderListFragment {
         }
     }
 
+    @Override
+    public void onFragmentUIHandle(Bundle bundle) {
+        super.onFragmentUIHandle(bundle);
+        if (bundle.getBoolean(ApiConstance.ISDELCLICK) == true){
+            Toast.makeText(getActivity(),"DELETE",Toast.LENGTH_SHORT).show();
+        }
+        if (selectHomeBean.user.username.equals(UserManager.getCurrentUser().username)){
+            DeleteRequest deleteRequest = new DeleteRequest(selectHomeBean.image.id);
+            deleteRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                @Override
+                public void onSuccess(BaseResponse data) {
+                    if (data.status == 1){
+                        FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentHome.newInstance(), null);
+                    }
+                }
+
+                @Override
+                public void onFail(int failCode, String message) {
+
+                }
+            });
+            deleteRequest.execute();
+        }
+    }
 }

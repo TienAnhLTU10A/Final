@@ -59,9 +59,9 @@ public class FragmentMenu extends CommonFragment {
     public FragmentMenu() {
     }
 
-    public static FragmentMenu newInstance() {
+    public static FragmentMenu newInstance(Bundle bundle) {
         FragmentMenu fragment = new FragmentMenu();
-        Bundle args = new Bundle();
+        Bundle args = bundle;
         fragment.setArguments(args);
         return fragment;
     }
@@ -138,6 +138,15 @@ public class FragmentMenu extends CommonFragment {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
+    @Override
+    public void onFragmentDataHandle(Bundle bundle) {
+        super.onFragmentDataHandle(bundle);
+        if (bundle.getBoolean(ApiConstance.ISUSERSAVED) == true) {
+
+
+        }
+    }
+
     public void setCurrentMenu(int position) {
         View currentmenu = getMenuByPosition(currentmenupos);
         if (currentmenu != null) {
@@ -172,6 +181,9 @@ public class FragmentMenu extends CommonFragment {
     }
 
     public void setUp(final int fragmentId, DrawerLayout drawerLayout) {
+
+        tvUserName_Nav.setText(UserManager.getCurrentUser().username);
+        ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
 
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
@@ -294,4 +306,6 @@ public class FragmentMenu extends CommonFragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+
 }

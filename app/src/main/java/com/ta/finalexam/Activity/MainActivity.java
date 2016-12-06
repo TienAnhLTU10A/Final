@@ -60,6 +60,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
+
+
     FragmentMenu fragmentMenu;
 
 
@@ -200,6 +202,15 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     }
 
+    @OnClick(R.id.tv_delete)
+    public void onDelete(){
+        if (fragmentListener!=null){
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(ApiConstance.ISDELCLICK,true);
+            fragmentListener.onFragmentUIHandle(bundle);
+        }
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
@@ -229,6 +240,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 UserManager.clearUserData();
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
+
         }
     }
 

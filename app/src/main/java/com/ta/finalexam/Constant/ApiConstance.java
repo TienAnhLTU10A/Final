@@ -1,5 +1,7 @@
 package com.ta.finalexam.Constant;
 
+import vn.app.base.util.StringUtil;
+
 /**
  * Created by kooryy2 on 10/31/2016.
  * last fix by TA on 6/12/2016
@@ -36,6 +38,7 @@ public class ApiConstance {
     public static final String PHOTO_FILE_NAME = "photo.jpg";
     public static final String AVATAR_PHOTO = "photo_avatar.jpg";
     public static final String ISLOGINYET = "isloginyet";
+    public static final String ISUSERSAVED = "saved";
 
     //ImageUpload Request
     public static final String UNKNOW_ERROR = "UNKNOW_ERROR";
@@ -57,6 +60,7 @@ public class ApiConstance {
     public static final String IMAGEID = "imageId";
     public static final String COMMENT = "comment";
     public static final String USERID = "userId";
+    public static final String ISDELCLICK = "isdeleteclicked";
 
     //Follow & Favourite
     public static final String FAVOURITE_STATUS = "isFavourite";

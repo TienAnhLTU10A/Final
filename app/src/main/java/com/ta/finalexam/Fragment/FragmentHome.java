@@ -74,4 +74,5 @@ public class FragmentHome extends HeaderFragment {
     public void onFap() {
         FragmentUtil.pushFragment(getActivity(), FragmentImageUpload.newInstance(), null);
     }
+
 }

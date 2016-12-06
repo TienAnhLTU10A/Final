@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.StringEncryption;
@@ -119,6 +120,7 @@ public class FragmentLogin extends NoHeaderFragment {
                     SharedPrefUtils.saveAccessToken(data.data.token);
                     DebugLog.i("Token la" + SharedPrefUtils.getAccessToken());
                     UserManager.saveCurrentUser(data.data);
+
                     if(SharedPrefUtils.getBoolean(ApiConstance.ISLOGINYET,false) == false){
                         FragmentUtil.pushFragmentWithAnimation(getActivity(), new FragmentTutorial(), null);
                         SharedPrefUtils.putBoolean(ApiConstance.ISLOGINYET,true);
