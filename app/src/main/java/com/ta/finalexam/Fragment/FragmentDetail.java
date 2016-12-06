@@ -1,5 +1,6 @@
 package com.ta.finalexam.Fragment;
 
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +38,7 @@ import vn.app.base.adapter.DividerItemDecoration;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.util.DebugLog;
+import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.IntentUtil;
 
@@ -63,8 +65,8 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
     @OnClick(R.id.img_send)
     public void onSendClicked() {
-        if (edtSendCm.getText().toString() !=""){
-            CommentRequest commentRequest = new CommentRequest(selectHomeBean.image.id,edtSendCm.getText().toString());
+        if (edtSendCm.getText().toString() != "") {
+            CommentRequest commentRequest = new CommentRequest(selectHomeBean.image.id, edtSendCm.getText().toString());
             commentRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                 @Override
                 public void onSuccess(BaseResponse data) {
@@ -94,7 +96,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
     public static FragmentDetail newInstance(HomeBean homeBean) {
         FragmentDetail newFragment = new FragmentDetail();
         Bundle getHomeBean = new Bundle();
-        getHomeBean.putParcelable(IMAGE,homeBean);
+        getHomeBean.putParcelable(IMAGE, homeBean);
         newFragment.setArguments(getHomeBean);
         return newFragment;
 
@@ -147,7 +149,10 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
     @Override
     protected int getRightIcon() {
-        return HeaderOption.RIGHT_DELETE;
+        if (selectHomeBean.user.username.equals(UserManager.getCurrentUser().username)) {
+            return HeaderOption.RIGHT_DELETE;
+        } else return HeaderOption.RIGHT_NO_OPTION;
+
     }
 
     @Override
@@ -155,7 +160,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
         return "Detail";
     }
 
-    private void getCommentList(){
+    private void getCommentList() {
         showCoverNetworkLoading();
         commentList.clear();
         CommentListRequest commentListRequest = new CommentListRequest(selectHomeBean.image.id);
@@ -166,6 +171,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
                 initialResponseHandled();
                 setRecyclerView(commentList);
             }
+
             @Override
             public void onFail(int failCode, String message) {
                 DebugLog.e(message);
@@ -174,20 +180,20 @@ public class FragmentDetail extends BaseHeaderListFragment {
         commentListRequest.execute();
     }
 
-    private void setRecyclerView(List<CommentListData> dataList){
+    private void setRecyclerView(List<CommentListData> dataList) {
         imageDetailListAdapter = new ImageDetailListAdapter();
         imageDetailListAdapter.setHeader(selectHomeBean);
         imageDetailListAdapter.setItems(dataList);
         imageDetailListAdapter.setOnDetailClicked(new OnDetailClicked() {
             @Override
             public void onFollowDetailClick(HomeBean homeBean) {
-                if (homeBean.user.isFollowing){
+                if (homeBean.user.isFollowing) {
                     //Goi unfollow
-                    followRequest = new FollowRequest(homeBean.user.id,0);
+                    followRequest = new FollowRequest(homeBean.user.id, 0);
                     followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                         @Override
                         public void onSuccess(BaseResponse data) {
-                            if (data.status == 1){
+                            if (data.status == 1) {
                                 selectHomeBean.user.isFollowing = false;
                                 imageDetailListAdapter.notifyDataSetChanged();
                             }
@@ -200,11 +206,11 @@ public class FragmentDetail extends BaseHeaderListFragment {
                     });
                 } else {
                     //Goi follow
-                    followRequest = new FollowRequest(homeBean.user.id,1);
+                    followRequest = new FollowRequest(homeBean.user.id, 1);
                     followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                         @Override
                         public void onSuccess(BaseResponse data) {
-                            if (data.status == 1){
+                            if (data.status == 1) {
                                 selectHomeBean.user.isFollowing = true;
                                 imageDetailListAdapter.notifyDataSetChanged();
                             }
@@ -221,13 +227,13 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
             @Override
             public void onFavouriteDetailClick(HomeBean homeBean) {
-                if (homeBean.image.isFavourite){
+                if (homeBean.image.isFavourite) {
                     //Goi unfavorite
-                    favouritesRequest = new FavouritesRequest(homeBean.image.id,0);
+                    favouritesRequest = new FavouritesRequest(homeBean.image.id, 0);
                     favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                         @Override
                         public void onSuccess(BaseResponse data) {
-                            if (data.status == 1){
+                            if (data.status == 1) {
                                 selectHomeBean.image.isFavourite = false;
                                 imageDetailListAdapter.notifyDataSetChanged();
                             }
@@ -241,11 +247,11 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
                 } else {
                     //Goi favourite
-                    favouritesRequest = new FavouritesRequest(homeBean.image.id,1);
+                    favouritesRequest = new FavouritesRequest(homeBean.image.id, 1);
                     favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                         @Override
                         public void onSuccess(BaseResponse data) {
-                            if (data.status == 1){
+                            if (data.status == 1) {
                                 selectHomeBean.image.isFavourite = true;
                                 imageDetailListAdapter.notifyDataSetChanged();
                             }
@@ -295,25 +301,29 @@ public class FragmentDetail extends BaseHeaderListFragment {
     @Override
     public void onFragmentUIHandle(Bundle bundle) {
         super.onFragmentUIHandle(bundle);
-        if (bundle.getBoolean(ApiConstance.ISDELCLICK) == true){
-            Toast.makeText(getActivity(),"DELETE",Toast.LENGTH_SHORT).show();
-        }
-        if (selectHomeBean.user.username.equals(UserManager.getCurrentUser().username)){
-            DeleteRequest deleteRequest = new DeleteRequest(selectHomeBean.image.id);
-            deleteRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+        if (bundle.getBoolean(ApiConstance.ISDELCLICK) == true) {
+            Toast.makeText(getActivity(), "DELETE", Toast.LENGTH_SHORT).show();
+            DialogUtil.showTwoBtnCancelableDialog(getActivity(), "DETELE IMAGE ?", "Are u sure to delete this image", new DialogInterface.OnClickListener() {
                 @Override
-                public void onSuccess(BaseResponse data) {
-                    if (data.status == 1){
-                        FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentHome.newInstance(), null);
-                    }
-                }
+                public void onClick(DialogInterface dialog, int which) {
+                    DeleteRequest deleteRequest = new DeleteRequest(selectHomeBean.image.id);
+                    deleteRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                        @Override
+                        public void onSuccess(BaseResponse data) {
+                            if (data.status == 1) {
+                                FragmentUtil.pushFragmentWithAnimation(getActivity(), FragmentHome.newInstance(), null);
+                            }
+                        }
 
-                @Override
-                public void onFail(int failCode, String message) {
+                        @Override
+                        public void onFail(int failCode, String message) {
 
+                        }
+                    });
+                    deleteRequest.execute();
                 }
             });
-            deleteRequest.execute();
         }
+
     }
 }
