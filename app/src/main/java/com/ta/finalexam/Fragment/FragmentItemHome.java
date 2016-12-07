@@ -115,6 +115,8 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         homeRequest.execute();
     }
 
+    //KLKLKL
+
     @Override
     protected void onLoadingMore(int currentPage) {
         super.onLoadingMore(currentPage);
