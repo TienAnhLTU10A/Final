@@ -25,5 +25,5 @@ public class UserBean {
     public String avatar;
     @SerializedName("create_at")
     @Expose
-    public long createAt;
+    public String createAt;
 }

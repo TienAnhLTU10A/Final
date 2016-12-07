@@ -203,6 +203,7 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
                 DebugLog.e(message);
             }
         });
+        nearbyRequest.execute();
     }
 
     @Override

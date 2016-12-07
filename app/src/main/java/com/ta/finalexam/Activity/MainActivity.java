@@ -1,15 +1,17 @@
 package com.ta.finalexam.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.camera.CropImageIntentBuilder;
 import com.ta.finalexam.Bean.HeaderControlBean;
 import com.ta.finalexam.Bean.UserBean;
 import com.ta.finalexam.Constant.FragmentActionConstant;
@@ -21,8 +23,11 @@ import com.ta.finalexam.Fragment.FragmentLogin;
 import com.ta.finalexam.Fragment.FragmentMenu;
 import com.ta.finalexam.Fragment.FragmentNearby;
 import com.ta.finalexam.Fragment.FragmentProfile;
+import com.ta.finalexam.Fragment.FragmentRegister;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,7 +37,9 @@ import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
-public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks {
+public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks{
+
+    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
 
     @BindView(R.id.toolbar)
     RelativeLayout rlToolbar;
@@ -86,7 +93,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
         if (currentUser == null) {
             setUpInitScreen(FragmentLogin.newInstance(), null);
         } else {
-            setUpInitScreen(FragmentHome.newInstance(), null);
+            setUpInitScreen(FragmentHome.newInstance(),ApiConstance.TAGHOME);
         }
     }
 
@@ -191,6 +198,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     private void handleMenuSlide() {
         fragmentMenu = (FragmentMenu) getSupportFragmentManager().findFragmentById(R.id.nagigation_drawer);
         fragmentMenu.setUp(R.id.nagigation_drawer, drawerLayout);
+
+
     }
 
     @OnClick(R.id.headerBack)
@@ -200,10 +209,15 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @OnClick(R.id.tv_update)
     public void updateProfile() {
-        if (fragmentListener != null){
+
+    }
+
+    @OnClick(R.id.tv_delete)
+    public void onDelete(){
+        if (fragmentListener!=null){
             Bundle bundle = new Bundle();
-            bundle.putString("UPDATE" , null);
-            fragmentListener.onFragmentDataHandle(bundle);
+            bundle.putBoolean(ApiConstance.ISDELCLICK,true);
+            fragmentListener.onFragmentUIHandle(bundle);
         }
     }
 
@@ -211,9 +225,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                //TODO profile
-                Log.e("initView", "currentUser =  " + currentUser.id);
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(currentUser.id), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(""), null);
                 break;
             case 1:
                 //TODO home
@@ -238,15 +250,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
             case 6:
                 //TODO LOGOUT
                 UserManager.clearUserData();
-                if(currentUser == null){
-                    FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
-                }
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
-            default:
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
-                break;
-        }
-    }
 
 }
 

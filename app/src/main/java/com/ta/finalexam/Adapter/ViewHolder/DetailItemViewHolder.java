@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.ta.finalexam.Bean.DetailBean.DetailData;
+import com.ta.finalexam.Bean.DetailBean.CommentListData;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.RoundedCornersTransformation;
 
@@ -15,6 +15,7 @@ import vn.app.base.util.StringUtil;
 
 /**
  * Created by Veteran Commander on 10/26/2016.
+ * last fix : 5/12/2016 by TA
  */
 
 public class DetailItemViewHolder extends OnClickViewHolder {
@@ -31,10 +32,16 @@ public class DetailItemViewHolder extends OnClickViewHolder {
         super(itemView);
     }
 
-    public void bind(DetailData detailData){
-        Glide.with(itemView.getContext()).load(detailData.user.avatar)
-                .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(),sCorner,sMargin)).into(ivAvatar);
-        StringUtil.displayText(detailData.comment, tvComment);
+    public void bind(CommentListData commentListData) {
+        if (commentListData.user == null) {
+            ivAvatar.setImageResource(R.drawable.dummy_avatar);
+        } else {
+            Glide.with(itemView.getContext()).load(commentListData.user.avatar)
+                    .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(), sCorner, sMargin)).into(ivAvatar);
+        }
+        StringUtil.displayText(commentListData.comment, tvComment);
+
+
     }
 
 }

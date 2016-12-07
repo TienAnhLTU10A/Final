@@ -1,13 +1,16 @@
 package com.ta.finalexam.Fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ta.finalexam.Activity.MainActivity;
+import com.google.android.gms.common.api.Api;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.StringEncryption;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -60,6 +63,17 @@ public class FragmentLogin extends NoHeaderFragment {
 
     @Override
     protected void initView(View root) {
+        super.initView(root);
+        etPass.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    login();
+                    return true;
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -74,7 +88,7 @@ public class FragmentLogin extends NoHeaderFragment {
 
     @OnClick(R.id.btnCreateAccount)
     public void goToRegisterFragment() {
-        FragmentUtil.pushFragment(getActivity(), RegisterFragment.newInstance(), null);
+        FragmentUtil.pushFragment(getActivity(), FragmentRegister.newInstance(), null);
     }
 
     @OnClick(R.id.btnLogin)
@@ -103,7 +117,12 @@ public class FragmentLogin extends NoHeaderFragment {
                     SharedPrefUtils.saveAccessToken(data.data.token);
                     DebugLog.i("Token la" + SharedPrefUtils.getAccessToken());
                     UserManager.saveCurrentUser(data.data);
-                    FragmentUtil.pushFragment(getActivity(), new FragmentHome(), null);
+
+                    if(SharedPrefUtils.getBoolean(ApiConstance.ISLOGINYET,false) == false){
+                        FragmentUtil.pushFragmentWithAnimation(getActivity(), new FragmentTutorial(), null);
+                        SharedPrefUtils.putBoolean(ApiConstance.ISLOGINYET,true);
+                    } else FragmentUtil.pushFragmentWithAnimation(getActivity(), new FragmentHome(), null);
+
                 } else Toast.makeText(getActivity(), "Fail roi", Toast.LENGTH_SHORT).show();
 
 

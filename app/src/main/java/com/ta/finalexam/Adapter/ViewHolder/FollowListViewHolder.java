@@ -16,6 +16,7 @@ import vn.app.base.util.StringUtil;
 
 /**
  * Created by Veteran Commander on 10/14/2016.
+ * last fix : 5/12/2016 by TA
  */
 
 public class FollowListViewHolder extends OnClickViewHolder {
@@ -41,7 +42,17 @@ public class FollowListViewHolder extends OnClickViewHolder {
     }
 
     public void bind(MemberBean member){
+        if (member.isFollowing == null){
+            return;
+        }
         ImageLoader.loadImage(itemView.getContext(),member.avatar,ivAvatar);
         StringUtil.displayText(member.username,tvFollowName);
+        if (member.isFollowing == true) {
+            btnFollow.setBackgroundResource(R.drawable.btn_following);
+            btnFollow.setText("Following");
+        } else {
+            btnFollow.setBackgroundResource(R.drawable.btn_un_following);
+            btnFollow.setText("Follow");
+        }
     }
 }

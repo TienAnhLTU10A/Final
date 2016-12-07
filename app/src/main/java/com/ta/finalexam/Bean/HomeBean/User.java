@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class User implements Parcelable {
 
-
     @SerializedName("_id")
     @Expose
     public String id;

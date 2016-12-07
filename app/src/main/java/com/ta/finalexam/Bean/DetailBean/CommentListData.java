@@ -8,7 +8,7 @@ import com.ta.finalexam.Bean.MemberBean;
  * Created by Veteran Commander on 11/18/2016.
  */
 
-public class DetailData {
+public class CommentListData {
     @SerializedName("user")
     @Expose
     public MemberBean user;
@@ -17,13 +17,5 @@ public class DetailData {
     public String comment;
     @SerializedName("created_at")
     @Expose
-    public Integer createdAt;
-
-    public String username;
-
-    public DetailData(String username, String comment) {
-        this.username = username;
-        this.comment = comment;
-    }
-
+    public String createdAt;
 }

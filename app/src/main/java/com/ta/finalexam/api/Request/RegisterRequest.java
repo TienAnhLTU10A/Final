@@ -1,19 +1,34 @@
 package com.ta.finalexam.api.Request;
 
+import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
+
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.ta.finalexam.Constant.ApiConstance;
+import com.ta.finalexam.Fragment.FragmentRegister;
+import com.ta.finalexam.Fragment.FragmentTutorial;
+import com.ta.finalexam.Ulities.manager.UserManager;
 import com.ta.finalexam.api.RegisterResponse;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.api.volley.core.UploadBinaryApiRequest;
+import vn.app.base.util.DebugLog;
+import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
@@ -26,26 +41,29 @@ public class RegisterRequest extends UploadBinaryApiRequest<RegisterResponse> {
     String password;
     String email;
     File imageAvatar;
+    FragmentActivity context;
 
-    public SimpleRequestCallBack simpleRequestCallBack;
+    //public SimpleRequestCallBack simpleRequestCallBack;
 
-    public RegisterRequest(String username, String password, String email,SimpleRequestCallBack simpleRequestCallBack) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.simpleRequestCallBack = simpleRequestCallBack;
+//    public RegisterRequest(String username, String password, String email,SimpleRequestCallBack simpleRequestCallBack) {
+//        this.username = username;
+//        this.password = password;
+//        this.email = email;
+//        this.simpleRequestCallBack = simpleRequestCallBack;
+//
+//
+//    }
 
-    }
-
-    public RegisterRequest(String username, String password, String email, File imageAvatar, SimpleRequestCallBack simpleRequestCallBack) {
+    public RegisterRequest(String username, String password, String email, File imageAvatar,FragmentActivity context) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.imageAvatar = imageAvatar;
-        this.simpleRequestCallBack = simpleRequestCallBack;
+        this.context = context;
+//        this.simpleRequestCallBack = simpleRequestCallBack;
 
         Map<String, File> fileMap = new HashMap<>();
-        fileMap.put("image", imageAvatar);
+        fileMap.put("avatar", imageAvatar);
         setRequestFiles(fileMap);
     }
 
@@ -87,15 +105,15 @@ public class RegisterRequest extends UploadBinaryApiRequest<RegisterResponse> {
 
     @Override
     public void onRequestSuccess(RegisterResponse response) {
-        simpleRequestCallBack.onResponse(true, response.message);
+        SharedPrefUtils.saveAccessToken(response.data.token);
+        UserManager.saveCurrentUser(response.data);
+        FragmentUtil.pushFragmentWithAnimation(context,new FragmentTutorial(),null);
     }
 
     @Override
     public void onRequestError(VolleyError error) {
-        String message = (error == null || error.getMessage() == null || error.networkResponse == null) ? ApiConstance.UNKNOW_ERROR : error.getMessage();
-        if (error instanceof NoConnectionError || error instanceof NetworkError || error instanceof TimeoutError) {
-            message = ApiConstance.NO_CONNECTION_ERROR;
-        }
-        simpleRequestCallBack.onResponse(false, message);
+
     }
+
+
 }

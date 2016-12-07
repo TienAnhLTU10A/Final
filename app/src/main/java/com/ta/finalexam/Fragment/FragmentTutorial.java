@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.TutViewPagerAdapter;
 import com.ta.finalexam.Bean.TutorialBean.DataTut;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.Request.TutRequest;
 import com.ta.finalexam.api.TutorialResponse;
@@ -16,6 +17,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.relex.circleindicator.CircleIndicator;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.util.FragmentUtil;
 
 /**
  * Created by Veteran Commander on 10/21/2016.
@@ -39,8 +41,8 @@ public class FragmentTutorial extends NoHeaderFragment {
 
     @OnClick(R.id.btn_tut_skip)
     public void onSkip() {
-        Toast.makeText(getActivity(), btnSkip.getText().toString(), Toast.LENGTH_SHORT).show();
         //go to home screen
+        FragmentUtil.pushFragment(getActivity(), FragmentHome.newInstance(), null);
     }
 
     @Override

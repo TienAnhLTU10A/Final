@@ -1,6 +1,7 @@
 package com.ta.finalexam.Fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ta.finalexam.Bean.UserBean;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
 
@@ -51,7 +53,6 @@ public class FragmentMenu extends CommonFragment {
     private RelativeLayout menu_1;
     private LinearLayout menu_2, menu_3, menu_4, menu_5, menu_6, menu_7;
 
-    UserBean currentUser = UserManager.getCurrentUser();
     private int currentmenupos = 0;
     private float lastTranslate = 0.0f;
 
@@ -232,7 +233,6 @@ public class FragmentMenu extends CommonFragment {
                     return;
                 }
                 getActivity().invalidateOptionsMenu();
-//                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
 
             @Override
@@ -241,7 +241,9 @@ public class FragmentMenu extends CommonFragment {
             }
         });
         setCurrentMenu(0);
+
     }
+
 
     private void selectItem(int position) {
 //        if (position != 2 && position != 4 && position != 5) {
@@ -269,6 +271,8 @@ public class FragmentMenu extends CommonFragment {
                 throw new ClassCastException("Activity must implement NavigationDraweraCallbacks");
             }
         }
+
+
     }
 
 
@@ -294,4 +298,6 @@ public class FragmentMenu extends CommonFragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+
 }

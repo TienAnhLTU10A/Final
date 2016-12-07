@@ -60,11 +60,13 @@
             android:layout_below="@+id/layout_title_detail_header"
             android:layout_marginTop="7dp" />
 
+
         <TextView
             android:id="@+id/tvLocation_detail_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/ivPhotoCover_detail_header"
+            android:layout_marginTop="15dp"
             android:layout_alignLeft="@+id/lnlayout"
             android:layout_marginBottom="18dp"
             android:background="#FF13212D"
@@ -103,13 +105,12 @@
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/imageView_like_detail_header"
-        android:layout_width="40dp"
-        android:layout_height="39dp"
+        android:id="@+id/btn_like_detail_header"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="13dp"
         android:layout_marginRight="13dp"
         android:src="@drawable/icon_favourite"
-        android:backgroundTint="@color/purple"
         app:layout_anchor="@id/ivPhotoCover_detail_header"
         app:layout_anchorGravity="bottom|right|end"/>
 

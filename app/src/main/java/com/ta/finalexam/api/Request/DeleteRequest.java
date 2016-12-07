@@ -2,23 +2,24 @@ package com.ta.finalexam.api.Request;
 
 import com.android.volley.Request;
 import com.ta.finalexam.Constant.ApiConstance;
-import com.ta.finalexam.api.CommentListResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.core.ObjectApiRequest;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
- * Created by Veteran Commander on 11/18/2016.
+ * Created by Veteran Commander on 11/24/2016.
  */
 
-public class CommentListRequest extends ObjectApiRequest<CommentListResponse> {
-    String imageID;
+public class DeleteRequest extends ObjectApiRequest<BaseResponse> {
 
-    public CommentListRequest(String imageID) {
-        this.imageID = imageID;
+    String imageId;
+
+    public DeleteRequest(String imageId) {
+        this.imageId = imageId;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class CommentListRequest extends ObjectApiRequest<CommentListResponse> {
 
     @Override
     public String getRequestURL() {
-        return ApiConstance.URLCOMMENTLIST;
+        return ApiConstance.URLDELETE;
     }
 
     @Override
@@ -46,13 +47,13 @@ public class CommentListRequest extends ObjectApiRequest<CommentListResponse> {
     @Override
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
-        params.put(ApiConstance.IMAGEID, imageID);
+        params.put(ApiConstance.IMAGEID,imageId);
         return params;
     }
 
     @Override
-    public Class<CommentListResponse> getResponseClass() {
-        return CommentListResponse.class;
+    public Class<BaseResponse> getResponseClass() {
+        return BaseResponse.class;
     }
 
     @Override

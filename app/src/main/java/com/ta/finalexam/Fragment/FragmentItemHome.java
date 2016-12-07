@@ -115,8 +115,6 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         homeRequest.execute();
     }
 
-    //KLKLKL
-
     @Override
     protected void onLoadingMore(int currentPage) {
         super.onLoadingMore(currentPage);
@@ -154,7 +152,13 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         vAdapter.setOnMapCallBack(new OnMapClick() {
             @Override
             public void onMapClick(HomeBean homeBean) {
+
                 goToMapAddress(homeBean);
+            }
+
+            @Override
+            public void onPhotoClick(HomeBean homeBean) {
+                FragmentUtil.pushFragmentWithAnimation(getActivity(), FragmentDetail.newInstance(homeBean),null);
             }
         });
         vAdapter.setOnClickCallBack(new OnClickRecycleView() {

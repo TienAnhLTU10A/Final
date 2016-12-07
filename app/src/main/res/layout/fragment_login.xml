@@ -4,9 +4,9 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imgBg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/imgBg"
         android:scaleType="centerCrop"
         android:src="@mipmap/login_bg" />
 
@@ -16,17 +16,17 @@
         android:background="@color/colorPurpleTransparent" />
 
     <ImageView
-        android:id="@+id/imgLogo"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:id="@+id/imgLogo"
+        android:src="@drawable/icon_camera"
         android:layout_marginTop="100dp"
-        android:src="@drawable/icon_camera" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/etLogin"
         style="@style/login_et_bg"
+        android:drawableLeft="@drawable/ic_person_outline_white_18dp"
         android:layout_below="@+id/imgLogo"
         android:layout_marginTop="50dp"
         android:drawableLeft="@drawable/ic_person_outline_white_18dp"
@@ -35,37 +35,38 @@
         android:lines="1" />
 
     <EditText
-        android:id="@+id/etPassword"
         style="@style/login_et_bg"
+        android:drawableLeft="@drawable/ic_lock_outline_white_18dp"
+        android:id="@+id/etPassword"
+        android:inputType="textPassword"
         android:layout_below="@id/etLogin"
         android:layout_marginTop="20dp"
-        android:drawableLeft="@drawable/ic_lock_outline_white_18dp"
-        android:inputType="textPassword"
-        android:lines="1" />
+        android:lines="1"
+        android:imeOptions="actionDone"/>
 
     <Button
-        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:hint="LOGIN"
+        android:textColorHint="@color/colorWhite"
+        android:id="@+id/btnLogin"
         android:layout_below="@id/etPassword"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         android:layout_marginTop="20dp"
-        android:background="@color/colorBlue"
-        android:hint="LOGIN"
-        android:textColorHint="@color/colorWhite" />
+        android:background="@color/colorBlue" />
 
     <Button
-        android:id="@+id/btnCreateAccount"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/btnLogin"
+        android:hint="CREATE NEW ACCOUNT"
+        android:id="@+id/btnCreateAccount"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
+        android:textColorHint="@color/colorWhite"
         android:layout_marginTop="10dp"
         android:background="@color/colorTrong"
-        android:hint="CREATE NEW ACCOUNT"
-        android:textColorHint="@color/colorWhite" />
+        android:layout_below="@id/btnLogin"/>
 
 
 </RelativeLayout>

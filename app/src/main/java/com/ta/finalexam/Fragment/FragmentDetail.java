@@ -1,21 +1,35 @@
 package com.ta.finalexam.Fragment;
 
+import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.ImageDetailListAdapter;
-import com.ta.finalexam.Bean.DetailBean.DetailData;
+import com.ta.finalexam.Bean.DetailBean.CommentListData;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.manager.UserManager;
 import com.ta.finalexam.api.CommentListResponse;
 import com.ta.finalexam.api.Request.CommentListRequest;
 import com.ta.finalexam.api.Request.CommentRequest;
+import com.ta.finalexam.api.Request.DeleteRequest;
+import com.ta.finalexam.api.Request.FavouritesRequest;
+import com.ta.finalexam.api.Request.FollowRequest;
+import com.ta.finalexam.callback.OnDetailClicked;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,12 +38,23 @@ import vn.app.base.adapter.DividerItemDecoration;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.util.DebugLog;
+import vn.app.base.util.DialogUtil;
+import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.IntentUtil;
 
 /**
  * Created by Veteran Commander on 10/19/2016.
  */
 
 public class FragmentDetail extends BaseHeaderListFragment {
+
+    public static final String IMAGE = "image";
+
+    FollowRequest followRequest;
+
+    FavouritesRequest favouritesRequest;
+
+    LatLng pictureLocation;
 
     @BindView(R.id.edt_send_cm)
     EditText edtSendCm;
@@ -40,7 +65,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
     @OnClick(R.id.img_send)
     public void onSendClicked() {
         if (edtSendCm.getText().toString() != "") {
-            CommentRequest commentRequest = new CommentRequest(homeBean.image.id, edtSendCm.getText().toString());
+            CommentRequest commentRequest = new CommentRequest(selectHomeBean.image.id, edtSendCm.getText().toString());
             commentRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                 @Override
                 public void onSuccess(BaseResponse data) {
@@ -54,30 +79,41 @@ public class FragmentDetail extends BaseHeaderListFragment {
                     DebugLog.e(message);
                 }
             });
+            commentRequest.execute();
         }
 
     }
 
-    HomeBean homeBean;
+    HomeBean selectHomeBean;
 
     ImageDetailListAdapter imageDetailListAdapter;
 
-    List<DetailData> commentList;
+    List<CommentListData> commentList;
+
+    List<CommentListData> commentListDummy;
 
     public static FragmentDetail newInstance(HomeBean homeBean) {
         FragmentDetail newFragment = new FragmentDetail();
-        newFragment.homeBean = homeBean;
+        Bundle getHomeBean = new Bundle();
+        getHomeBean.putParcelable(IMAGE, homeBean);
+        newFragment.setArguments(getHomeBean);
         return newFragment;
 
     }
 
     @Override
-    protected void onRefreshData() {
+    protected int getLayoutId() {
+        return R.layout.fragment_image_detail;
+    }
 
+    @Override
+    protected void onRefreshData() {
+        getCommentList();
     }
 
     @Override
     protected void getArgument(Bundle bundle) {
+        selectHomeBean = bundle.getParcelable(IMAGE);
 
     }
 
@@ -86,16 +122,13 @@ public class FragmentDetail extends BaseHeaderListFragment {
         super.initView(root);
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvList.addItemDecoration(new DividerItemDecoration(getActivity(), null));
-        setCanRefresh(false);
+        setCanRefresh(true);
     }
 
     @Override
     protected void initData() {
+        commentList = new ArrayList<>();
         getCommentList();
-        imageDetailListAdapter = new ImageDetailListAdapter();
-        imageDetailListAdapter.setHeader(homeBean);
-        imageDetailListAdapter.setItems(commentList);
-        rvList.setAdapter(imageDetailListAdapter);
     }
 
     @Override
@@ -105,7 +138,10 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
     @Override
     protected int getRightIcon() {
-        return HeaderOption.RIGHT_DELETE;
+        if (selectHomeBean.user.username.equals(UserManager.getCurrentUser().username)) {
+            return HeaderOption.RIGHT_DELETE;
+        } else return HeaderOption.RIGHT_NO_OPTION;
+
     }
 
     @Override
@@ -114,12 +150,15 @@ public class FragmentDetail extends BaseHeaderListFragment {
     }
 
     private void getCommentList() {
-        CommentListRequest commentListRequest = new CommentListRequest(homeBean.image.id);
+        showCoverNetworkLoading();
+        commentList.clear();
+        CommentListRequest commentListRequest = new CommentListRequest(selectHomeBean.image.id);
         commentListRequest.setRequestCallBack(new ApiObjectCallBack<CommentListResponse>() {
             @Override
             public void onSuccess(CommentListResponse data) {
-                initialResponseHandled();
                 commentList = data.data;
+                initialResponseHandled();
+                handleDetailImage(commentList);
             }
 
             @Override
@@ -127,6 +166,153 @@ public class FragmentDetail extends BaseHeaderListFragment {
                 DebugLog.e(message);
             }
         });
+        commentListRequest.execute();
     }
 
+    private void handleDetailImage(List<CommentListData> dataList) {
+        imageDetailListAdapter = new ImageDetailListAdapter();
+        imageDetailListAdapter.setHeader(selectHomeBean);
+        imageDetailListAdapter.setItems(dataList);
+        imageDetailListAdapter.setOnDetailClicked(new OnDetailClicked() {
+            @Override
+            public void onFollowDetailClick(HomeBean homeBean) {
+                if (homeBean.user.isFollowing) {
+                    //Goi unfollow
+                    followRequest = new FollowRequest(homeBean.user.id, 0);
+                    followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                        @Override
+                        public void onSuccess(BaseResponse data) {
+                            if (data.status == 1) {
+                                selectHomeBean.user.isFollowing = false;
+                                imageDetailListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(int failCode, String message) {
+
+                        }
+                    });
+                } else {
+                    //Goi follow
+                    followRequest = new FollowRequest(homeBean.user.id, 1);
+                    followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                        @Override
+                        public void onSuccess(BaseResponse data) {
+                            if (data.status == 1) {
+                                selectHomeBean.user.isFollowing = true;
+                                imageDetailListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(int failCode, String message) {
+
+                        }
+                    });
+                }
+                followRequest.execute();
+            }
+
+            @Override
+            public void onFavouriteDetailClick(HomeBean homeBean) {
+                if (homeBean.image.isFavourite) {
+                    //Goi unfavorite
+                    favouritesRequest = new FavouritesRequest(homeBean.image.id, 0);
+                    favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                        @Override
+                        public void onSuccess(BaseResponse data) {
+                            if (data.status == 1) {
+                                selectHomeBean.image.isFavourite = false;
+                                imageDetailListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(int failCode, String message) {
+
+                        }
+                    });
+
+                } else {
+                    //Goi favourite
+                    favouritesRequest = new FavouritesRequest(homeBean.image.id, 1);
+                    favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                        @Override
+                        public void onSuccess(BaseResponse data) {
+                            if (data.status == 1) {
+                                selectHomeBean.image.isFavourite = true;
+                                imageDetailListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(int failCode, String message) {
+
+                        }
+                    });
+                }
+                favouritesRequest.execute();
+            }
+
+            @Override
+            public void onMapClick(HomeBean homeBean) {
+                goToMapAddress(homeBean);
+            }
+
+            @Override
+            public void onAvatarClicked(HomeBean homeBean) {
+                //TODO: go to profile
+
+            }
+        });
+        rvList.setAdapter(imageDetailListAdapter);
+    }
+
+    private void goToMapAddress(HomeBean homeBean) {
+        Uri mapUri;
+        if (pictureLocation != null) {
+            mapUri = Uri.parse("geo:" + pictureLocation.latitude + "," + pictureLocation.longitude + "?q=" + +pictureLocation.latitude + "," + pictureLocation.longitude + "&z=15");
+        } else {
+            mapUri = Uri.parse("geo:0,0?z=15&q=" + getDecodeAddress(homeBean.image.location));
+        }
+        IntentUtil.openMap(getActivity(), mapUri);
+    }
+
+    private String getDecodeAddress(String location) {
+        try {
+            return URLDecoder.decode(location, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return location.replace(" ", "+");
+        }
+    }
+
+    @Override
+    public void onFragmentUIHandle(Bundle bundle) {
+        super.onFragmentUIHandle(bundle);
+        if (bundle.getBoolean(ApiConstance.ISDELCLICK) == true) {
+            Toast.makeText(getActivity(), "DELETE", Toast.LENGTH_SHORT).show();
+            DialogUtil.showTwoBtnCancelableDialog(getActivity(), "DETELE IMAGE ?", "Are u sure to delete this image", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    DeleteRequest deleteRequest = new DeleteRequest(selectHomeBean.image.id);
+                    deleteRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                        @Override
+                        public void onSuccess(BaseResponse data) {
+                            if (data.status == 1) {
+                                FragmentUtil.pushFragmentWithAnimation(getActivity(), FragmentHome.newInstance(), null);
+                            }
+                        }
+
+                        @Override
+                        public void onFail(int failCode, String message) {
+
+                        }
+                    });
+                    deleteRequest.execute();
+                }
+            });
+        }
+
+    }
 }

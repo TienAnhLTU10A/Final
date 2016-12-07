@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by kooryy2 on 10/30/2016.
  */
 
-public class HomeBean implements Parcelable{
+public class HomeBean implements Parcelable {
 
     @SerializedName("user")
     @Expose

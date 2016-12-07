@@ -1,7 +1,10 @@
 package com.ta.finalexam.Constant;
 
+import vn.app.base.util.StringUtil;
+
 /**
  * Created by kooryy2 on 10/31/2016.
+ * last fix by TA on 6/12/2016
  */
 
 public class ApiConstance {
@@ -25,6 +28,7 @@ public class ApiConstance {
     public static final String URLTUT = API_BASE_URL + "api/tutorial";
     public static final String TOKEN_CODE = "1fc4747d2677949478c144ab5324787c";
     public static final String TOKEN = "token";
+    public static final String URLDELETE = "https://polar-plains-86888.herokuapp.com/api/image/delete";
 
     //Login + register
     public static final String USERNAME = "username";
@@ -34,6 +38,8 @@ public class ApiConstance {
     public static final int REQUEST_CODE_TAKEPHOTO = 100;
     public static final String PHOTO_FILE_NAME = "photo.jpg";
     public static final String AVATAR_PHOTO = "photo_avatar.jpg";
+    public static final String ISLOGINYET = "isloginyet";
+    public static final String ISUSERSAVED = "saved";
 
     //ImageUpload Request
     public static final String UNKNOW_ERROR = "UNKNOW_ERROR";
@@ -55,6 +61,7 @@ public class ApiConstance {
     public static final String IMAGEID = "imageId";
     public static final String COMMENT = "comment";
     public static final String USERID = "userId";
+    public static final String ISDELCLICK = "isdeleteclicked";
 
     //Follow & Favourite
     public static final String FAVOURITE_STATUS = "isFavourite";
@@ -68,8 +75,7 @@ public class ApiConstance {
     //UpdateProfile
     public static final String AVATAR = "avatar";
 
+    //TAG for fragment
+    public static final String TAGHOME = "taghome";
+
 }
-
-
-
-
