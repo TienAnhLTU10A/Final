@@ -107,7 +107,7 @@ public class RegisterRequest extends UploadBinaryApiRequest<RegisterResponse> {
     public void onRequestSuccess(RegisterResponse response) {
         SharedPrefUtils.saveAccessToken(response.data.token);
         UserManager.saveCurrentUser(response.data);
-        FragmentUtil.pushFragment(context,new FragmentTutorial(),null);
+        FragmentUtil.pushFragmentWithAnimation(context,new FragmentTutorial(),null);
     }
 
     @Override
