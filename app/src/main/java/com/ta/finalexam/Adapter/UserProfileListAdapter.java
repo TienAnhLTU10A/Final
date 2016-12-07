@@ -5,8 +5,8 @@ import android.view.ViewGroup;
 
 import com.ta.finalexam.Adapter.ViewHolder.UserProfileHeaderViewHolder;
 import com.ta.finalexam.Adapter.ViewHolder.UserProfileListViewHolder;
-import com.ta.finalexam.Bean.ImageListBean.ImageListBean;
-import com.ta.finalexam.Bean.ProfileBean.UserBean.ProfileBean;
+import com.ta.finalexam.Bean.ImageListBean;
+import com.ta.finalexam.Bean.ProfileBean;
 import com.ta.finalexam.callback.OnUserEdit;
 
 import vn.app.base.adapter.HeaderAdapterWithItemClick;
@@ -19,6 +19,10 @@ import vn.app.base.util.UiUtil;
 
 public class UserProfileListAdapter extends HeaderAdapterWithItemClick<OnClickViewHolder, ProfileBean, ImageListBean, String> {
     OnUserEdit onUserEdit;
+
+    public void setOnUserEdit(OnUserEdit onUserEdit) {
+        this.onUserEdit = onUserEdit;
+    }
 
     @Override
     protected OnClickViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ta.finalexam.Bean.UserBean;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
 
@@ -40,7 +41,7 @@ public class FragmentMenu extends CommonFragment {
 
     private static final String PREF_USER_LEARN_DRAWER = "nav_learn_drawer";
 
-    private int mCurrentSelectPosition = 0;
+    private int mCurrentSelectPosition = 1;
     private boolean mUserLearnDrawer;
     private DrawerLayout mDrawerLayout;
 
@@ -50,6 +51,7 @@ public class FragmentMenu extends CommonFragment {
     private RelativeLayout menu_1;
     private LinearLayout menu_2, menu_3, menu_4, menu_5, menu_6, menu_7;
 
+    UserBean currentUser = UserManager.getCurrentUser();
     private int currentmenupos = 0;
     private float lastTranslate = 0.0f;
 
@@ -81,10 +83,11 @@ public class FragmentMenu extends CommonFragment {
 
     @Override
     protected void initView(View root) {
+
     }
 
     @OnClick(R.id.menu_1)
-    public void onChange() {
+    public void onProfile() {
         selectItem(0);
     }
 
@@ -113,7 +116,7 @@ public class FragmentMenu extends CommonFragment {
         selectItem(5);
     }
 
-    @OnClick(R.id.menu_4)
+    @OnClick(R.id.menu_7)
     public void onLogout() {
         selectItem(6);
     }
@@ -125,10 +128,7 @@ public class FragmentMenu extends CommonFragment {
 
     @Override
     protected void initData() {
-        if (UserManager.getCurrentUser() != null) {
-            tvUserName_Nav.setText(UserManager.getCurrentUser().username);
-            ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
-        }
+
     }
 
     public boolean isDrawerOpen() {
@@ -169,6 +169,11 @@ public class FragmentMenu extends CommonFragment {
     }
 
     public void setUp(final int fragmentId, DrawerLayout drawerLayout) {
+
+        if (UserManager.getCurrentUser() != null) {
+            tvUserName_Nav.setText(currentUser.username);
+            ImageLoader.loadImage(getActivity(), currentUser.avatar, menu_Avatar);
+        }
 
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
@@ -227,6 +232,7 @@ public class FragmentMenu extends CommonFragment {
                     return;
                 }
                 getActivity().invalidateOptionsMenu();
+//                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
 
             @Override
@@ -277,6 +283,7 @@ public class FragmentMenu extends CommonFragment {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECT_POSITION, mCurrentSelectPosition);
     }
+
 
     /**
      * Callbacks interface that all activities using this fragment must implement.

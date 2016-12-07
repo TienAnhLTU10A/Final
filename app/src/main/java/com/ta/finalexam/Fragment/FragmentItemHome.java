@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -28,16 +29,17 @@ import java.util.List;
 import butterknife.BindView;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.IntentUtil;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentItemHome extends BaseHeaderListFragment {
-    public int maxItem = 10;
     private List<HomeBean> homeBeanList;
     private HomeAdapter vAdapter;
-    int type;
+    private String last_time_stamp;
+    private int type;
 
     @BindView(R.id.recycerList)
     RecyclerView rvList;
@@ -53,6 +55,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         FragmentItemHome fragmentItemHome = new FragmentItemHome();
         Bundle bundle = new Bundle();
         bundle.putInt(ApiConstance.TYPE, type);
+        fragmentItemHome.setArguments(bundle);
         return fragmentItemHome;
     }
 
@@ -71,32 +74,35 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     @Override
     protected void getArgument(Bundle bundle) {
         type = bundle.getInt(ApiConstance.TYPE);
-        getHome(true, type);
     }
 
     @Override
     protected void onRefreshData() {
-        getHome(true, type);
+        getHome(true);
     }
 
     @Override
     protected void initData() {
         if (homeBeanList == null) {
-            getHome(false, type);
+            getHome(false);
         } else {
             handleHomeData(homeBeanList);
         }
     }
 
-    private void getHome(final boolean isRefresh, int type) {
-        showCoverNetworkLoading();
-        HomeRequest homeRequest = new HomeRequest(type, maxItem, homeBean);
+    private void getHome(final boolean isRefresh) {
+        HomeRequest homeRequest;
+        if (!isRefresh) {
+            homeRequest = new HomeRequest(type, "", 0);
+        } else {
+            homeRequest = new HomeRequest(type, last_time_stamp, 0);
+        }
+
         homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
             @Override
             public void onSuccess(HomeResponse data) {
                 initialResponseHandled();
                 handleHomeData(data.data);
-//                homeBeanList = data.data;
                 vAdapter.notifyDataSetChanged();
 
             }
@@ -112,12 +118,37 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     @Override
     protected void onLoadingMore(int currentPage) {
         super.onLoadingMore(currentPage);
+        getHome(true);
+        vAdapter.notifyDataSetChanged();
+    }
+
+    public void getLastTimeStamp(List<HomeBean> inHomeBeanList) {
+        if (inHomeBeanList != null) {
+            int size = inHomeBeanList.size();
+            if (size > 0) {
+                HomeBean homeBeanLast = inHomeBeanList.get(size - 1);
+                last_time_stamp = String.valueOf(homeBeanLast.image.createdAt);
+            } else {
+                last_time_stamp = "";
+            }
+        }
     }
 
     private void handleHomeData(List<HomeBean> inHomeBeanList) {
         this.homeBeanList = inHomeBeanList;
-        vAdapter = new HomeAdapter(homeBeanList);
-        rvList.setAdapter(vAdapter);
+        int size = homeBeanList.size();
+        for (int i = 0; i < size; i++) {
+            homeBean = homeBeanList.get(i);
+            if (size == 10) {
+                homeBeanList.add(homeBean);
+                vAdapter.notifyDataSetChanged();
+            } else {
+                vAdapter = new HomeAdapter(homeBeanList);
+                rvList.setAdapter(vAdapter);
+            }
+        }
+        getLastTimeStamp(homeBeanList);
+
         vAdapter.setOnMapCallBack(new OnMapClick() {
             @Override
             public void onMapClick(HomeBean homeBean) {
@@ -125,16 +156,19 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             }
         });
         vAdapter.setOnClickCallBack(new OnClickRecycleView() {
+
             @Override
-            public void onFollowResponse(String userId, int status) {
+            public void onFollowResponse(final String userId, final int status) {
                 FollowRequest followRequest = new FollowRequest(userId, status);
                 followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                     @Override
                     public void onSuccess(BaseResponse data) {
                         if (data.status == 1) {
+                            changeFollowLocal(userId, status);
                             vAdapter.notifyDataSetChanged();
                         }
                     }
+
                     @Override
                     public void onFail(int failCode, String message) {
                     }
@@ -143,13 +177,14 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             }
 
             @Override
-            public void onFavouriteResponse(String imageId, int status) {
+            public void onFavouriteResponse(final String imageId, final int status) {
                 FavouritesRequest favouritesRequest = new FavouritesRequest(imageId, status);
                 favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                     @Override
                     public void onSuccess(BaseResponse data) {
                         hideCoverNetworkLoading();
                         if (data.status == 1) {
+                            changeFavouriteLocal(imageId, status);
                             vAdapter.notifyDataSetChanged();
                         }
                     }
@@ -161,7 +196,49 @@ public class FragmentItemHome extends BaseHeaderListFragment {
                 });
                 favouritesRequest.execute();
             }
+
+            @Override
+            public void onGoToProfile(String userId) {
+                FragmentUtil.pushFragment(getActivity(), FragmentProfile.newInstance(userId), null, "ProfileUser");
+            }
+
+            @Override
+            public void onGoToDetail(HomeBean homeBean) {
+                FragmentUtil.pushFragment(getActivity(), FragmentDetail.newInstance(homeBean), null, "DetailImage");
+            }
         });
+    }
+
+    private void changeFollowLocal(String userId, int status) {
+        Log.e("changeFollowLocal", "===>" + status);
+        int size = homeBeanList.size();
+        for (int i = 0; i < size; i++) {
+            homeBean = homeBeanList.get(i);
+            if (homeBean != null && homeBean.user.id.equals(userId)) {
+                if (status == ApiConstance.FOLLOW) {
+                    homeBeanList.get(i).user.isFollowing = true;
+                } else {
+                    homeBeanList.get(i).user.isFollowing = false;
+                }
+            }
+        }
+    }
+
+    private void changeFavouriteLocal(String imageId, int status) {
+        int size = homeBeanList.size();
+        for (int i = 0; i < size; i++) {
+            homeBean = homeBeanList.get(i);
+            if (homeBean != null && homeBean.image.id.equals(imageId)) {
+                if (status == ApiConstance.UN_FAVOURITE) {
+//                    homeBeanList.get(i).image.isFavourite = false;
+                    homeBean.image.isFavourite = false;
+                } else {
+//                    homeBeanList.get(i).image.isFavourite = true;
+                    homeBean.image.isFavourite = true;
+                }
+
+            }
+        }
     }
 
     private void goToMapAddress(HomeBean homeBean) {

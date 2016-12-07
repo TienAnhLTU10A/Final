@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.ImageDetailListAdapter;
 import com.ta.finalexam.Bean.DetailBean.DetailData;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
@@ -38,8 +39,8 @@ public class FragmentDetail extends BaseHeaderListFragment {
 
     @OnClick(R.id.img_send)
     public void onSendClicked() {
-        if (edtSendCm.getText().toString() !=""){
-            CommentRequest commentRequest = new CommentRequest(homeBean.image.id,edtSendCm.getText().toString());
+        if (edtSendCm.getText().toString() != "") {
+            CommentRequest commentRequest = new CommentRequest(homeBean.image.id, edtSendCm.getText().toString());
             commentRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
                 @Override
                 public void onSuccess(BaseResponse data) {
@@ -112,7 +113,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
         return "Detail";
     }
 
-    private void getCommentList(){
+    private void getCommentList() {
         CommentListRequest commentListRequest = new CommentListRequest(homeBean.image.id);
         commentListRequest.setRequestCallBack(new ApiObjectCallBack<CommentListResponse>() {
             @Override
@@ -127,6 +128,5 @@ public class FragmentDetail extends BaseHeaderListFragment {
             }
         });
     }
-
 
 }

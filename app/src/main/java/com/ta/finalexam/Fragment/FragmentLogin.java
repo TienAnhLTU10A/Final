@@ -1,11 +1,13 @@
 package com.ta.finalexam.Fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.StringEncryption;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -33,7 +35,6 @@ public class FragmentLogin extends NoHeaderFragment {
 
     String user;
     String pass;
-
 
     @BindView(R.id.etLogin)
     EditText etLogin;
@@ -117,4 +118,5 @@ public class FragmentLogin extends NoHeaderFragment {
         KeyboardUtil.hideKeyboard(getActivity());
         showCoverNetworkLoading();
     }
+
 }

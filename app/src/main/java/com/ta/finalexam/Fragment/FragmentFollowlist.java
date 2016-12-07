@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.FollowListAdapter;
 import com.ta.finalexam.Bean.MemberBean;
 import com.ta.finalexam.Constant.HeaderOption;
@@ -23,14 +24,13 @@ import vn.app.base.util.DebugLog;
  */
 
 public class FragmentFollowlist extends BaseHeaderListFragment {
-//    List<Member> memberFollowList;
+    //    List<Member> memberFollowList;
     FollowListAdapter followListAdapter;
 
-    public static FragmentFollowlist newInstance(){
+    public static FragmentFollowlist newInstance() {
         FragmentFollowlist newFragment = new FragmentFollowlist();
         return newFragment;
     }
-
 
 
     @Override
@@ -79,7 +79,7 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
         return true;
     }
 
-    private void getFollowlistdata(){
+    private void getFollowlistdata() {
         FollowlistRequest followlistRequest = new FollowlistRequest();
         followlistRequest.setRequestCallBack(new ApiObjectCallBack<FollowlistResponse>() {
             @Override
@@ -98,20 +98,16 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
         });
     }
 
-    private void handleFollowlistdata(List<MemberBean> dataFollowList){
+    private void handleFollowlistdata(List<MemberBean> dataFollowList) {
         followListAdapter = new FollowListAdapter(dataFollowList);
         followListAdapter.setOnRecyclerViewItemClick(new OnRecyclerViewItemClick() {
             @Override
             public void onItemClick(View view, int position) {
                 int realpos = position + 1;
-                Toast.makeText(getActivity(),realpos + "" ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), realpos + "", Toast.LENGTH_SHORT).show();
             }
         });
         rvList.setAdapter(followListAdapter);
 
     }
-
-
-
-
 }

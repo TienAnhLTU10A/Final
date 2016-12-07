@@ -40,8 +40,6 @@ dependencies {
     compile project(path: ':base')
 
 
-
-
     compile 'com.google.android.gms:play-services-location:9.8.0'
     compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.android.support:appcompat-v7:24.2.1'
@@ -51,10 +49,9 @@ dependencies {
     compile 'me.relex:circleindicator:1.2.2@aar'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.github.mabbas007:TagsEditText:v1.0.2'
+    compile 'com.github.mabbas007:TagsEditText:v1.0.4'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.3.1'
-    
-
+    compile 'me.villani.lorenzo.android:android-cropimage:1.1.+'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }

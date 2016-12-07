@@ -2,14 +2,17 @@ package com.ta.finalexam.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.camera.CropImageIntentBuilder;
 import com.ta.finalexam.Bean.HeaderControlBean;
+import com.ta.finalexam.Bean.UserBean;
+import com.ta.finalexam.Constant.FragmentActionConstant;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.Fragment.FragmentFollowlist;
 import com.ta.finalexam.Fragment.FragmentHome;
@@ -30,9 +33,6 @@ import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
 public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks {
-
-    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
-//    FragmentProfile.UpdateProfileCallBack updateProfileCallBack;
 
     @BindView(R.id.toolbar)
     RelativeLayout rlToolbar;
@@ -56,6 +56,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     DrawerLayout drawerLayout;
 
     FragmentMenu fragmentMenu;
+    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
+    UserBean currentUser;
 
 
     @Override
@@ -80,7 +82,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @Override
     public void initView() {
-        if (UserManager.getCurrentUser() == null) {
+        currentUser = UserManager.getCurrentUser();
+        if (currentUser == null) {
             setUpInitScreen(FragmentLogin.newInstance(), null);
         } else {
             setUpInitScreen(FragmentHome.newInstance(), null);
@@ -89,6 +92,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @Override
     public void initData() {
+        currentUser = UserManager.getCurrentUser();
     }
 
     @Override
@@ -106,7 +110,16 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
             if (headerControlBean != null) {
                 handleHeaderUI(headerControlBean);
             }
+        } else if (bundle.containsKey(FragmentActionConstant.FRAGMENT_ACTION)) {
+            int fragmentAction = bundle.getInt(FragmentActionConstant.FRAGMENT_ACTION);
+            if (fragmentAction == FragmentActionConstant.PICK_IMAGE) {
+                handlePickPhoto();
+            }
         }
+    }
+
+    private void handlePickPhoto() {
+        imagePickerUtil.pickImage(this, false);
     }
 
     private void handleHeaderUI(HeaderControlBean headerControlBean) {
@@ -187,20 +200,29 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @OnClick(R.id.tv_update)
     public void updateProfile() {
-
+        if (fragmentListener != null){
+            Bundle bundle = new Bundle();
+            bundle.putString("UPDATE" , null);
+            fragmentListener.onFragmentDataHandle(bundle);
+        }
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(""), null);
+                //TODO profile
+                Log.e("initView", "currentUser =  " + currentUser.id);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(currentUser.id), null);
                 break;
             case 1:
+                //TODO home
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
                 break;
             case 2:
+                //TODO image upload
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentImageUpload.newInstance(), null);
+
                 break;
             case 3:
                 //TODO favourite
@@ -216,23 +238,15 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
             case 6:
                 //TODO LOGOUT
                 UserManager.clearUserData();
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
+                if(currentUser == null){
+                    FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
+                }
+                break;
+            default:
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
                 break;
         }
     }
 
-    public TextView getTvUpdate() {
-        return tvUpdate;
-    }
-
-//    @OnClick(R.id.tv_update)
-//    public void onClickUpdate() {
-//        if (updateProfileCallBack != null) {
-//            updateProfileCallBack.onClickUpdate();
-//        }
-//    }
-//    public void setUpdateProfileCallBack(FragmentProfile.UpdateProfileCallBack updateProfileCallBack) {
-//        this.updateProfileCallBack = updateProfileCallBack;
-//    }
 }
 

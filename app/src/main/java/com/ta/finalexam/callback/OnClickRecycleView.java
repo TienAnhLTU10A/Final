@@ -9,4 +9,6 @@ import com.ta.finalexam.Bean.HomeBean.HomeBean;
 public interface OnClickRecycleView {
    void onFollowResponse(String userId , int status);
    void onFavouriteResponse(String imageId , int status);
+   void onGoToProfile(String userId);
+   void onGoToDetail(HomeBean homeBean);
 }

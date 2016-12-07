@@ -3,7 +3,7 @@ package com.ta.finalexam.Adapter.ViewHolder;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ta.finalexam.Bean.ProfileBean.UserBean.ProfileBean;
+import com.ta.finalexam.Bean.ProfileBean;
 import com.ta.finalexam.R;
 import com.ta.finalexam.callback.OnUserEdit;
 

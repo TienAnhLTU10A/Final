@@ -3,7 +3,9 @@
 buildscript {
     repositories {
         jcenter()
+
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
@@ -16,8 +18,14 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url 'http://lorenzo.villani.me/android-cropimage/'
+        }
+    }
+    repositories {
         maven { url "https://jitpack.io" }
     }
+
 }
 
 task clean(type: Delete) {

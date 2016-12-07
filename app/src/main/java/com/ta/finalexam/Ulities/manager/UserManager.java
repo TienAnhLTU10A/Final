@@ -1,5 +1,7 @@
 package com.ta.finalexam.Ulities.manager;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.ta.finalexam.Bean.UserBean;
@@ -18,11 +20,13 @@ public class UserManager {
 
     public static void saveCurrentUser(UserBean userBean){
         String userData = gson.toJson(userBean,UserBean.class);
+        Log.e("saveCurrentUser", "userData 1 =  " + userData);
         SharedPrefUtils.putString(USER_DATA,userData);
     }
 
     public static UserBean getCurrentUser(){
         String userData = SharedPrefUtils.getString(USER_DATA,null);
+        Log.e("saveCurrentUser", "userData 2 =  " + userData);
         if (StringUtil.checkStringValid(userData)){
             try {
                 return gson.fromJson(userData,UserBean.class);

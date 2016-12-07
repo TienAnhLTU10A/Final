@@ -18,14 +18,14 @@ import vn.app.base.util.SharedPrefUtils;
  */
 
 public class HomeRequest extends ObjectApiRequest<HomeResponse> {
-    HomeBean homeBean;
+    private String last_query_timestamp;
     private int type;
     private int num;
 
-    public HomeRequest(int type, int num, HomeBean homeBean) {
+    public HomeRequest(int type , String last_query_timestamp, int num) {
+        this.last_query_timestamp = last_query_timestamp;
         this.type = type;
         this.num = num;
-        this.homeBean = homeBean;
     }
 
     @Override
@@ -47,9 +47,7 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
         params.put(ApiConstance.TYPE, String.valueOf(type));
-        if (homeBean != null){
-            params.put(ApiConstance.LAST_QUERY_TIMESTAMP, String.valueOf(homeBean.image.createdAt));
-        }
+        params.put(ApiConstance.LAST_QUERY_TIMESTAMP , last_query_timestamp);
         params.put(ApiConstance.NUM, String.valueOf(num));
         return params;
     }

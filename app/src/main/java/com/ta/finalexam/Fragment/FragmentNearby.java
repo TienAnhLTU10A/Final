@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.CustomInfoWindow;
 import com.ta.finalexam.Bean.NearbyBean.DataNearby;
 import com.ta.finalexam.Constant.HeaderOption;
@@ -228,4 +229,5 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
         }
         super.onStop();
     }
+
 }

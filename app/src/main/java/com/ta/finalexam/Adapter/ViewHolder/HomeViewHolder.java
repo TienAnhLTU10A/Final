@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.RoundedCornersTransformation;
 import com.ta.finalexam.callback.OnClickRecycleView;
@@ -102,9 +103,9 @@ public class HomeViewHolder extends OnClickViewHolder {
     public void FollowUser() {
         if (onClickCallBack != null) {
             if (!isFollow) {
-                onClickCallBack.onFollowResponse(homeBean.user.id, 1);
+                onClickCallBack.onFollowResponse(homeBean.user.id, ApiConstance.FOLLOW);
             } else {
-                onClickCallBack.onFollowResponse(homeBean.user.id, 0);
+                onClickCallBack.onFollowResponse(homeBean.user.id, ApiConstance.UN_FOLLOW);
             }
         }
     }
@@ -123,7 +124,9 @@ public class HomeViewHolder extends OnClickViewHolder {
 
     @OnClick(R.id.ivPhotoPreview)
     public void openDetail() {
-        //TODO Chuyển Màn Detail
+        if (onClickCallBack != null){
+            onClickCallBack.onGoToDetail(homeBean);
+        }
     }
 
 

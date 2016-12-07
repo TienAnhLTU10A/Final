@@ -5,14 +5,15 @@ package com.ta.finalexam.Constant;
  */
 
 public class ApiConstance {
-    public static final String TYPE = "TYPE";
-    public static final String LAST_QUERY_TIMESTAMP = "LAST_QUERY_TIMESTAMP";
-    public static final String NUM = "NUM";
+    public static final String TYPE = "type";
+    public static final String LAST_QUERY_TIMESTAMP = "last_query_timestamp";
+    public static final String NUM = "num";
     public static final int NUMS = 10;
 
     // API Url && TOKEN
     public static final String API_BASE_URL = "https://polar-plains-86888.herokuapp.com/";
     public static final String LOGIN = API_BASE_URL + "api/login";
+    public static final String FAVOURITE_LIST = API_BASE_URL + "/api/favouritelist";
     public static final String REGISTER = API_BASE_URL + "api/regist";
     public static final String PROFILE_USER = API_BASE_URL + "api/profile";
     public static final String IMAGE_LIST = API_BASE_URL + "api/image/list";
@@ -58,6 +59,11 @@ public class ApiConstance {
     //Follow & Favourite
     public static final String FAVOURITE_STATUS = "isFavourite";
     public static final String FOLLOW_STATUS = "isFollow";
+    public static final int FOLLOW = 1;
+    public static final int UN_FOLLOW = 0;
+    public static final int FAVOURITE = 1;
+    public static final int UN_FAVOURITE = 0;
+
 
     //UpdateProfile
     public static final String AVATAR = "avatar";
