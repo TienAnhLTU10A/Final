@@ -11,4 +11,6 @@ public interface OnClickRecycleView {
    void onFavouriteResponse(String imageId , int status);
    void onGoToProfile(String userId);
    void onGoToDetail(HomeBean homeBean);
+   void onMapClick(HomeBean homeBean);
+   void onPhotoClick(HomeBean homeBean);
 }

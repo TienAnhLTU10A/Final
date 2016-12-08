@@ -172,8 +172,8 @@ public class FragmentMenu extends CommonFragment {
     public void setUp(final int fragmentId, DrawerLayout drawerLayout) {
 
         if (UserManager.getCurrentUser() != null) {
-            tvUserName_Nav.setText(currentUser.username);
-            ImageLoader.loadImage(getActivity(), currentUser.avatar, menu_Avatar);
+            tvUserName_Nav.setText(UserManager.getCurrentUser().username);
+            ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
         }
 
         mFragmentContainerView = getActivity().findViewById(fragmentId);

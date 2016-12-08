@@ -26,7 +26,7 @@ import vn.app.base.util.StringUtil;
 public class HomeViewHolder extends OnClickViewHolder {
     public static int sCorner = 15;
     public static int sMargin = 2;
-    OnMapClick onMapCallBack;
+
     OnClickRecycleView onClickCallBack;
     private HomeBean homeBean;
 
@@ -61,11 +61,9 @@ public class HomeViewHolder extends OnClickViewHolder {
         super(itemView);
     }
 
-    public void bind(HomeBean homeBean, OnMapClick onMapClick, OnClickRecycleView onClickRecycleView) {
-        this.onMapCallBack = onMapClick;
+    public void bind(HomeBean homeBean, OnClickRecycleView onClickRecycleView) {
         this.onClickCallBack = onClickRecycleView;
         this.homeBean = homeBean;
-
         Glide.with(itemView.getContext()).load(homeBean.user.avatar).placeholder(R.drawable.placeholer_avatar)
                 .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(), sCorner, sMargin)).into(ivUserPhoto);
         Glide.with(itemView.getContext()).load(homeBean.image.url).crossFade()
@@ -112,8 +110,8 @@ public class HomeViewHolder extends OnClickViewHolder {
 
     @OnClick(R.id.tvLocation)
     public void openMap() {
-        if (onMapCallBack != null) {
-            onMapCallBack.onMapClick(homeBean);
+        if (onClickCallBack != null) {
+            onClickCallBack.onMapClick(homeBean);
         }
     }
 

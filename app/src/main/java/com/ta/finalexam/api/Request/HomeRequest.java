@@ -1,12 +1,10 @@
 package com.ta.finalexam.api.Request;
 
 import com.android.volley.Request;
-import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.api.HomeResponse;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import vn.app.base.api.volley.core.ObjectApiRequest;
@@ -21,7 +19,12 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     private int type;
     private int num;
 
-    public HomeRequest(int type , String last_query_timestamp, int num) {
+
+    public HomeRequest(int type) {
+        this.type = type;
+    }
+
+    public HomeRequest(int type, String last_query_timestamp, int num) {
         this.last_query_timestamp = last_query_timestamp;
         this.type = type;
         this.num = num;
@@ -46,8 +49,12 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
         params.put(ApiConstance.TYPE, String.valueOf(type));
-        params.put(ApiConstance.LAST_QUERY_TIMESTAMP , last_query_timestamp);
-        params.put(ApiConstance.NUM, String.valueOf(num));
+        if (last_query_timestamp != null) {
+            params.put(ApiConstance.LAST_QUERY_TIMESTAMP, last_query_timestamp);
+        }
+        if (num != 0) {
+            params.put(ApiConstance.NUM, String.valueOf(num));
+        }
         return params;
     }
 

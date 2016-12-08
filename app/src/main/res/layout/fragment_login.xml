@@ -25,11 +25,11 @@
         android:layout_centerHorizontal="true" />
 
     <EditText
+        android:id="@+id/etLogin"
         style="@style/login_et_bg"
         android:drawableLeft="@drawable/ic_person_outline_white_18dp"
         android:layout_below="@+id/imgLogo"
         android:layout_marginTop="50dp"
-        android:drawableLeft="@drawable/ic_person_outline_white_18dp"
         android:imeOptions="actionNext"
         android:inputType="text"
         android:lines="1" />

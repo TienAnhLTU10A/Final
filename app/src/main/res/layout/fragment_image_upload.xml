@@ -65,7 +65,7 @@
                         android:id="@+id/etCaption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="top|start"
+                        android:gravity="top|left"
                         android:hint="This is good place"
                         android:inputType="textMultiLine"
                         android:lines="3"
@@ -99,7 +99,6 @@
                 </RelativeLayout>
 
                 <Button
-                    android:id="@+id/button2"
                     style="@style/ImageUpload_btn_style"
                     android:inputType="textCapCharacters"
                     android:text="@string/ImageUpload_title_3" />
@@ -108,10 +107,6 @@
                     android:id="@+id/etHashTag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lines="2"
-                    android:layout_marginLeft="38dp"
-                    android:layout_marginRight="@dimen/ImageUpload_layout_mar_l_r"
-                    android:layout_marginTop="12dp"
                     TagsEditText:allowSpaceInTag="true"
                     TagsEditText:tagsBackground="@drawable/square"
                     TagsEditText:tagsCloseImageLeft="@drawable/dot"
