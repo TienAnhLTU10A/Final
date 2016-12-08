@@ -86,8 +86,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     protected void initData() {
         if (homeBeanList == null) {
             getHome(false);
-        }
-        else {
+        } else {
             handleHomeFirstData(homeBeanList);
         }
 
@@ -114,8 +113,11 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     public void getLastTimeStamp(List<HomeBean> inHomeBeanList) {
         if (inHomeBeanList != null) {
             int size = inHomeBeanList.size();
-            HomeBean homeBeanLast = inHomeBeanList.get(size - 1);
-            last_time_stamp = String.valueOf(homeBeanLast.image.createdAt);
+            if (size > 0) {
+                HomeBean homeBeanLast = inHomeBeanList.get(size - 1);
+                last_time_stamp = String.valueOf(homeBeanLast.image.createdAt);
+            }
+
         }
     }
 
@@ -139,6 +141,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
                             }
                         }
                     }
+
                     @Override
                     public void onFail(int failCode, String message) {
                         initialNetworkError();
