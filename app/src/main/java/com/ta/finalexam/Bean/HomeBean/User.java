@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class User implements Parcelable {
 
-
     @SerializedName("_id")
     @Expose
     public String id;
@@ -22,33 +21,16 @@ public class User implements Parcelable {
     @Expose
     public Boolean isFollowing;
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.username);
-        dest.writeString(this.avatar);
-        dest.writeValue(this.isFollowing);
-    }
-
-    public User() {
-    }
-
     protected User(Parcel in) {
-        this.id = in.readString();
-        this.username = in.readString();
-        this.avatar = in.readString();
-        this.isFollowing = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        id = in.readString();
+        username = in.readString();
+        avatar = in.readString();
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
-        public User createFromParcel(Parcel source) {
-            return new User(source);
+        public User createFromParcel(Parcel in) {
+            return new User(in);
         }
 
         @Override
@@ -56,4 +38,16 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(username);
+        dest.writeString(avatar);
+    }
 }

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ta.finalexam.Bean.UserBean;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -26,11 +27,6 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.fragment.CommonFragment;
 import vn.app.base.imageloader.ImageLoader;
-import vn.app.base.util.FragmentUtil;
-
-/**
- * last fix by TA 6/12/2016
- */
 
 public class FragmentMenu extends CommonFragment {
 
@@ -47,9 +43,9 @@ public class FragmentMenu extends CommonFragment {
 
     private static final String PREF_USER_LEARN_DRAWER = "nav_learn_drawer";
 
-    private int mCurrentSelectPosition = 0;
+    private int mCurrentSelectPosition = 1;
     private boolean mUserLearnDrawer;
-    public DrawerLayout mDrawerLayout;
+    private DrawerLayout mDrawerLayout;
 
     View contentView;
 
@@ -63,9 +59,9 @@ public class FragmentMenu extends CommonFragment {
     public FragmentMenu() {
     }
 
-    public static FragmentMenu newInstance(Bundle bundle) {
+    public static FragmentMenu newInstance() {
         FragmentMenu fragment = new FragmentMenu();
-        Bundle args = bundle;
+        Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,10 +84,11 @@ public class FragmentMenu extends CommonFragment {
 
     @Override
     protected void initView(View root) {
+
     }
 
     @OnClick(R.id.menu_1)
-    public void onChange() {
+    public void onProfile() {
         selectItem(0);
     }
 
@@ -132,23 +129,11 @@ public class FragmentMenu extends CommonFragment {
 
     @Override
     protected void initData() {
-//        if (UserManager.getCurrentUser() != null) {
-//            tvUserName_Nav.setText(UserManager.getCurrentUser().username);
-//            ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
-//        }
+
     }
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
-    }
-
-    @Override
-    public void onFragmentDataHandle(Bundle bundle) {
-        super.onFragmentDataHandle(bundle);
-        if (bundle.getBoolean(ApiConstance.ISUSERSAVED) == true) {
-
-
-        }
     }
 
     public void setCurrentMenu(int position) {
@@ -186,8 +171,10 @@ public class FragmentMenu extends CommonFragment {
 
     public void setUp(final int fragmentId, DrawerLayout drawerLayout) {
 
-        tvUserName_Nav.setText(UserManager.getCurrentUser().username);
-        ImageLoader.loadImage(getActivity(), R.drawable.placeholer_avatar , UserManager.getCurrentUser().avatar, menu_Avatar);
+        if (UserManager.getCurrentUser() != null) {
+            tvUserName_Nav.setText(UserManager.getCurrentUser().username);
+            ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
+        }
 
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
@@ -300,6 +287,7 @@ public class FragmentMenu extends CommonFragment {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECT_POSITION, mCurrentSelectPosition);
     }
+
 
     /**
      * Callbacks interface that all activities using this fragment must implement.

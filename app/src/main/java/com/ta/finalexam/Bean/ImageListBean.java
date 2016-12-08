@@ -1,4 +1,4 @@
-package com.ta.finalexam.Bean.ImageListBean;
+package com.ta.finalexam.Bean;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

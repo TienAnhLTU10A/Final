@@ -8,6 +8,8 @@ import java.util.Map;
 
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.core.ObjectApiRequest;
+import vn.app.base.constant.ApiParam;
+import vn.app.base.util.SharedPrefUtils;
 
 /**
  * Created by kooryy2 on 11/18/2016.
@@ -47,9 +49,9 @@ public class FavouritesRequest extends ObjectApiRequest<BaseResponse> {
 
     @Override
     public Map<String, String> getRequestHeaders() {
-        Map<String, String> header = new HashMap<>();
-        header.put(ApiConstance.TOKEN, ApiConstance.TOKEN_CODE);
-        return header;
+        Map<String,String> newHeader = new HashMap<>();
+        newHeader.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
+        return newHeader;
     }
 
     @Override

@@ -22,7 +22,6 @@ import vn.app.base.util.DebugLog;
 
 /**
  * Created by Veteran Commander on 10/14/2016.
- * last fix : 5/12/2016 by TA
  */
 
 public class FragmentFollowlist extends BaseHeaderListFragment {
@@ -37,6 +36,7 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
         FragmentFollowlist newFragment = new FragmentFollowlist();
         return newFragment;
     }
+
 
 
     @Override
@@ -79,7 +79,6 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
         followlistRequest.setRequestCallBack(new ApiObjectCallBack<FollowlistResponse>() {
             @Override
             public void onSuccess(FollowlistResponse data) {
-//                hideCoverNetworkLoading();
                 initialResponseHandled();
                 memberFollowList = data.data;
                 handleFollowlistdata(memberFollowList);

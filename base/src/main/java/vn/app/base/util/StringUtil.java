@@ -119,6 +119,12 @@ public class StringUtil {
         }
     }
 
+    public static String replaceString(String replace) {
+        String str = "/n";
+        str.replace("/n", "");
+        return str;
+    }
+
     public static String formatDateText(Calendar calendar) {
         return getMinguoYear(calendar.get(Calendar.YEAR)) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日";
     }

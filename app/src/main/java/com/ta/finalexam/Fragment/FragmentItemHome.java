@@ -7,20 +7,20 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.ta.finalexam.Adapter.HomeAdapter;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.ApiConstance;
-import com.ta.finalexam.Constant.HomeType;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.animation.EndlessRecyclerOnScrollListener;
 import com.ta.finalexam.api.HomeResponse;
 import com.ta.finalexam.api.Request.FavouritesRequest;
 import com.ta.finalexam.api.Request.FollowRequest;
 import com.ta.finalexam.api.Request.HomeRequest;
 import com.ta.finalexam.callback.OnClickRecycleView;
-import com.ta.finalexam.callback.OnMapClick;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -34,21 +34,12 @@ import vn.app.base.util.IntentUtil;
 
 /**
  * A simple {@link Fragment} subclass.
- * last fix by TA on 6/12/2016
  */
 public class FragmentItemHome extends BaseHeaderListFragment {
-    public static final int FOLLOWING = 1;
-    public static final int UN_FOLLOWING = 0;
-    public int maxItem = 10;
-    public int FOLLOWSTATUS;
-
-    public static final int FAVOURITE = 1;
-    public static final int UN_FAVOURITE = 0;
-    public int FAVOURITESTATUS;
-
     private List<HomeBean> homeBeanList;
     private HomeAdapter vAdapter;
-    int type;
+    private String last_time_stamp;
+    private int type;
 
     @BindView(R.id.recycerList)
     RecyclerView rvList;
@@ -63,8 +54,8 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     public static FragmentItemHome newInstance(int type) {
         FragmentItemHome fragmentItemHome = new FragmentItemHome();
         Bundle bundle = new Bundle();
-        bundle.putInt(ApiConstance.TYPE, HomeType.NEW);
-        bundle.putInt(ApiConstance.TYPE, HomeType.FOLLOW);
+        bundle.putInt(ApiConstance.TYPE, type);
+        fragmentItemHome.setArguments(bundle);
         return fragmentItemHome;
     }
 
@@ -84,35 +75,31 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     @Override
     protected void getArgument(Bundle bundle) {
         type = bundle.getInt(ApiConstance.TYPE);
-        getHome(true, type);
     }
 
     @Override
     protected void onRefreshData() {
-        getHome(true, type);
+        getHome(true);
     }
 
     @Override
     protected void initData() {
         if (homeBeanList == null) {
-            getHome(false, type);
-        } else {
-            handleHomeData(homeBeanList);
+            getHome(false);
         }
+        else {
+            handleHomeFirstData(homeBeanList);
+        }
+
     }
 
-    private void getHome(final boolean isRefresh, int type) {
-        showCoverNetworkLoading();
-        HomeRequest homeRequest = new HomeRequest(type, maxItem, homeBean);
+    private void getHome(final boolean isRefresh) {
+        HomeRequest homeRequest = new HomeRequest(type);
         homeRequest.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
             @Override
             public void onSuccess(HomeResponse data) {
                 initialResponseHandled();
-                handleHomeData(data.data);
-                for (int i = 0; i < maxItem; i++) {
-                    homeBeanList.add(data.data.get(i));
-                }
-                vAdapter.notifyDataSetChanged();
+                handleHomeFirstData(data.data);
 
             }
 
@@ -124,48 +111,135 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         homeRequest.execute();
     }
 
-    @Override
-    protected void onLoadingMore(int currentPage) {
-        super.onLoadingMore(currentPage);
+    public void getLastTimeStamp(List<HomeBean> inHomeBeanList) {
+        if (inHomeBeanList != null) {
+            int size = inHomeBeanList.size();
+            HomeBean homeBeanLast = inHomeBeanList.get(size - 1);
+            last_time_stamp = String.valueOf(homeBeanLast.image.createdAt);
+        }
     }
 
-    private void handleHomeData(List<HomeBean> inHomeBeanList) {
-        this.homeBeanList = inHomeBeanList;
+
+    private void handleHomeFirstData(List<HomeBean> firstHomeBeanList) {
+        this.homeBeanList = firstHomeBeanList;
         vAdapter = new HomeAdapter(homeBeanList);
         rvList.setAdapter(vAdapter);
-        vAdapter.setOnMapCallBack(new OnMapClick() {
+        rvList.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore(int currentPage) {
+                final HomeRequest homeRequest2 = new HomeRequest(type, last_time_stamp, 10);
+                homeRequest2.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
+                    @Override
+                    public void onSuccess(HomeResponse data) {
+                        initialResponseHandled();
+                        if (data.data.size() != 0) {
+                            int count = data.data.size();
+                            for (int i = 0; i < count; i++) {
+                                homeBeanList.add(data.data.get(i));
+                            }
+                        }
+                    }
+                    @Override
+                    public void onFail(int failCode, String message) {
+                        initialNetworkError();
+                    }
+                });
+            }
+        });
+        vAdapter.setOnClickCallBack(new OnClickRecycleView() {
+            @Override
+            public void onFollowResponse(final String userId, final int status) {
+                FollowRequest followRequest = new FollowRequest(userId, status);
+                followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                    @Override
+                    public void onSuccess(BaseResponse data) {
+                        if (data.status == 1) {
+                            changeFollowLocal(userId, status);
+                            vAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFail(int failCode, String message) {
+                    }
+                });
+                followRequest.execute();
+            }
+
+            @Override
+            public void onFavouriteResponse(final String imageId, final int status) {
+                FavouritesRequest favouritesRequest = new FavouritesRequest(imageId, status);
+                favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
+                    @Override
+                    public void onSuccess(BaseResponse data) {
+                        hideCoverNetworkLoading();
+                        if (data.status == 1) {
+                            changeFavouriteLocal(imageId, status);
+                            vAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFail(int failCode, String message) {
+
+                    }
+                });
+                favouritesRequest.execute();
+            }
+
+            @Override
+            public void onGoToProfile(String userId) {
+                FragmentUtil.pushFragment(getActivity(), FragmentProfile.newInstance(userId), null, "ProfileUser");
+            }
+
+            @Override
+            public void onGoToDetail(HomeBean homeBean) {
+                FragmentUtil.pushFragment(getActivity(), FragmentDetail.newInstance(homeBean), null, "DetailImage");
+            }
+
             @Override
             public void onMapClick(HomeBean homeBean) {
-
                 goToMapAddress(homeBean);
             }
 
             @Override
             public void onPhotoClick(HomeBean homeBean) {
-                FragmentUtil.pushFragmentWithAnimation(getActivity(), FragmentDetail.newInstance(homeBean),null);
+                FragmentUtil.pushFragmentWithAnimation(getActivity(), FragmentDetail.newInstance(homeBean), null);
             }
         });
-        vAdapter.setOnClickCallBack(new OnClickRecycleView() {
-            @Override
-            public void onFollowResponse(HomeBean homeBean) {
-                if (FOLLOWSTATUS == FOLLOWING) {
-                    getFollow(FOLLOWSTATUS, homeBean);
-                } else if (FOLLOWSTATUS == UN_FOLLOWING) {
-                    getFollow(FOLLOWSTATUS, homeBean);
+        getLastTimeStamp(homeBeanList);
+    }
+
+    private void changeFollowLocal(String userId, int status) {
+        Log.e("changeFollowLocal", "===>" + status);
+        int size = homeBeanList.size();
+        for (int i = 0; i < size; i++) {
+            homeBean = homeBeanList.get(i);
+            if (homeBean != null && homeBean.user.id.equals(userId)) {
+                if (status == ApiConstance.FOLLOW) {
+                    homeBeanList.get(i).user.isFollowing = true;
+                } else {
+                    homeBeanList.get(i).user.isFollowing = false;
                 }
             }
+        }
+    }
 
-            @Override
-            public void onFavouriteResponse(HomeBean homeBean) {
-                if (FAVOURITESTATUS == FAVOURITE) {
-                    getFavourites(FAVOURITESTATUS, homeBean);
-                } else if (FAVOURITESTATUS == UN_FAVOURITE) {
-                    getFavourites(FAVOURITESTATUS, homeBean);
+    private void changeFavouriteLocal(String imageId, int status) {
+        int size = homeBeanList.size();
+        for (int i = 0; i < size; i++) {
+            homeBean = homeBeanList.get(i);
+            if (homeBean != null && homeBean.image.id.equals(imageId)) {
+                if (status == ApiConstance.UN_FAVOURITE) {
+//                    homeBeanList.get(i).image.isFavourite = false;
+                    homeBean.image.isFavourite = false;
+                } else {
+//                    homeBeanList.get(i).image.isFavourite = true;
+                    homeBean.image.isFavourite = true;
                 }
+
             }
-
-
-        });
+        }
     }
 
     private void goToMapAddress(HomeBean homeBean) {
@@ -184,45 +258,5 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         } catch (UnsupportedEncodingException e) {
             return location.replace(" ", "+");
         }
-    }
-
-    private void getFollow(final int mStatus, HomeBean homeBean) {
-        showCoverNetworkLoading();
-        FollowRequest followRequest = new FollowRequest(homeBean.user.id, mStatus);
-        followRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
-            @Override
-            public void onSuccess(BaseResponse data) {
-                hideCoverNetworkLoading();
-                FOLLOWSTATUS = mStatus;
-                vAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                hideCoverNetworkLoading();
-            }
-        });
-        followRequest.execute();
-    }
-
-    private void getFavourites(final int fStatus, HomeBean homeBean) {
-        showCoverNetworkLoading();
-        FavouritesRequest favouritesRequest = new FavouritesRequest(homeBean.image.id, fStatus);
-        favouritesRequest.setRequestCallBack(new ApiObjectCallBack<BaseResponse>() {
-            @Override
-            public void onSuccess(BaseResponse data) {
-                hideCoverNetworkLoading();
-                FAVOURITESTATUS = fStatus;
-                if (data.status == 1) {
-                    vAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFail(int failCode, String message) {
-                hideCoverNetworkLoading();
-            }
-        });
-        favouritesRequest.execute();
     }
 }

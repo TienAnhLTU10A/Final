@@ -1,8 +1,5 @@
 package com.ta.finalexam.Fragment;
 
-
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,9 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.ta.finalexam.Adapter.UserProfileListAdapter;
-import com.ta.finalexam.Bean.ImageListBean.ImageListBean;
-import com.ta.finalexam.Bean.ProfileBean.UserBean.ProfileBean;
+import com.ta.finalexam.Bean.ImageListBean;
+import com.ta.finalexam.Bean.ProfileBean;
 import com.ta.finalexam.Bean.UserBean;
+import com.ta.finalexam.Constant.FragmentActionConstant;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
@@ -23,6 +21,7 @@ import com.ta.finalexam.api.ProfileResponse;
 import com.ta.finalexam.api.Request.ImageListProfileUserRequest;
 import com.ta.finalexam.api.Request.ProfileUserRequest;
 import com.ta.finalexam.api.Request.UpdateProfileRequest;
+import com.ta.finalexam.callback.OnUserEdit;
 
 import java.io.File;
 import java.util.List;
@@ -32,14 +31,14 @@ import butterknife.OnClick;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentProfile extends BaseHeaderListFragment {
+public class FragmentProfile extends BaseHeaderListFragment implements OnUserEdit {
     public static final String USER_ID = "USER_ID";
 
-    UpdateProfileCallBack mCallBack;
     @BindView(R.id.recycerList)
     RecyclerView rvList;
 
@@ -48,12 +47,14 @@ public class FragmentProfile extends BaseHeaderListFragment {
 
     @BindView(R.id.fabCamera)
     FloatingActionButton fabCamera;
-    List<ProfileBean> profileBeanList;
-    List<ImageListBean> imageListBean;
-    String userId;
-    UserBean userBean;
 
-    UserProfileListAdapter mAdapter;
+    private ProfileBean profileBean;
+    private List<ImageListBean> imageListBean;
+    private String userId;
+    String userPhotoPath;
+    UserBean currentUser = UserManager.getCurrentUser();
+    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
+    UserProfileListAdapter mAdapter = new UserProfileListAdapter();
 
     public FragmentProfile() {
     }
@@ -61,9 +62,8 @@ public class FragmentProfile extends BaseHeaderListFragment {
     public static FragmentProfile newInstance(String userId) {
         FragmentProfile fragmentProfile = new FragmentProfile();
         Bundle bundle = new Bundle();
-        if (userId != null) {
-            bundle.putString(USER_ID, userId);
-        }
+        bundle.putString(USER_ID, userId);
+        fragmentProfile.getArgument(bundle);
         return fragmentProfile;
     }
 
@@ -84,7 +84,7 @@ public class FragmentProfile extends BaseHeaderListFragment {
 
     @Override
     protected int getRightIcon() {
-        if (userId == null) {
+        if (userId.equals(currentUser.id)) {
             return HeaderOption.RIGHT_UPDATE;
         } else {
             return 0;
@@ -93,7 +93,7 @@ public class FragmentProfile extends BaseHeaderListFragment {
 
     @Override
     public String getScreenTitle() {
-        if (userId != null) {
+        if (userId.equals(currentUser.id)) {
             return "User";
         } else {
             return "Profile";
@@ -106,6 +106,7 @@ public class FragmentProfile extends BaseHeaderListFragment {
         super.initView(root);
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         setCanRefresh(false);
+
     }
 
     @Override
@@ -115,17 +116,21 @@ public class FragmentProfile extends BaseHeaderListFragment {
 
     @Override
     protected void onRefreshData() {
-
+        getProfileUserHeader(true);
     }
 
     @Override
     protected void initData() {
-
+        if (profileBean == null && imageListBean == null) {
+            getProfileUserHeader(false);
+        } else {
+            setUpData();
+        }
     }
 
-    private void getProfileUserHeader() {
+    private void getProfileUserHeader(boolean isRefresh) {
         ProfileUserRequest profileUserRequest;
-        if (userId.equalsIgnoreCase(UserManager.getCurrentUser().id)) {
+        if (userId.equalsIgnoreCase(currentUser.id)) {
             profileUserRequest = new ProfileUserRequest("");
         } else {
             profileUserRequest = new ProfileUserRequest(userId);
@@ -134,6 +139,9 @@ public class FragmentProfile extends BaseHeaderListFragment {
             @Override
             public void onSuccess(ProfileResponse data) {
                 initialResponseHandled();
+                profileBean = data.profileBean;
+                getImageListProfileUser();
+
             }
 
             @Override
@@ -146,7 +154,7 @@ public class FragmentProfile extends BaseHeaderListFragment {
 
     private void getImageListProfileUser() {
         ImageListProfileUserRequest imageListProfileUserRequest;
-        if (userId.equalsIgnoreCase(UserManager.getCurrentUser().id)) {
+        if (userId.equalsIgnoreCase(currentUser.id)) {
             imageListProfileUserRequest = new ImageListProfileUserRequest("");
         } else {
             imageListProfileUserRequest = new ImageListProfileUserRequest(userId);
@@ -155,6 +163,8 @@ public class FragmentProfile extends BaseHeaderListFragment {
             @Override
             public void onSuccess(ImageListResponse data) {
                 initialResponseHandled();
+                imageListBean = data.data;
+                setUpData();
             }
 
             @Override
@@ -163,10 +173,6 @@ public class FragmentProfile extends BaseHeaderListFragment {
             }
         });
         imageListProfileUserRequest.execute();
-    }
-
-    private void handleProfileUserHeader() {
-
     }
 
     public void updateProfile(File avatar) {
@@ -179,37 +185,40 @@ public class FragmentProfile extends BaseHeaderListFragment {
         }).execute();
     }
 
-    @OnClick(R.id.fabCamera)
-    public void goToUpload() {
-        FragmentUtil.pushFragment(getActivity(), FragmentImageUpload.newInstance(), null);
+    private void setUpData() {
+        mAdapter.setHeader(profileBean);
+        mAdapter.setItems(imageListBean);
+        rvList.setAdapter(mAdapter);
+        mAdapter.setOnUserEdit(this);
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Activity activity = context instanceof Activity ? (Activity) context : null;
-        if (activity != null) {
-            try {
-                mCallBack = (UpdateProfileCallBack) activity;
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Activity must implement UpdateProfileCallBack");
+    public void onFragmentDataHandle(Bundle bundle) {
+        super.onFragmentDataHandle(bundle);
+        if (bundle != null) {
+            userPhotoPath = bundle.getString(USER_ID, null);
+            if (userPhotoPath != null) {
+                updateProfile(imagePickerUtil.createFileUri(getActivity()));
             }
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallBack = null;
+    public void OnChangePhoto(int position) {
+        if (commonListener != null) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(FragmentActionConstant.FRAGMENT_ACTION, FragmentActionConstant.PICK_IMAGE);
+            commonListener.onCommonUIHandle(bundle);
+        }
     }
 
-    /**
-     * Callbacks interface that all activities using this fragment must implement.
-     */
-    public interface UpdateProfileCallBack {
-        /**
-         * Called when an item in the navigation drawer is selected.
-         */
-        void onClickUpdate(File avatar);
+    @Override
+    public void onUpdateProfile(File avatar) {
+
+    }
+
+    @OnClick(R.id.fabCamera)
+    public void goToUpload() {
+        FragmentUtil.pushFragment(getActivity(), FragmentImageUpload.newInstance(), null);
     }
 }

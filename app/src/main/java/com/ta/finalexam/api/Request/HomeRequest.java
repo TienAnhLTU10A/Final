@@ -1,12 +1,10 @@
 package com.ta.finalexam.api.Request;
 
 import com.android.volley.Request;
-import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.api.HomeResponse;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import vn.app.base.api.volley.core.ObjectApiRequest;
@@ -17,14 +15,19 @@ import vn.app.base.util.SharedPrefUtils;
  */
 
 public class HomeRequest extends ObjectApiRequest<HomeResponse> {
-    HomeBean homeBean;
+    private String last_query_timestamp;
     private int type;
     private int num;
 
-    public HomeRequest(int type, int num, HomeBean homeBean) {
+
+    public HomeRequest(int type) {
+        this.type = type;
+    }
+
+    public HomeRequest(int type, String last_query_timestamp, int num) {
+        this.last_query_timestamp = last_query_timestamp;
         this.type = type;
         this.num = num;
-        this.homeBean = homeBean;
     }
 
     @Override
@@ -46,10 +49,12 @@ public class HomeRequest extends ObjectApiRequest<HomeResponse> {
     public Map<String, String> getRequestParams() {
         Map<String, String> params = new HashMap<>();
         params.put(ApiConstance.TYPE, String.valueOf(type));
-        if (homeBean != null){
-            params.put(ApiConstance.LAST_QUERY_TIMESTAMP, String.valueOf(homeBean.image.createdAt));
+        if (last_query_timestamp != null) {
+            params.put(ApiConstance.LAST_QUERY_TIMESTAMP, last_query_timestamp);
         }
-        params.put(ApiConstance.NUM, String.valueOf(num));
+        if (num != 0) {
+            params.put(ApiConstance.NUM, String.valueOf(num));
+        }
         return params;
     }
 

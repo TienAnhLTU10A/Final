@@ -1,6 +1,6 @@
-package com.ta.finalexam.Bean.ProfileBean;
+package com.ta.finalexam.Bean;
 
-import com.google.gson.annotations.Expose;
+import  com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**

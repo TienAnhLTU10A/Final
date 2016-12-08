@@ -19,29 +19,15 @@ public class HomeBean implements Parcelable {
     @Expose
     public Image image;
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.user, flags);
-        dest.writeParcelable(this.image, flags);
-    }
-
-    public HomeBean() {
-    }
-
     protected HomeBean(Parcel in) {
-        this.user = in.readParcelable(User.class.getClassLoader());
-        this.image = in.readParcelable(Image.class.getClassLoader());
+        user = in.readParcelable(User.class.getClassLoader());
+        image = in.readParcelable(Image.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<HomeBean> CREATOR = new Parcelable.Creator<HomeBean>() {
+    public static final Creator<HomeBean> CREATOR = new Creator<HomeBean>() {
         @Override
-        public HomeBean createFromParcel(Parcel source) {
-            return new HomeBean(source);
+        public HomeBean createFromParcel(Parcel in) {
+            return new HomeBean(in);
         }
 
         @Override
@@ -49,4 +35,15 @@ public class HomeBean implements Parcelable {
             return new HomeBean[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(user, flags);
+        dest.writeParcelable(image, flags);
+    }
 }

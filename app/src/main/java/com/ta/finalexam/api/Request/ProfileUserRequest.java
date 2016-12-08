@@ -62,6 +62,6 @@ public class ProfileUserRequest extends ObjectApiRequest<ProfileResponse> {
 
     @Override
     public int getMethod() {
-        return Request.Method.GET;
+        return Request.Method.POST;
     }
 }

@@ -2,7 +2,7 @@ package com.ta.finalexam.api;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.ta.finalexam.Bean.ProfileBean.UserBean.ProfileBean;
+import com.ta.finalexam.Bean.ProfileBean;
 
 import vn.app.base.api.response.BaseResponse;
 

@@ -9,6 +9,7 @@
         android:id="@+id/imgBg"
         android:scaleType="centerCrop"
         android:src="@mipmap/login_bg" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,14 +25,14 @@
         android:layout_centerHorizontal="true" />
 
     <EditText
+        android:id="@+id/etLogin"
         style="@style/login_et_bg"
         android:drawableLeft="@drawable/ic_person_outline_white_18dp"
         android:layout_below="@+id/imgLogo"
         android:layout_marginTop="50dp"
-        android:id="@+id/etLogin"
+        android:imeOptions="actionNext"
         android:inputType="text"
-        android:lines="1"
-        android:imeOptions="actionNext"/>
+        android:lines="1" />
 
     <EditText
         style="@style/login_et_bg"
@@ -63,7 +64,7 @@
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
         android:textColorHint="@color/colorWhite"
-                android:layout_marginTop="10dp"
+        android:layout_marginTop="10dp"
         android:background="@color/colorTrong"
         android:layout_below="@id/btnLogin"/>
 

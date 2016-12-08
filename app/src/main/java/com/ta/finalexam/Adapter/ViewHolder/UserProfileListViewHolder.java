@@ -1,11 +1,10 @@
 package com.ta.finalexam.Adapter.ViewHolder;
 
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ta.finalexam.Bean.ImageListBean.ImageListBean;
+import com.ta.finalexam.Bean.ImageListBean;
 import com.ta.finalexam.R;
 
 import butterknife.BindView;

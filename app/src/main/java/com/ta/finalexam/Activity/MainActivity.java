@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ta.finalexam.Bean.HeaderControlBean;
+import com.ta.finalexam.Bean.UserBean;
 import com.ta.finalexam.Constant.ApiConstance;
+import com.ta.finalexam.Constant.FragmentActionConstant;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.Fragment.FragmentFollowlist;
 import com.ta.finalexam.Fragment.FragmentHome;
@@ -35,9 +38,7 @@ import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
-public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks{
-
-    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
+public class MainActivity extends CommonActivity implements FragmentMenu.NavigationDrawerCallbacks {
 
     @BindView(R.id.toolbar)
     RelativeLayout rlToolbar;
@@ -60,9 +61,9 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
-
-
     FragmentMenu fragmentMenu;
+    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
+    UserBean currentUser;
 
 
     @Override
@@ -87,18 +88,17 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @Override
     public void initView() {
-        if (UserManager.getCurrentUser() == null) {
+        currentUser = UserManager.getCurrentUser();
+        if (currentUser == null) {
             setUpInitScreen(FragmentLogin.newInstance(), null);
         } else {
-            setUpInitScreen(FragmentHome.newInstance(),ApiConstance.TAGHOME);
+            setUpInitScreen(FragmentHome.newInstance(), ApiConstance.TAGHOME);
         }
-
     }
-
 
     @Override
     public void initData() {
-
+        currentUser = UserManager.getCurrentUser();
     }
 
     @Override
@@ -116,7 +116,16 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
             if (headerControlBean != null) {
                 handleHeaderUI(headerControlBean);
             }
+        } else if (bundle.containsKey(FragmentActionConstant.FRAGMENT_ACTION)) {
+            int fragmentAction = bundle.getInt(FragmentActionConstant.FRAGMENT_ACTION);
+            if (fragmentAction == FragmentActionConstant.PICK_IMAGE) {
+                handlePickPhoto();
+            }
         }
+    }
+
+    private void handlePickPhoto() {
+        imagePickerUtil.pickImage(this, false);
     }
 
     private void handleHeaderUI(HeaderControlBean headerControlBean) {
@@ -188,8 +197,6 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     private void handleMenuSlide() {
         fragmentMenu = (FragmentMenu) getSupportFragmentManager().findFragmentById(R.id.nagigation_drawer);
         fragmentMenu.setUp(R.id.nagigation_drawer, drawerLayout);
-
-
     }
 
     @OnClick(R.id.headerBack)
@@ -203,10 +210,10 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     }
 
     @OnClick(R.id.tv_delete)
-    public void onDelete(){
-        if (fragmentListener!=null){
+    public void onDelete() {
+        if (fragmentListener != null) {
             Bundle bundle = new Bundle();
-            bundle.putBoolean(ApiConstance.ISDELCLICK,true);
+            bundle.putBoolean(ApiConstance.ISDELCLICK, true);
             fragmentListener.onFragmentUIHandle(bundle);
         }
     }
@@ -215,14 +222,16 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                Toast.makeText(this, "aaaaa", Toast.LENGTH_LONG).show();
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(""), null);
                 break;
             case 1:
+                //TODO home
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
-
                 break;
             case 2:
+                //TODO image upload
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentImageUpload.newInstance(), null);
+
                 break;
             case 3:
                 //TODO favourite
@@ -240,12 +249,6 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 UserManager.clearUserData();
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
-
         }
     }
-
-    public TextView getTvDelete(){
-        return tvDelete;
-    }
 }
-

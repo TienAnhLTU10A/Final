@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.TutViewPagerAdapter;
 import com.ta.finalexam.Bean.TutorialBean.DataTut;
 import com.ta.finalexam.Constant.ApiConstance;
@@ -91,6 +92,5 @@ public class FragmentTutorial extends NoHeaderFragment {
         viewPager.setAdapter(tutViewPagerAdapter);
         indicator.setViewPager(viewPager);
     }
-
 
 }

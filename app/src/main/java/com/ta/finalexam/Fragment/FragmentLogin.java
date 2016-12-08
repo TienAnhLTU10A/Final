@@ -32,14 +32,12 @@ import vn.app.base.util.StringUtil;
 
 /**
  * Created by 3543 on 10/14/2016.
- * last fix by TA 6/12/2016
  */
 
 public class FragmentLogin extends NoHeaderFragment {
 
     String user;
     String pass;
-
 
     @BindView(R.id.etLogin)
     EditText etLogin;
@@ -95,7 +93,6 @@ public class FragmentLogin extends NoHeaderFragment {
 
     @OnClick(R.id.btnLogin)
     public void login() {
-        DebugLog.e("Token hien tai la :" + SharedPrefUtils.getAccessToken());
         user = etLogin.getText().toString().trim();
         try {
             pass = StringEncryption.SHA1(etPass.getText().toString().trim());
@@ -140,8 +137,5 @@ public class FragmentLogin extends NoHeaderFragment {
         KeyboardUtil.hideKeyboard(getActivity());
         showCoverNetworkLoading();
     }
-    @OnClick(R.id.btnCreateAccount)
-    public void gotoRegister(){
-        FragmentUtil.pushFragment(getActivity(), new FragmentRegister(), null);
-    }
+
 }

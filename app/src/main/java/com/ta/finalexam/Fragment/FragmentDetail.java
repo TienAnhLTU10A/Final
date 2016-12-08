@@ -44,7 +44,6 @@ import vn.app.base.util.IntentUtil;
 
 /**
  * Created by Veteran Commander on 10/19/2016.
- * last fix : 5/12/2016 by TA
  */
 
 public class FragmentDetail extends BaseHeaderListFragment {
@@ -130,16 +129,6 @@ public class FragmentDetail extends BaseHeaderListFragment {
     protected void initData() {
         commentList = new ArrayList<>();
         getCommentList();
-//        TextView tvDelete = ((MainActivity)getActivity()).getTvDelete();
-//        tvDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getActivity(),"Delete",Toast.LENGTH_SHORT).show();
-//
-//
-//            }
-//        });
-
     }
 
     @Override
@@ -174,7 +163,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
             public void onSuccess(CommentListResponse data) {
                 commentList = data.data;
                 initialResponseHandled();
-                setRecyclerView(commentList);
+                handleDetailImage(commentList);
             }
 
             @Override
@@ -185,7 +174,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
         commentListRequest.execute();
     }
 
-    private void setRecyclerView(List<CommentListData> dataList) {
+    private void handleDetailImage(List<CommentListData> dataList) {
         imageDetailListAdapter = new ImageDetailListAdapter();
         imageDetailListAdapter.setHeader(selectHomeBean);
         imageDetailListAdapter.setItems(dataList);

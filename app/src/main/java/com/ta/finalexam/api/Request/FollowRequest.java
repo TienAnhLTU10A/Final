@@ -16,12 +16,10 @@ import vn.app.base.util.SharedPrefUtils;
  */
 
 public class FollowRequest extends ObjectApiRequest<BaseResponse> {
-
-    HomeBean homeBean;
     private String userID;
     private int isFollow ;
 
-    public FollowRequest(String userID, int isFollow) {
+    public FollowRequest(String userID, int isFollow ) {
         this.userID = userID;
         this.isFollow = isFollow;
     }

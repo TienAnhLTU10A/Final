@@ -20,9 +20,6 @@ import vn.app.base.adapter.viewholder.OnClickViewHolder;
 import vn.app.base.imageloader.ImageLoader;
 import vn.app.base.util.StringUtil;
 
-import static com.ta.finalexam.R.id.btnFollow;
-import static com.ta.finalexam.R.id.btn_follow_detail_header;
-
 /**
  * Created by Veteran Commander on 10/26/2016.
  * last fix : 5/12/2016 by TA
