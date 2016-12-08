@@ -21,6 +21,7 @@ import android.widget.ImageView;
 
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.FileForUploadUtils;
 import com.ta.finalexam.Ulities.StringEncryption;
 import com.ta.finalexam.Ulities.manager.UserManager;
 import com.ta.finalexam.api.RegisterResponse;
@@ -146,14 +147,11 @@ public class FragmentRegister extends NoHeaderFragment {
             }
 
         }
-        registerRequest = new RegisterRequest(userId, pass, email, imageAvatar,getActivity());
+        registerRequest = new RegisterRequest(userId, pass, email, imageAvatar, getActivity());
         registerRequest.execute();
         showCoverNetworkLoading();
 
     }
-
-
-
 
     @OnClick(R.id.ivAvatar)
     //Goi intent chup anh
@@ -165,36 +163,20 @@ public class FragmentRegister extends NoHeaderFragment {
         startActivityForResult(getCamera, ApiConstance.REQUEST_CODE_TAKEPHOTO);
     }
 
-    //Tao fileUri
-    public File creatFileUri(Context context) {
-        File[] externalFile = ContextCompat.getExternalFilesDirs(context, null);
-        if (externalFile == null) {
-            externalFile = new File[]{context.getExternalFilesDir(null)};
-        }
-        final File root = new File(externalFile[0] + File.separator + "InstagramFaker" + File.separator);
-        root.mkdir();
-        final String fname = REGISTER_PHOTO;
-        final File sdImageMainDirectory = new File(root, fname);
-        if (sdImageMainDirectory.exists()) {
-            sdImageMainDirectory.delete();
-        }
-        return sdImageMainDirectory;
-    }
-
-    //Tao file tu Bitmap
-    private File creatFilefromBitmap(Bitmap bitmap) throws IOException {
-
-        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
-        imageDir.mkdir();
-        imageAvatar = new File(imageDir, "avatarCropped.jpg");
-        DebugLog.i("Duong dan" + imageDir);
-        OutputStream fOut = new FileOutputStream(imageAvatar);
-        Bitmap getBitmap = bitmap;
-        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-        fOut.flush();
-        fOut.close();
-        return imageAvatar;
-    }
+//    //Tao file tu Bitmap
+//    private File creatFilefromBitmap(Bitmap bitmap) throws IOException {
+//
+//        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
+//        imageDir.mkdir();
+//        imageAvatar = new File(imageDir, "avatarCropped.jpg");
+//        DebugLog.i("Duong dan" + imageDir);
+//        OutputStream fOut = new FileOutputStream(imageAvatar);
+//        Bitmap getBitmap = bitmap;
+//        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+//        fOut.flush();
+//        fOut.close();
+//        return imageAvatar;
+//    }
 
 
     private File creatFilefromDrawable(int drawableID) throws IOException {
@@ -236,7 +218,7 @@ public class FragmentRegister extends NoHeaderFragment {
                 try {
                     //lay bitmap tu uri result
                     Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 800, 800);
-                    creatFilefromBitmap(bitmap);
+                    imageAvatar = FileForUploadUtils.creatFilefromBitmap(bitmap);
                     ivAvatar.setImageBitmap(bitmap);
 
                 } catch (IOException e) {

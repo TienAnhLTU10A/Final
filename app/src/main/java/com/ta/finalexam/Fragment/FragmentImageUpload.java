@@ -30,6 +30,7 @@ import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.FileForUploadUtils;
 import com.ta.finalexam.api.Request.ImageUploadRequest;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -179,7 +180,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
                 try {
                     //lay bitmap tu uri result
                     Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 900, 900);
-                    creatFilefromBitmap(bitmap);
+                    imageAvatar = FileForUploadUtils.creatFilefromBitmap(bitmap);
                     ivPhotoPreview.setImageBitmap(bitmap);
 
                 } catch (IOException e) {
@@ -190,18 +191,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
             }
         }
     }
-    //Tao file tu Bitmap
-    private File creatFilefromBitmap(Bitmap bitmap) throws IOException {
-        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
-        imageDir.mkdir();
-        imageAvatar = new File(imageDir, "avatarCropped.jpg");
-        OutputStream fOut = new FileOutputStream(imageAvatar);
-        Bitmap getBitmap = bitmap;
-        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-        fOut.flush();
-        fOut.close();
-        return imageAvatar;
-    }
+
 
     public void uploadImage(String caption, String mlong, String lat, String location,
                             String hashtag, File image) {
