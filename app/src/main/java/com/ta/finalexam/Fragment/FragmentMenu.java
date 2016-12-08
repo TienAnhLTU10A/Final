@@ -132,10 +132,10 @@ public class FragmentMenu extends CommonFragment {
 
     @Override
     protected void initData() {
-        if (UserManager.getCurrentUser() != null) {
-            tvUserName_Nav.setText(UserManager.getCurrentUser().username);
-            ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
-        }
+//        if (UserManager.getCurrentUser() != null) {
+//            tvUserName_Nav.setText(UserManager.getCurrentUser().username);
+//            ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
+//        }
     }
 
     public boolean isDrawerOpen() {
@@ -187,7 +187,7 @@ public class FragmentMenu extends CommonFragment {
     public void setUp(final int fragmentId, DrawerLayout drawerLayout) {
 
         tvUserName_Nav.setText(UserManager.getCurrentUser().username);
-        ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
+        ImageLoader.loadImage(getActivity(), R.drawable.placeholer_avatar , UserManager.getCurrentUser().avatar, menu_Avatar);
 
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;

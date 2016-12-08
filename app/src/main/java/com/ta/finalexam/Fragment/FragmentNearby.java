@@ -191,10 +191,9 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
                     mMarker.icon(BitmapDescriptorFactory.fromBitmap(resizeMarker(R.drawable.map_pin)));
                     mMap.addMarker(mMarker.title(dataNearbyList.get(i).user.username)
                             .snippet(dataNearbyList.get(i).image.caption));
-
-                    userpostion = new LatLng(lat,mlong);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userpostion, 15));
                 }
+                userpostion = new LatLng(lat,mlong);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userpostion, 15));
             }
 
             @Override

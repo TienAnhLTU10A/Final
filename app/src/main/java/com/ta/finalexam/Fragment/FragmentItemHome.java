@@ -78,6 +78,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         super.initView(root);
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvList.setItemAnimator(new DefaultItemAnimator());
+
     }
 
     @Override

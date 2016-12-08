@@ -156,6 +156,11 @@ public class FragmentDetail extends BaseHeaderListFragment {
     }
 
     @Override
+    protected void setLoadMore() {
+        super.setLoadMore();
+    }
+
+    @Override
     public String getScreenTitle() {
         return "Detail";
     }
