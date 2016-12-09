@@ -222,7 +222,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(""), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(UserManager.getCurrentUser().id), null);
                 break;
             case 1:
                 //TODO home

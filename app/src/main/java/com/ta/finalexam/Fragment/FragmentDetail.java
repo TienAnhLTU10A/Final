@@ -114,7 +114,6 @@ public class FragmentDetail extends BaseHeaderListFragment {
     @Override
     protected void getArgument(Bundle bundle) {
         selectHomeBean = bundle.getParcelable(IMAGE);
-
     }
 
     @Override

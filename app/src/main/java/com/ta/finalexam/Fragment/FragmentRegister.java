@@ -162,21 +162,6 @@ public class FragmentRegister extends NoHeaderFragment {
         startActivityForResult(getCamera, ApiConstance.REQUEST_CODE_TAKEPHOTO);
     }
 
-    private File creatFilefromDrawable(int drawableID) throws IOException {
-        Drawable drawable = getResources().getDrawable(drawableID);
-        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
-        imageDir.mkdir();
-        imageAvatar = new File(imageDir, "avatarDefault.jpg");
-        DebugLog.i("Duong dan" + imageDir);
-        OutputStream fOut = new FileOutputStream(imageAvatar);
-        Bitmap getBitmap = ((BitmapDrawable) drawable).getBitmap();
-        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-        fOut.flush();
-        fOut.close();
-        return imageAvatar;
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -225,6 +210,21 @@ public class FragmentRegister extends NoHeaderFragment {
         byte[] sha1hash = md.digest();
         return convertToHex(sha1hash);
     }
+
+    private File creatFilefromDrawable(int drawableID) throws IOException {
+        Drawable drawable = getResources().getDrawable(drawableID);
+        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
+        imageDir.mkdir();
+        imageAvatar = new File(imageDir, "avatarDefault.jpg");
+        DebugLog.i("Duong dan" + imageDir);
+        OutputStream fOut = new FileOutputStream(imageAvatar);
+        Bitmap getBitmap = ((BitmapDrawable) drawable).getBitmap();
+        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+        fOut.flush();
+        fOut.close();
+        return imageAvatar;
+    }
+
 
 }
 
