@@ -12,7 +12,6 @@ import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.RoundedCornersTransformation;
 import com.ta.finalexam.callback.OnClickRecycleView;
-import com.ta.finalexam.callback.OnMapClick;
 
 import butterknife.BindView;
 import butterknife.OnClick;

@@ -29,15 +29,12 @@ public class ApiConstance {
     //Login + register
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
-    public static final int CAMERA_REQQUEST_CROP = 927;
     public static final int REQUEST_CODE_TAKEPHOTO = 100;
     public static final int REQUEST_CODE_PICKPHOTO = 188;
     public static final String ISLOGINYET = "isloginyet";
-    public static final String ISUSERSAVED = "saved";
 
     //ImageUpload Request
-    public static final String UNKNOW_ERROR = "UNKNOW_ERROR";
-    public static final String NO_CONNECTION_ERROR = "NO_CONNECTION_ERROR";
+
     public static final String CAPTION = "caption";
     public static final String LOCATION = "location";
     public static final String LAT = "lat";
@@ -62,14 +59,12 @@ public class ApiConstance {
     public static final String FOLLOW_STATUS = "isFollow";
     public static final int FOLLOW = 1;
     public static final int UN_FOLLOW = 0;
-    public static final int FAVOURITE = 1;
     public static final int UN_FAVOURITE = 0;
 
 
     //UpdateProfile
     public static final String AVATAR = "avatar";
     public static final String UPDATE_BUTTON = "UPDATE_BUTTON";
-    public static final int PROPFILEPICKIMAGE = 1234;
 
     //TAG for fragment
     public static final String TAGHOME = "taghome";
