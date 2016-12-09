@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Api;
+import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.StringEncryption;
@@ -167,4 +168,9 @@ public class FragmentLogin extends NoHeaderFragment {
         return convertToHex(sha1hash);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).onLockDrawer();
+    }
 }
