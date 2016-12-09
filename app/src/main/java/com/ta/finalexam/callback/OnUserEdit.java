@@ -8,5 +8,4 @@ import java.io.File;
 
 public interface OnUserEdit {
     void OnChangePhoto(int position);
-    void onUpdateProfile(File avatar);
 }

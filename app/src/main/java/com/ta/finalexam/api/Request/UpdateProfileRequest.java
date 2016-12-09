@@ -1,5 +1,7 @@
 package com.ta.finalexam.api.Request;
 
+import android.content.Context;
+
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.ta.finalexam.Constant.ApiConstance;
@@ -9,8 +11,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.api.volley.core.UploadBinaryApiRequest;
+import vn.app.base.fragment.BaseFragment;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
@@ -18,10 +20,13 @@ import vn.app.base.util.SharedPrefUtils;
  */
 
 public class UpdateProfileRequest extends UploadBinaryApiRequest<UpdateProfileResponse> {
-    SimpleRequestCallBack simpleRequestCallBack;
+    Context mContext;
 
-    public UpdateProfileRequest(File avatar, SimpleRequestCallBack simpleRequestCallBack) {
-        this.simpleRequestCallBack = simpleRequestCallBack;
+    public UpdateProfileRequest(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    public UpdateProfileRequest(File avatar) {
 
         Map<String, File> fileMap = new HashMap<>();
         fileMap.put(ApiConstance.AVATAR, avatar);
@@ -62,7 +67,6 @@ public class UpdateProfileRequest extends UploadBinaryApiRequest<UpdateProfileRe
 
     @Override
     public void onRequestSuccess(UpdateProfileResponse response) {
-
     }
 
     @Override

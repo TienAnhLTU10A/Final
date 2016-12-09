@@ -1,7 +1,6 @@
 package com.ta.finalexam.Fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Address;
@@ -9,13 +8,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +23,6 @@ import android.widget.ImageView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
@@ -34,22 +30,18 @@ import com.ta.finalexam.api.Request.ImageUploadRequest;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.util.BitmapUtil;
-import vn.app.base.util.DebugLog;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.ImagePickerUtil;
 
-import static com.ta.finalexam.Fragment.FragmentRegister.REGISTER_PHOTO;
+import static com.ta.finalexam.Ulities.FileForUploadUtils.creatFilefromBitmap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -179,7 +171,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
                 try {
                     //lay bitmap tu uri result
                     Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 900, 900);
-                    creatFilefromBitmap(bitmap);
+                    imageAvatar = creatFilefromBitmap(bitmap);
                     ivPhotoPreview.setImageBitmap(bitmap);
 
                 } catch (IOException e) {
@@ -190,33 +182,16 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
             }
         }
     }
-    //Tao file tu Bitmap
-    private File creatFilefromBitmap(Bitmap bitmap) throws IOException {
-        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
-        imageDir.mkdir();
-        imageAvatar = new File(imageDir, "avatarCropped.jpg");
-        OutputStream fOut = new FileOutputStream(imageAvatar);
-        Bitmap getBitmap = bitmap;
-        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-        fOut.flush();
-        fOut.close();
-        return imageAvatar;
-    }
 
     public void uploadImage(String caption, String mlong, String lat, String location,
                             String hashtag, File image) {
-        showCoverNetworkLoading();
         Log.e("X _ initData", "caption :" + caption);
         Log.e("X _ initData", "mlong :" + mlong);
         Log.e("X _ initData", "lat :" + lat);
         Log.e("X _ initData", "location :" + location);
         Log.e("X _ initData", "caption :" + hashtag);
-        new ImageUploadRequest(caption, mlong, lat, location, hashtag, image, new SimpleRequestCallBack() {
-            @Override
-            public void onResponse(boolean success, String message) {
-                hideCoverNetworkLoading();
-            }
-        }).execute();
+        ImageUploadRequest imageUploadRequest = new ImageUploadRequest(caption, mlong, lat, location, hashtag, image, getActivity());
+        imageUploadRequest.execute();
     }
 
 

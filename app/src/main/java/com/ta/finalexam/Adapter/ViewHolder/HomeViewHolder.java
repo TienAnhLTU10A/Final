@@ -117,7 +117,9 @@ public class HomeViewHolder extends OnClickViewHolder {
 
     @OnClick(R.id.ivAvatar)
     public void openUser() {
-        //TODO Chuyển Màn User
+        if (onClickCallBack != null){
+            onClickCallBack.onGoToProfile(homeBean.user.id);
+        }
     }
 
     @OnClick(R.id.ivPhotoPreview)

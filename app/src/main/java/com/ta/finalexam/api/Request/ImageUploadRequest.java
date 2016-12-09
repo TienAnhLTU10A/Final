@@ -1,21 +1,19 @@
 package com.ta.finalexam.api.Request;
 
-import android.support.v7.widget.SwitchCompat;
+import android.support.v4.app.FragmentActivity;
 
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.ta.finalexam.Constant.ApiConstance;
+import com.ta.finalexam.Fragment.FragmentHome;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import vn.app.base.api.response.BaseResponse;
-import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.api.volley.core.UploadBinaryApiRequest;
+import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.SharedPrefUtils;
 
 /**
@@ -28,23 +26,21 @@ public class ImageUploadRequest extends UploadBinaryApiRequest<BaseResponse> {
     public String lat;
     public String mlong;
     public String hashtag;
-    public SimpleRequestCallBack simpleRequestCallBack;
+    FragmentActivity mContext;
 
     public ImageUploadRequest(String caption, String mlong, String lat, String location,
-                              String hashtag, File image, SimpleRequestCallBack simpleRequestCallBack) {
+                              String hashtag, File image, FragmentActivity mContext) {
         this.caption = caption;
         this.mlong = mlong;
         this.lat = lat;
         this.location = location;
         this.hashtag = hashtag;
-        this.simpleRequestCallBack = simpleRequestCallBack;
+        this.mContext = mContext;
 
         Map<String, File> fileMap = new HashMap<>();
         fileMap.put("image", image);
         setRequestFiles(fileMap);
-
     }
-
 
     @Override
     public String getRequestURL() {
@@ -91,15 +87,11 @@ public class ImageUploadRequest extends UploadBinaryApiRequest<BaseResponse> {
 
     @Override
     public void onRequestSuccess(BaseResponse response) {
-        simpleRequestCallBack.onResponse(true, response.message);
+        FragmentUtil.pushFragmentWithAnimation(mContext, FragmentHome.newInstance(), null);
     }
 
     @Override
     public void onRequestError(VolleyError error) {
-        String message = (error == null || error.getMessage() == null || error.networkResponse == null) ? ApiConstance.UNKNOW_ERROR : error.getMessage();
-        if (error instanceof NoConnectionError || error instanceof NetworkError || error instanceof TimeoutError) {
-            message = ApiConstance.NO_CONNECTION_ERROR;
-        }
-        simpleRequestCallBack.onResponse(false, message);
+
     }
 }

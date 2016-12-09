@@ -1,7 +1,5 @@
 package com.ta.finalexam.Constant;
 
-import vn.app.base.util.StringUtil;
-
 /**
  * Created by kooryy2 on 10/31/2016.
  * last fix by TA on 6/12/2016
@@ -11,9 +9,9 @@ public class ApiConstance {
     public static final String TYPE = "type";
     public static final String LAST_QUERY_TIMESTAMP = "last_query_timestamp";
     public static final String NUM = "num";
-    public static final int NUMS = 10;
 
     // API Url && TOKEN
+    public static final String TOKEN = "token";
     public static final String API_BASE_URL = "https://polar-plains-86888.herokuapp.com/";
     public static final String LOGIN = API_BASE_URL + "api/login";
     public static final String FAVOURITE_LIST = API_BASE_URL + "/api/favouritelist";
@@ -26,18 +24,14 @@ public class ApiConstance {
     public static final String URL_FOLLOW = API_BASE_URL + "api/follow";
     public static final String URL_FAVOURITES = API_BASE_URL + "api/favourite";
     public static final String URLTUT = API_BASE_URL + "api/tutorial";
-    public static final String TOKEN_CODE = "1fc4747d2677949478c144ab5324787c";
-    public static final String TOKEN = "token";
     public static final String URLDELETE = "https://polar-plains-86888.herokuapp.com/api/image/delete";
 
     //Login + register
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
-    public static final int CAMERA_REQUEST_CODE = 977;
     public static final int CAMERA_REQQUEST_CROP = 927;
     public static final int REQUEST_CODE_TAKEPHOTO = 100;
-    public static final String PHOTO_FILE_NAME = "photo.jpg";
-    public static final String AVATAR_PHOTO = "photo_avatar.jpg";
+    public static final int REQUEST_CODE_PICKPHOTO = 188;
     public static final String ISLOGINYET = "isloginyet";
     public static final String ISUSERSAVED = "saved";
 
@@ -74,6 +68,7 @@ public class ApiConstance {
 
     //UpdateProfile
     public static final String AVATAR = "avatar";
+    public static final String UPDATE_BUTTON = "UPDATE_BUTTON";
 
     //TAG for fragment
     public static final String TAGHOME = "taghome";

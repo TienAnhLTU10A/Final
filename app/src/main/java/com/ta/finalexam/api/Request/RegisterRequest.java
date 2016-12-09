@@ -43,24 +43,12 @@ public class RegisterRequest extends UploadBinaryApiRequest<RegisterResponse> {
     File imageAvatar;
     FragmentActivity context;
 
-    //public SimpleRequestCallBack simpleRequestCallBack;
-
-//    public RegisterRequest(String username, String password, String email,SimpleRequestCallBack simpleRequestCallBack) {
-//        this.username = username;
-//        this.password = password;
-//        this.email = email;
-//        this.simpleRequestCallBack = simpleRequestCallBack;
-//
-//
-//    }
-
     public RegisterRequest(String username, String password, String email, File imageAvatar,FragmentActivity context) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.imageAvatar = imageAvatar;
         this.context = context;
-//        this.simpleRequestCallBack = simpleRequestCallBack;
 
         Map<String, File> fileMap = new HashMap<>();
         fileMap.put("avatar", imageAvatar);

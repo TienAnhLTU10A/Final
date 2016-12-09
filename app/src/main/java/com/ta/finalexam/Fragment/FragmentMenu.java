@@ -74,7 +74,7 @@ public class FragmentMenu extends CommonFragment {
         if (savedInstanceState != null) {
             mCurrentSelectPosition = savedInstanceState.getInt(STATE_SELECT_POSITION);
         }
-        selectItem(mCurrentSelectPosition);
+//        selectItem(mCurrentSelectPosition);
     }
 
     @Override

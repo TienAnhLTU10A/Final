@@ -291,7 +291,6 @@ public class FragmentDetail extends BaseHeaderListFragment {
     public void onFragmentUIHandle(Bundle bundle) {
         super.onFragmentUIHandle(bundle);
         if (bundle.getBoolean(ApiConstance.ISDELCLICK) == true) {
-            Toast.makeText(getActivity(), "DELETE", Toast.LENGTH_SHORT).show();
             DialogUtil.showTwoBtnCancelableDialog(getActivity(), "DETELE IMAGE ?", "Are u sure to delete this image", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

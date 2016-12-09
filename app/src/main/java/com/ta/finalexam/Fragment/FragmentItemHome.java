@@ -29,6 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import vn.app.base.api.response.BaseResponse;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
+import vn.app.base.util.DebugLog;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.IntentUtil;
 
@@ -86,8 +87,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     protected void initData() {
         if (homeBeanList == null) {
             getHome(false);
-        }
-        else {
+        } else {
             handleHomeFirstData(homeBeanList);
         }
 
@@ -100,7 +100,6 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             public void onSuccess(HomeResponse data) {
                 initialResponseHandled();
                 handleHomeFirstData(data.data);
-
             }
 
             @Override
@@ -114,8 +113,10 @@ public class FragmentItemHome extends BaseHeaderListFragment {
     public void getLastTimeStamp(List<HomeBean> inHomeBeanList) {
         if (inHomeBeanList != null) {
             int size = inHomeBeanList.size();
-            HomeBean homeBeanLast = inHomeBeanList.get(size - 1);
-            last_time_stamp = String.valueOf(homeBeanLast.image.createdAt);
+            if (size > 0) {
+                HomeBean homeBeanLast = inHomeBeanList.get(size - 1);
+                last_time_stamp = String.valueOf(homeBeanLast.image.createdAt);
+            }
         }
     }
 
@@ -127,6 +128,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         rvList.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore(int currentPage) {
+                DebugLog.e("onLoadMore==:" + currentPage);
                 final HomeRequest homeRequest2 = new HomeRequest(type, last_time_stamp, 10);
                 homeRequest2.setRequestCallBack(new ApiObjectCallBack<HomeResponse>() {
                     @Override
@@ -137,13 +139,17 @@ public class FragmentItemHome extends BaseHeaderListFragment {
                             for (int i = 0; i < count; i++) {
                                 homeBeanList.add(data.data.get(i));
                             }
+                            vAdapter.notifyDataSetChanged();
+                            getLastTimeStamp(data.data);
                         }
                     }
+
                     @Override
                     public void onFail(int failCode, String message) {
                         initialNetworkError();
                     }
                 });
+                homeRequest2.execute();
             }
         });
         vAdapter.setOnClickCallBack(new OnClickRecycleView() {

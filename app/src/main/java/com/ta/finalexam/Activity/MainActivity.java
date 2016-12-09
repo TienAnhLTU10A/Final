@@ -1,16 +1,11 @@
 package com.ta.finalexam.Activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ta.finalexam.Bean.HeaderControlBean;
 import com.ta.finalexam.Bean.UserBean;
@@ -24,11 +19,8 @@ import com.ta.finalexam.Fragment.FragmentLogin;
 import com.ta.finalexam.Fragment.FragmentMenu;
 import com.ta.finalexam.Fragment.FragmentNearby;
 import com.ta.finalexam.Fragment.FragmentProfile;
-import com.ta.finalexam.Fragment.FragmentRegister;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -206,9 +198,12 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @OnClick(R.id.tv_update)
     public void updateProfile() {
-
+        if (fragmentListener != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(ApiConstance.UPDATE_BUTTON , null );
+            fragmentListener.onFragmentUIHandle(bundle);
+        }
     }
-
     @OnClick(R.id.tv_delete)
     public void onDelete() {
         if (fragmentListener != null) {
@@ -222,7 +217,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(""), null);
+                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(UserManager.getCurrentUser().id), null);
                 break;
             case 1:
                 //TODO home
@@ -250,5 +245,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
                 FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
         }
+    }
+    public void onLockDrawer(){
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 }
