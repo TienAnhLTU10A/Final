@@ -42,7 +42,7 @@ public class FragmentTutorial extends NoHeaderFragment {
     @OnClick(R.id.btn_tut_skip)
     public void onSkip() {
         //go to home screen
-        FragmentUtil.pushFragment(getActivity(), FragmentHome.newInstance(), null);
+        FragmentUtil.pushFragmentWithAnimation(getActivity(), FragmentHome.newInstance(), null);
     }
 
     @Override

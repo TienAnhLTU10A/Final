@@ -268,6 +268,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
             @Override
             public void onAvatarClicked(HomeBean homeBean) {
                 //TODO: go to profile
+                FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentProfile.newInstance(selectHomeBean.user.id),null);
 
             }
         });

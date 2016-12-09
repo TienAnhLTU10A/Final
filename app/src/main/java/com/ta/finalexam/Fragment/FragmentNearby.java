@@ -22,9 +22,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.CustomInfoWindow;
+import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Bean.NearbyBean.DataNearby;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
@@ -35,6 +37,7 @@ import java.util.List;
 
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.util.DebugLog;
+import vn.app.base.util.FragmentUtil;
 
 import static java.lang.String.valueOf;
 
@@ -44,6 +47,7 @@ import static java.lang.String.valueOf;
  */
 
 public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,
+                                                                GoogleMap.OnInfoWindowClickListener,
                                                                 GoogleApiClient.OnConnectionFailedListener {
     private GoogleMap mMap;
 
@@ -61,7 +65,7 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
 
     int countpost = 0;
 
-    List<DataNearby> dataNearbyList;
+    List<HomeBean> dataNearbyList;
 
 
 
@@ -148,14 +152,7 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
             return;
         }
         mMap.setMyLocationEnabled(true);
-
-//        if (dataNearbyList.size() != 0){
-//
-//
-//        }
-
-
-
+        mMap.setOnInfoWindowClickListener(this);
 
 
     }
@@ -190,6 +187,7 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
                             Double.valueOf(dataNearbyList.get(i).image._long));
                     MarkerOptions mMarker = new MarkerOptions().position(postlocation);
                     mMarker.icon(BitmapDescriptorFactory.fromBitmap(resizeMarker(R.drawable.map_pin)));
+
                     mMap.addMarker(mMarker.title(dataNearbyList.get(i).user.username)
                             .snippet(dataNearbyList.get(i).image.caption));
                 }
@@ -230,4 +228,13 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
         super.onStop();
     }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        for (int i = 0 ; i < dataNearbyList.size(); i ++){
+            if (dataNearbyList.get(i).image.caption.equals(marker.getSnippet())){
+                FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentDetail.newInstance(dataNearbyList.get(i)),null);
+            }
+        }
+
+    }
 }
