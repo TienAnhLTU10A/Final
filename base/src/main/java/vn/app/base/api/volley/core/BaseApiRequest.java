@@ -55,7 +55,7 @@ public abstract class BaseApiRequest<T> implements BaseTypeRequest.GsonRequestHe
         return new Response.Listener<T>() {
             @Override
             public void onResponse(T response) {
-                onRequestSuccess(response);
+                    onRequestSuccess(response);
             }
         };
     }

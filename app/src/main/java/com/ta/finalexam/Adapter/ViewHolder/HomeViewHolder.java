@@ -4,11 +4,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.RoundedCornersTransformation;
 import com.ta.finalexam.callback.OnClickRecycleView;
@@ -26,15 +26,15 @@ import vn.app.base.util.StringUtil;
 public class HomeViewHolder extends OnClickViewHolder {
     public static int sCorner = 15;
     public static int sMargin = 2;
-    OnMapClick onMapCallBack;
+
     OnClickRecycleView onClickCallBack;
     private HomeBean homeBean;
 
     @BindView(R.id.ivAvatar)
     ImageView ivUserPhoto;
 
-    @BindView(R.id.btnFollow)
-    Button btn_follow;
+    @BindView(R.id.btnFollow_Home)
+    Button btnFollow_Home;
 
     @BindView(R.id.tvNameHome)
     TextView tvName;
@@ -51,21 +51,20 @@ public class HomeViewHolder extends OnClickViewHolder {
     @BindView(R.id.tvLocation)
     TextView tvLocation;
 
-    @BindView(R.id.ivLike)
-    ImageView ivFavourite;
+    @BindView(R.id.ivLike_Home)
+    ImageView ivFavourite_Home;
 
-    boolean mFollow, mFavourites;
     int hashtash;
+    boolean isFollow = false, isFavourite = false;
 
     public HomeViewHolder(View itemView) {
         super(itemView);
     }
 
-    public void bind(HomeBean homeBean, OnMapClick onMapClick, OnClickRecycleView onClickRecycleView) {
-        this.onMapCallBack = onMapClick;
+    public void bind(HomeBean homeBean, OnClickRecycleView onClickRecycleView) {
         this.onClickCallBack = onClickRecycleView;
         this.homeBean = homeBean;
-        Glide.with(itemView.getContext()).load(homeBean.user.avatar)
+        Glide.with(itemView.getContext()).load(homeBean.user.avatar).placeholder(R.drawable.placeholer_avatar)
                 .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(), sCorner, sMargin)).into(ivUserPhoto);
         Glide.with(itemView.getContext()).load(homeBean.image.url).crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL).into(ivPhotoCover);
@@ -75,41 +74,69 @@ public class HomeViewHolder extends OnClickViewHolder {
             StringUtil.displayText(homeBean.image.hashtag.get(i), tvHashTag);
         }
 
-        StringUtil.displayText(homeBean.image.location, tvLocation);
+        String location = homeBean.image.location;
+        location.replace("\n", "");
+        StringUtil.displayText(location, tvLocation);
         StringUtil.displayText(homeBean.user.username, tvName);
         StringUtil.displayText(homeBean.image.caption, tvLabel);
 
-        if (homeBean.image.isFavourite) {
-            ivFavourite.setImageResource(R.drawable.icon_favourite);
+        if (homeBean.user.isFollowing == true) {
+            btnFollow_Home.setBackgroundResource(R.color.color_btn_follow_bg);
+            btnFollow_Home.setText("Following");
         } else {
-            ivFavourite.setImageResource(R.drawable.icon_no_favourite);
+            btnFollow_Home.setBackgroundResource(R.color.txt_gray);
+            btnFollow_Home.setText("Follow");
         }
-        mFavourites = homeBean.image.isFavourite;
+        isFollow = homeBean.user.isFollowing;
 
+        if (homeBean.image.isFavourite) {
+            ivFavourite_Home.setImageResource(R.drawable.icon_favourite);
+        } else {
+            ivFavourite_Home.setImageResource(R.drawable.icon_no_favourite);
+        }
+        isFavourite = homeBean.image.isFavourite;
+    }
+
+    @OnClick(R.id.btnFollow_Home)
+    public void FollowUser() {
+        if (onClickCallBack != null) {
+            if (!isFollow) {
+                onClickCallBack.onFollowResponse(homeBean.user.id, ApiConstance.FOLLOW);
+            } else {
+                onClickCallBack.onFollowResponse(homeBean.user.id, ApiConstance.UN_FOLLOW);
+            }
+        }
     }
 
     @OnClick(R.id.tvLocation)
     public void openMap() {
-        if (onMapCallBack != null) {
-            onMapCallBack.onMapClick(homeBean);
+        if (onClickCallBack != null) {
+            onClickCallBack.onMapClick(homeBean);
         }
     }
+
     @OnClick(R.id.ivAvatar)
     public void openUser() {
-        //TODO Chuyển Màn User
+        if (onClickCallBack != null){
+            onClickCallBack.onGoToProfile(homeBean.user.id);
+        }
     }
+
     @OnClick(R.id.ivPhotoPreview)
-    public void openDetail(){
-        //TODO Chuyển Màn Detail
+    public void openDetail() {
+        if (onClickCallBack != null){
+            onClickCallBack.onGoToDetail(homeBean);
+        }
     }
-    @OnClick(R.id.btnFollow)
-    public void onFollow(){
-        if (homeBean.user.isFollowing) {
-            btn_follow.setBackgroundResource(R.drawable.btn_following);
-            btn_follow.setText("Following");
+
+
+    @OnClick(R.id.ivLike_Home)
+    public void FavouriteImage() {
+        if (onClickCallBack != null) {
+            if (!isFavourite)
+                onClickCallBack.onFavouriteResponse(homeBean.image.id, 1);
         } else {
-            btn_follow.setBackgroundResource(R.drawable.btn_un_following);
-            btn_follow.setText("Follow");
+            onClickCallBack.onFavouriteResponse(homeBean.image.id, 0);
         }
     }
 

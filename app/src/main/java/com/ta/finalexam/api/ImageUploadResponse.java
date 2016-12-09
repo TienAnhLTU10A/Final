@@ -1,8 +1,7 @@
 package com.ta.finalexam.api;
 
 import com.google.gson.annotations.SerializedName;
-import com.ta.finalexam.Bean.HomeBean.HomeBean;
-import com.ta.finalexam.Bean.ImageUploadBean.ImageUpload;
+import com.ta.finalexam.Bean.ImageUpload;
 
 import java.util.ArrayList;
 import java.util.List;

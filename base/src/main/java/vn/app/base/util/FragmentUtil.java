@@ -36,6 +36,11 @@ public class FragmentUtil {
         showFragment(fragmentManager, fragment, true, data, null, false);
     }
 
+    public static void pushFragmentAnimation(FragmentManager fragmentManager, @NonNull Fragment fragment, @Nullable Bundle data) {
+        DebugLog.e("bundle data:" + data);
+        showFragment(fragmentManager, fragment, true, data, null, true);
+    }
+
     public static void replaceFragment(FragmentManager fragmentManager, @NonNull Fragment fragment, @Nullable Bundle data) {
         showFragment(fragmentManager, fragment, false, data, null, false);
     }

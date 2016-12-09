@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.ta.finalexam.Activity.MainActivity">
+
+
+    <ImageView
+        android:id="@+id/ivAvatar_profile_user"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@color/base_green" />
+
+    <TextView
+        android:id="@+id/tvName_profile_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivAvatar_profile_user"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/ivAvatar_profile_user"
+        android:text="Jennifer" />
+
+    <ImageView
+        android:id="@+id/ivPhoto_cover_profile_user"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ivAvatar_profile_user"
+        android:layout_marginTop="15dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/tvLocation_profile_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivPhoto_cover_profile_user"
+        android:layout_alignLeft="@+id/ivAvatar_profile_user"
+        android:layout_marginBottom="18dp"
+        android:background="#FF13212D"
+        android:gravity="center"
+        android:text="Isle of Man, UK"
+        android:textColor="@color/white"
+        android:textSize="10dp" />
+
+    <TextView
+        android:id="@+id/tvCaption_profile_user"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvLocation_profile_user"
+        android:layout_below="@+id/ivPhoto_cover_profile_user"
+        android:layout_marginTop="15dp"
+        android:text="This is beautiful street, good" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_below="@+id/tvHashTag_profile_user"
+        android:layout_marginTop="3dp"
+        android:background="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/btnFollow_profile_user"
+        android:layout_width="90dp"
+        android:layout_height="35dp"
+        android:layout_above="@+id/ivPhoto_cover_profile_user"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="Following"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tvHashTag_profile_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#Shooping #UK #Stree"
+        android:textColor="#39b1f1"
+        android:layout_below="@+id/tvCaption_profile_user"
+        android:layout_alignLeft="@+id/tvCaption_profile_user"
+        android:layout_alignStart="@+id/tvCaption_profile_user" />
+
+    <ImageView
+        android:id="@+id/ivLike_profile_user"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/icon_no_favourite"
+        android:layout_alignTop="@+id/tvCaption_profile_user"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

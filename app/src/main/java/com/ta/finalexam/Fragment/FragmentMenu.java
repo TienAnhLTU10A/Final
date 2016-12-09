@@ -1,6 +1,7 @@
 package com.ta.finalexam.Fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,13 +15,27 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.ta.finalexam.Bean.UserBean;
+import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.manager.UserManager;
 
+import butterknife.BindView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import vn.app.base.fragment.CommonFragment;
+import vn.app.base.imageloader.ImageLoader;
 
-public class FragmentMenu extends CommonFragment  {
+public class FragmentMenu extends CommonFragment {
+
+    @BindView(R.id.tvUserName)
+    TextView tvUserName_Nav;
+
+    @BindView(R.id.menu_avatar)
+    CircleImageView menu_Avatar;
+
 
     private NavigationDrawerCallbacks mCallbacks;
 
@@ -28,7 +43,7 @@ public class FragmentMenu extends CommonFragment  {
 
     private static final String PREF_USER_LEARN_DRAWER = "nav_learn_drawer";
 
-    private int mCurrentSelectPosition = 0;
+    private int mCurrentSelectPosition = 1;
     private boolean mUserLearnDrawer;
     private DrawerLayout mDrawerLayout;
 
@@ -59,7 +74,6 @@ public class FragmentMenu extends CommonFragment  {
         if (savedInstanceState != null) {
             mCurrentSelectPosition = savedInstanceState.getInt(STATE_SELECT_POSITION);
         }
-        selectItem(mCurrentSelectPosition);
     }
 
     @Override
@@ -68,19 +82,43 @@ public class FragmentMenu extends CommonFragment  {
     }
 
     @Override
-    protected void initView(View root) {}
+    protected void initView(View root) {
+
+    }
 
     @OnClick(R.id.menu_1)
-    public void onChange(){
+    public void onProfile() {
         selectItem(0);
     }
+
     @OnClick(R.id.menu_2)
-    public void onHome(){
+    public void onHome() {
         selectItem(1);
     }
+
     @OnClick(R.id.menu_3)
-    public void onUpload(){
+    public void onUpload() {
         selectItem(2);
+    }
+
+    @OnClick(R.id.menu_4)
+    public void onFavourite() {
+        selectItem(3);
+    }
+
+    @OnClick(R.id.menu_5)
+    public void onNearby() {
+        selectItem(4);
+    }
+
+    @OnClick(R.id.menu_6)
+    public void onFollow() {
+        selectItem(5);
+    }
+
+    @OnClick(R.id.menu_7)
+    public void onLogout() {
+        selectItem(6);
     }
 
     @Override
@@ -131,6 +169,11 @@ public class FragmentMenu extends CommonFragment  {
     }
 
     public void setUp(final int fragmentId, DrawerLayout drawerLayout) {
+
+        if (UserManager.getCurrentUser() != null) {
+            tvUserName_Nav.setText(UserManager.getCurrentUser().username);
+            ImageLoader.loadImage(getActivity(), UserManager.getCurrentUser().avatar, menu_Avatar);
+        }
 
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
@@ -197,7 +240,9 @@ public class FragmentMenu extends CommonFragment  {
             }
         });
         setCurrentMenu(0);
+
     }
+
 
     private void selectItem(int position) {
 //        if (position != 2 && position != 4 && position != 5) {
@@ -225,6 +270,8 @@ public class FragmentMenu extends CommonFragment  {
                 throw new ClassCastException("Activity must implement NavigationDraweraCallbacks");
             }
         }
+
+
     }
 
 
@@ -240,6 +287,7 @@ public class FragmentMenu extends CommonFragment  {
         outState.putInt(STATE_SELECT_POSITION, mCurrentSelectPosition);
     }
 
+
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
@@ -249,4 +297,6 @@ public class FragmentMenu extends CommonFragment  {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+
 }

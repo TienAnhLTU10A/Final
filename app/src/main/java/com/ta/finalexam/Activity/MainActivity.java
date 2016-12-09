@@ -6,13 +6,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ta.finalexam.Bean.HeaderControlBean;
+import com.ta.finalexam.Bean.UserBean;
+import com.ta.finalexam.Constant.ApiConstance;
+import com.ta.finalexam.Constant.FragmentActionConstant;
 import com.ta.finalexam.Constant.HeaderOption;
+import com.ta.finalexam.Fragment.FragmentFavourite;
+import com.ta.finalexam.Fragment.FragmentFollowlist;
 import com.ta.finalexam.Fragment.FragmentHome;
 import com.ta.finalexam.Fragment.FragmentImageUpload;
+import com.ta.finalexam.Fragment.FragmentLogin;
 import com.ta.finalexam.Fragment.FragmentMenu;
+import com.ta.finalexam.Fragment.FragmentNearby;
+import com.ta.finalexam.Fragment.FragmentProfile;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.manager.UserManager;
 
@@ -20,6 +27,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.activity.CommonActivity;
 import vn.app.base.util.FragmentUtil;
+import vn.app.base.util.ImagePickerUtil;
 import vn.app.base.util.StringUtil;
 import vn.app.base.util.UiUtil;
 
@@ -47,6 +55,8 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     DrawerLayout drawerLayout;
 
     FragmentMenu fragmentMenu;
+    ImagePickerUtil imagePickerUtil = new ImagePickerUtil();
+    UserBean currentUser;
 
 
     @Override
@@ -71,12 +81,17 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @Override
     public void initView() {
-
-        setUpInitScreen(FragmentHome.newInstance(), null);
+        currentUser = UserManager.getCurrentUser();
+        if (currentUser == null) {
+            setUpInitScreen(FragmentLogin.newInstance(), null);
+        } else {
+            setUpInitScreen(FragmentHome.newInstance(), ApiConstance.TAGHOME);
+        }
     }
 
     @Override
     public void initData() {
+        currentUser = UserManager.getCurrentUser();
     }
 
     @Override
@@ -94,7 +109,16 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
             if (headerControlBean != null) {
                 handleHeaderUI(headerControlBean);
             }
+        } else if (bundle.containsKey(FragmentActionConstant.FRAGMENT_ACTION)) {
+            int fragmentAction = bundle.getInt(FragmentActionConstant.FRAGMENT_ACTION);
+            if (fragmentAction == FragmentActionConstant.PICK_IMAGE) {
+                handlePickPhoto();
+            }
         }
+    }
+
+    private void handlePickPhoto() {
+        imagePickerUtil.pickImage(this, false);
     }
 
     private void handleHeaderUI(HeaderControlBean headerControlBean) {
@@ -169,36 +193,62 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     }
 
     @OnClick(R.id.headerBack)
-    public void onBack() {
-        FragmentUtil.popBackStack(this);
+    public void Back() {
+        FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(),FragmentHome.newInstance(),null);
+    }
+
+    @OnClick(R.id.tv_update)
+    public void updateProfile() {
+        if (fragmentListener != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(ApiConstance.UPDATE_BUTTON , null );
+            fragmentListener.onFragmentUIHandle(bundle);
+        }
+    }
+    @OnClick(R.id.tv_delete)
+    public void onDelete() {
+        if (fragmentListener != null) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(ApiConstance.ISDELCLICK, true);
+            fragmentListener.onFragmentUIHandle(bundle);
+        }
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                Toast.makeText(this,"aaaaa", Toast.LENGTH_LONG).show();
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentProfile.newInstance(UserManager.getCurrentUser().id), null);
                 break;
             case 1:
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
+                //TODO home
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentHome.newInstance(), null);
                 break;
             case 2:
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentImageUpload.newInstance(), null);
+                //TODO image upload
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentImageUpload.newInstance(), null);
+
                 break;
             case 3:
                 //TODO favourite
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentFavourite.newInstance(UserManager.getCurrentUser().id) , null);
                 break;
             case 4:
                 //TODO nearby
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentNearby.newInstance(), null);
                 break;
             case 5:
                 //TODO Follow
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentFollowlist.newInstance(), null);
                 break;
             case 6:
-                UserManager.clearUserData();
                 //TODO LOGOUT
+                UserManager.clearUserData();
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
         }
     }
+    public void onLockDrawer(){
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
 }
-

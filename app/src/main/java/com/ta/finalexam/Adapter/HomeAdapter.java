@@ -8,9 +8,7 @@ import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.R;
 import com.ta.finalexam.callback.OnClickRecycleView;
 import com.ta.finalexam.callback.OnMapClick;
-
 import java.util.List;
-
 import vn.app.base.adapter.AdapterWithItemClick;
 
 /**
@@ -19,12 +17,8 @@ import vn.app.base.adapter.AdapterWithItemClick;
 
 public class HomeAdapter extends AdapterWithItemClick<HomeViewHolder> {
     List<HomeBean> homeBeanList;
-    OnMapClick onMapCallBack;
-    OnClickRecycleView onClickCallBack;
 
-    public void setOnMapCallBack(OnMapClick onMapCallBack) {
-        this.onMapCallBack = onMapCallBack;
-    }
+    OnClickRecycleView onClickCallBack;
 
     public void setOnClickCallBack(OnClickRecycleView onClickCallBack) {
         this.onClickCallBack = onClickCallBack;
@@ -42,7 +36,7 @@ public class HomeAdapter extends AdapterWithItemClick<HomeViewHolder> {
 
     @Override
     public void onBindViewHolder(HomeViewHolder holder, int position) {
-        holder.bind(homeBeanList.get(position), onMapCallBack, onClickCallBack);
+        holder.bind(homeBeanList.get(position), onClickCallBack);
     }
 
     @Override
