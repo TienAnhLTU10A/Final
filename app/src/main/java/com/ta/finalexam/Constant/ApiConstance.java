@@ -14,7 +14,7 @@ public class ApiConstance {
     public static final String TOKEN = "token";
     public static final String API_BASE_URL = "https://polar-plains-86888.herokuapp.com/";
     public static final String LOGIN = API_BASE_URL + "api/login";
-    public static final String FAVOURITE_LIST = API_BASE_URL + "/api/favouritelist";
+    public static final String FAVOURITE_LIST = API_BASE_URL + "api/favouritelist";
     public static final String REGISTER = API_BASE_URL + "api/regist";
     public static final String PROFILE_USER = API_BASE_URL + "api/profile";
     public static final String IMAGE_LIST = API_BASE_URL + "api/image/list";

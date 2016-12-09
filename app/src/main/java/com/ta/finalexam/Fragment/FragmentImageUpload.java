@@ -39,10 +39,9 @@ import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import vn.app.base.util.BitmapUtil;
+import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.ImagePickerUtil;
-
-import static com.ta.finalexam.Ulities.FileForUploadUtils.creatFilefromBitmap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -137,7 +136,11 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
 
     @OnClick(R.id.btnPost)
     public void onPost() {
-        uploadImage(etCaption.getText().toString(), String.valueOf(mlong), String.valueOf(lat), location, etHashTag.getText().toString(), imageAvatar);
+        if (imageAvatar != null) {
+            uploadImage(etCaption.getText().toString(), String.valueOf(mlong), String.valueOf(lat), location, etHashTag.getText().toString(), imageAvatar);
+        }else {
+            DialogUtil.showOkBtnDialog(getActivity() , "No Image Found !" , "Ban Phai Chup Anh");
+        }
     }
 
     @OnCheckedChanged(R.id.switchCompat)

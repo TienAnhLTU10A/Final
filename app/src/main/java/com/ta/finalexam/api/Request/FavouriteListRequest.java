@@ -51,7 +51,7 @@ public class FavouriteListRequest extends ObjectApiRequest<HomeResponse> {
 
     @Override
     public Map<String, String> getRequestHeaders() {
-        Map<String,String> newHeader = new HashMap<>();
+        Map<String, String> newHeader = new HashMap<>();
         newHeader.put(ApiParam.TOKEN, SharedPrefUtils.getAccessToken());
         return newHeader;
     }

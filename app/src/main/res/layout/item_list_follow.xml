@@ -7,13 +7,15 @@
     android:padding="5dp"
     android:layout_marginBottom="10dp"
     android:background="@color/white">
+
     <ImageView
         android:id="@+id/avatar_follow"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_margin="@dimen/photo_padding_home"
         android:src="@drawable/dummy_avatar"
          />
+
     <TextView
         android:id="@+id/tv_name_follow"
         android:layout_width="0dp"
@@ -29,6 +31,7 @@
         android:layout_height="30dp"
         android:layout_weight="1"
         android:text="Following"
+        android:textAllCaps="false"
         android:textSize="8sp"
         android:textColor="@color/white"
         android:background="@drawable/button_shape"/>

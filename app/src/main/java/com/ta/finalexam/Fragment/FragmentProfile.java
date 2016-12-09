@@ -41,12 +41,15 @@ import com.ta.finalexam.callback.OnUserEdit;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.api.volley.callback.SimpleRequestCallBack;
+import vn.app.base.util.BitmapUtil;
+import vn.app.base.util.DialogUtil;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.ImagePickerUtil;
 
@@ -55,10 +58,6 @@ import vn.app.base.util.ImagePickerUtil;
  */
 public class FragmentProfile extends BaseHeaderListFragment implements OnUserEdit {
     public static final String USER_ID = "USER_ID";
-
-    Uri fileUri;
-
-    File imageAvatar;
 
     @BindView(R.id.recycerList)
     RecyclerView rvList;

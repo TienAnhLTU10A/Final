@@ -265,4 +265,11 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             return location.replace(" ", "+");
         }
     }
+
+//    private void removeUserId(List<HomeBean> inHomeBeanList) {
+//        int size = inHomeBeanList.size();
+//        for (int i = 0; i < size ; i++){
+//            inHomeBeanList.remove(inHomeBeanList.get(i).user.id)
+//        }
+//    }
 }

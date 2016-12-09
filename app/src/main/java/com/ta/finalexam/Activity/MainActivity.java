@@ -12,6 +12,7 @@ import com.ta.finalexam.Bean.UserBean;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.FragmentActionConstant;
 import com.ta.finalexam.Constant.HeaderOption;
+import com.ta.finalexam.Fragment.FragmentFavourite;
 import com.ta.finalexam.Fragment.FragmentFollowlist;
 import com.ta.finalexam.Fragment.FragmentHome;
 import com.ta.finalexam.Fragment.FragmentImageUpload;
@@ -193,7 +194,7 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
 
     @OnClick(R.id.headerBack)
     public void Back() {
-        FragmentUtil.popBackStack(this);
+        FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(),FragmentHome.newInstance(),null);
     }
 
     @OnClick(R.id.tv_update)
@@ -217,32 +218,33 @@ public class MainActivity extends CommonActivity implements FragmentMenu.Navigat
     public void onNavigationDrawerItemSelected(int position) {
         switch (position) {
             case 0:
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentProfile.newInstance(UserManager.getCurrentUser().id), null);
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentProfile.newInstance(UserManager.getCurrentUser().id), null);
                 break;
             case 1:
                 //TODO home
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentHome.newInstance(), null);
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentHome.newInstance(), null);
                 break;
             case 2:
                 //TODO image upload
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentImageUpload.newInstance(), null);
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentImageUpload.newInstance(), null);
 
                 break;
             case 3:
                 //TODO favourite
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentFavourite.newInstance(UserManager.getCurrentUser().id) , null);
                 break;
             case 4:
                 //TODO nearby
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentNearby.newInstance(), null);
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentNearby.newInstance(), null);
                 break;
             case 5:
                 //TODO Follow
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentFollowlist.newInstance(), null);
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentFollowlist.newInstance(), null);
                 break;
             case 6:
                 //TODO LOGOUT
                 UserManager.clearUserData();
-                FragmentUtil.pushFragment(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
+                FragmentUtil.pushFragmentAnimation(getSupportFragmentManager(), FragmentLogin.newInstance(), null);
                 break;
         }
     }

@@ -19,6 +19,7 @@ import java.util.List;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
 import vn.app.base.callback.OnRecyclerViewItemClick;
 import vn.app.base.util.DebugLog;
+import vn.app.base.util.FragmentUtil;
 
 /**
  * Created by Veteran Commander on 10/14/2016.
@@ -98,7 +99,7 @@ public class FragmentFollowlist extends BaseHeaderListFragment {
             @Override
             public void onItemClick(View view, int position) {
                 //TODO: chuyen man user
-
+                FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentProfile.newInstance(memberFollowList.get(position).user.id),null);
             }
         });
         rvList.setAdapter(followListAdapter);

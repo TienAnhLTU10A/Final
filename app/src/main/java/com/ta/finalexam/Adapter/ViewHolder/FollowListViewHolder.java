@@ -5,14 +5,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ta.finalexam.Bean.MemberBean;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.RoundedCornersTransformation;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.adapter.viewholder.OnClickViewHolder;
 import vn.app.base.imageloader.ImageLoader;
 import vn.app.base.util.StringUtil;
+
+import static com.ta.finalexam.Adapter.ViewHolder.HomeViewHolder.sCorner;
+import static com.ta.finalexam.Adapter.ViewHolder.HomeViewHolder.sMargin;
 
 /**
  * Created by Veteran Commander on 10/14/2016.
@@ -45,14 +50,8 @@ public class FollowListViewHolder extends OnClickViewHolder {
         if (member.isFollowing == null){
             return;
         }
-        ImageLoader.loadImage(itemView.getContext(),member.avatar,ivAvatar);
+        Glide.with(itemView.getContext()).load(member.avatar).placeholder(R.drawable.placeholer_avatar)
+                .bitmapTransform(new RoundedCornersTransformation(itemView.getContext(), sCorner, sMargin)).into(ivAvatar);
         StringUtil.displayText(member.username,tvFollowName);
-        if (member.isFollowing == true) {
-            btnFollow.setBackgroundResource(R.drawable.btn_following);
-            btnFollow.setText("Following");
-        } else {
-            btnFollow.setBackgroundResource(R.drawable.btn_un_following);
-            btnFollow.setText("Follow");
-        }
     }
 }

@@ -189,7 +189,7 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
                     mMarker.icon(BitmapDescriptorFactory.fromBitmap(resizeMarker(R.drawable.map_pin)));
 
                     mMap.addMarker(mMarker.title(dataNearbyList.get(i).user.username)
-                            .snippet(dataNearbyList.get(i).image.caption));
+                            .snippet(dataNearbyList.get(i).image.caption)).setTag(dataNearbyList.get(i));
                 }
                 userpostion = new LatLng(lat,mlong);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userpostion, 15));
@@ -230,11 +230,7 @@ public class FragmentNearby extends HeaderFragment implements OnMapReadyCallback
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        for (int i = 0 ; i < dataNearbyList.size(); i ++){
-            if (dataNearbyList.get(i).image.caption.equals(marker.getSnippet())){
-                FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentDetail.newInstance(dataNearbyList.get(i)),null);
-            }
-        }
+        FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentDetail.newInstance((HomeBean) marker.getTag()),null);
 
     }
 }
