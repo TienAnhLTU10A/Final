@@ -26,6 +26,7 @@ import com.google.android.gms.location.LocationServices;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.FileForUploadUtils;
 import com.ta.finalexam.api.Request.ImageUploadRequest;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -171,7 +172,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
                 try {
                     //lay bitmap tu uri result
                     Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 900, 900);
-                    imageAvatar = creatFilefromBitmap(bitmap);
+                    imageAvatar = FileForUploadUtils.creatFilefromBitmap(bitmap);
                     ivPhotoPreview.setImageBitmap(bitmap);
 
                 } catch (IOException e) {
@@ -182,6 +183,7 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
             }
         }
     }
+
 
     public void uploadImage(String caption, String mlong, String lat, String location,
                             String hashtag, File image) {

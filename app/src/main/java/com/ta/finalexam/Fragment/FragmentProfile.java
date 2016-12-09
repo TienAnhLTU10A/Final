@@ -5,7 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,13 +19,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.ta.finalexam.Adapter.UserProfileListAdapter;
+import com.ta.finalexam.Adapter.ViewHolder.UserProfileHeaderViewHolder;
 import com.ta.finalexam.Bean.ImageListBean;
 import com.ta.finalexam.Bean.ProfileBean;
 import com.ta.finalexam.Constant.ApiConstance;
+import com.ta.finalexam.Bean.UserBean;
+import com.ta.finalexam.Constant.ApiConstance;
+import com.ta.finalexam.Constant.FragmentActionConstant;
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.FileForUploadUtils;
 import com.ta.finalexam.Ulities.animation.EndlessRecyclerOnScrollListener;
+import com.ta.finalexam.Ulities.FileForUploadUtils;
 import com.ta.finalexam.Ulities.manager.UserManager;
 import com.ta.finalexam.api.ImageListResponse;
 import com.ta.finalexam.api.ProfileResponse;
@@ -31,14 +41,12 @@ import com.ta.finalexam.callback.OnUserEdit;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import vn.app.base.api.volley.callback.ApiObjectCallBack;
-import vn.app.base.util.BitmapUtil;
-import vn.app.base.util.DialogUtil;
+import vn.app.base.api.volley.callback.SimpleRequestCallBack;
 import vn.app.base.util.FragmentUtil;
 import vn.app.base.util.ImagePickerUtil;
 
@@ -47,6 +55,10 @@ import vn.app.base.util.ImagePickerUtil;
  */
 public class FragmentProfile extends BaseHeaderListFragment implements OnUserEdit {
     public static final String USER_ID = "USER_ID";
+
+    Uri fileUri;
+
+    File imageAvatar;
 
     @BindView(R.id.recycerList)
     RecyclerView rvList;
@@ -222,6 +234,7 @@ public class FragmentProfile extends BaseHeaderListFragment implements OnUserEdi
         getImage.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(getImage, ApiConstance.REQUEST_CODE_PICKPHOTO);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

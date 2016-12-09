@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
 import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
@@ -18,6 +19,7 @@ import com.ta.finalexam.api.LoginResponse;
 import com.ta.finalexam.api.Request.LoginRequest;
 
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
@@ -102,13 +104,20 @@ public class FragmentLogin extends NoHeaderFragment {
             e.printStackTrace();
         }
         pass = etPass.getText().toString().trim();
+        String encodePass = null;
+        try {
+            encodePass = SHA1(pass);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         if (!StringUtil.checkStringValid(user) || !StringUtil.checkStringValid(pass)) {
             DialogUtil.showOkBtnDialog(getActivity(), getString(R.string.missing_input_title), getString(R.string.missing_input_message)).setCancelable(true);
-
             return;
         }
-        final LoginRequest loginRequest = new LoginRequest(user, pass);
+        final LoginRequest loginRequest = new LoginRequest(user, encodePass);
         loginRequest.setRequestCallBack(new ApiObjectCallBack<LoginResponse>() {
             @Override
             public void onSuccess(LoginResponse data) {
@@ -136,6 +145,27 @@ public class FragmentLogin extends NoHeaderFragment {
         loginRequest.execute();
         KeyboardUtil.hideKeyboard(getActivity());
         showCoverNetworkLoading();
+    }
+
+    //Ham ma hoa
+    private static String convertToHex(byte[] data) {
+        StringBuilder buf = new StringBuilder();
+        for (byte b : data) {
+            int halfbyte = (b >>> 4) & 0x0F;
+            int two_halfs = 0;
+            do {
+                buf.append((0 <= halfbyte) && (halfbyte <= 9) ? (char) ('0' + halfbyte) : (char) ('a' + (halfbyte - 10)));
+                halfbyte = b & 0x0F;
+            } while (two_halfs++ < 1);
+        }
+        return buf.toString();
+    }
+    //Ma hoa SHA1
+    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        md.update(text.getBytes("iso-8859-1"), 0, text.length());
+        byte[] sha1hash = md.digest();
+        return convertToHex(sha1hash);
     }
 
     @Override

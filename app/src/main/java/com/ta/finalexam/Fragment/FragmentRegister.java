@@ -21,6 +21,7 @@ import android.widget.ImageView;
 
 import com.ta.finalexam.Constant.ApiConstance;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.FileForUploadUtils;
 import com.ta.finalexam.Ulities.StringEncryption;
 import com.ta.finalexam.Ulities.manager.UserManager;
 import com.ta.finalexam.api.RegisterResponse;
@@ -34,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
@@ -126,35 +128,30 @@ public class FragmentRegister extends NoHeaderFragment {
         email = etEmail.getText().toString().trim();
         confirmPass = etConfirm.getText().toString().trim();
         pass = etPass.getText().toString().trim();
-        if ((confirmPass == pass) && (!StringUtil.checkStringValid(userId) || !StringUtil.checkStringValid(email) || !StringUtil.checkStringValid(pass)
-                || !StringUtil.checkStringValid(confirmPass))) {
-            try {
-                encodePass = StringEncryption.SHA1(pass);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            DialogUtil.showOkBtnDialog(getActivity(), getString(R.string.missing_input_title), getString(R.string.missing_input_message)).setCancelable(true);
-            return;
+        try {
+            encodePass = SHA1(pass);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+        if ((confirmPass.equals(pass)) && (StringUtil.checkStringValid(userId)
+                && StringUtil.checkStringValid(email) && StringUtil.checkStringValid(pass)
+                && StringUtil.checkStringValid(confirmPass))) {
+            if (imageAvatar == null) {
+                try {
+                    creatFilefromDrawable(R.drawable.placeholer_avatar);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-        if (imageAvatar == null) {
-            try {
-                creatFilefromDrawable(R.drawable.placeholer_avatar);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-
-        }
-        registerRequest = new RegisterRequest(userId, pass, email, imageAvatar,getActivity());
-        registerRequest.execute();
-        showCoverNetworkLoading();
+            registerRequest = new RegisterRequest(userId, encodePass, email, imageAvatar, getActivity());
+            registerRequest.execute();
+            showCoverNetworkLoading();
+        } else DialogUtil.createCloseBtnDialog(getActivity(),"Error","Hay dien du va dong thong tin yeu cau");
 
     }
-
-
-
 
     @OnClick(R.id.ivAvatar)
     //Goi intent chup anh
@@ -165,46 +162,6 @@ public class FragmentRegister extends NoHeaderFragment {
         getCamera.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
         startActivityForResult(getCamera, ApiConstance.REQUEST_CODE_TAKEPHOTO);
     }
-
-    //Tao fileUri
-    public File creatFileUri(Context context) {
-        File[] externalFile = ContextCompat.getExternalFilesDirs(context, null);
-        if (externalFile == null) {
-            externalFile = new File[]{context.getExternalFilesDir(null)};
-        }
-        final File root = new File(externalFile[0] + File.separator + "InstagramFaker" + File.separator);
-        root.mkdir();
-        final String fname = REGISTER_PHOTO;
-        final File sdImageMainDirectory = new File(root, fname);
-        if (sdImageMainDirectory.exists()) {
-            sdImageMainDirectory.delete();
-        }
-        return sdImageMainDirectory;
-    }
-
-    private File creatFilefromDrawable(int drawableID) throws IOException {
-        Drawable drawable = getResources().getDrawable(drawableID);
-        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
-        imageDir.mkdir();
-        imageAvatar = new File(imageDir, "avatarDefault.jpg");
-        DebugLog.i("Duong dan" + imageDir);
-        OutputStream fOut = new FileOutputStream(imageAvatar);
-        Bitmap getBitmap = ((BitmapDrawable) drawable).getBitmap();
-        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-        fOut.flush();
-        fOut.close();
-//        MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), imageAvatar.getAbsolutePath(), imageAvatar.getName(), imageAvatar.getName());
-        return imageAvatar;
-    }
-
-    private boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -221,8 +178,9 @@ public class FragmentRegister extends NoHeaderFragment {
                 try {
                     //lay bitmap tu uri result
                     Bitmap bitmap = BitmapUtil.decodeFromFile(resultUri.getPath(), 800, 800);
-                    creatFilefromBitmap(bitmap);
+                    imageAvatar = FileForUploadUtils.creatFilefromBitmap(bitmap);
                     ivAvatar.setImageBitmap(bitmap);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -230,9 +188,44 @@ public class FragmentRegister extends NoHeaderFragment {
                 Exception error = result.getError();
             }
         }
-
-
     }
+
+
+    //Ma hoa
+    private static String convertToHex(byte[] data) {
+        StringBuilder buf = new StringBuilder();
+        for (byte b : data) {
+            int halfbyte = (b >>> 4) & 0x0F;
+            int two_halfs = 0;
+            do {
+                buf.append((0 <= halfbyte) && (halfbyte <= 9) ? (char) ('0' + halfbyte) : (char) ('a' + (halfbyte - 10)));
+                halfbyte = b & 0x0F;
+            } while (two_halfs++ < 1);
+        }
+        return buf.toString();
+    }
+
+    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        md.update(text.getBytes("iso-8859-1"), 0, text.length());
+        byte[] sha1hash = md.digest();
+        return convertToHex(sha1hash);
+    }
+
+    private File creatFilefromDrawable(int drawableID) throws IOException {
+        Drawable drawable = getResources().getDrawable(drawableID);
+        File imageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/InstagramFaker");
+        imageDir.mkdir();
+        imageAvatar = new File(imageDir, "avatarDefault.jpg");
+        DebugLog.i("Duong dan" + imageDir);
+        OutputStream fOut = new FileOutputStream(imageAvatar);
+        Bitmap getBitmap = ((BitmapDrawable) drawable).getBitmap();
+        getBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+        fOut.flush();
+        fOut.close();
+        return imageAvatar;
+    }
+
 
 }
 

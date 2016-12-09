@@ -114,7 +114,6 @@ public class FragmentDetail extends BaseHeaderListFragment {
     @Override
     protected void getArgument(Bundle bundle) {
         selectHomeBean = bundle.getParcelable(IMAGE);
-
     }
 
     @Override
@@ -142,6 +141,11 @@ public class FragmentDetail extends BaseHeaderListFragment {
             return HeaderOption.RIGHT_DELETE;
         } else return HeaderOption.RIGHT_NO_OPTION;
 
+    }
+
+    @Override
+    protected void setLoadMore() {
+        super.setLoadMore();
     }
 
     @Override
@@ -263,6 +267,7 @@ public class FragmentDetail extends BaseHeaderListFragment {
             @Override
             public void onAvatarClicked(HomeBean homeBean) {
                 //TODO: go to profile
+                FragmentUtil.pushFragmentWithAnimation(getActivity(),FragmentProfile.newInstance(selectHomeBean.user.id),null);
 
             }
         });
