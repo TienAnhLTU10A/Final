@@ -117,7 +117,7 @@ public class FragmentLogin extends NoHeaderFragment {
             DialogUtil.showOkBtnDialog(getActivity(), getString(R.string.missing_input_title), getString(R.string.missing_input_message)).setCancelable(true);
             return;
         }
-        final LoginRequest loginRequest = new LoginRequest(user, encodePass);
+        final LoginRequest loginRequest = new LoginRequest(user, pass);
         loginRequest.setRequestCallBack(new ApiObjectCallBack<LoginResponse>() {
             @Override
             public void onSuccess(LoginResponse data) {
@@ -126,7 +126,6 @@ public class FragmentLogin extends NoHeaderFragment {
                     SharedPrefUtils.saveAccessToken(data.data.token);
                     DebugLog.i("Token la" + SharedPrefUtils.getAccessToken());
                     UserManager.saveCurrentUser(data.data);
-
                     if(SharedPrefUtils.getBoolean(ApiConstance.ISLOGINYET,false) == false){
                         FragmentUtil.pushFragmentWithAnimation(getActivity(), new FragmentTutorial(), null);
                         SharedPrefUtils.putBoolean(ApiConstance.ISLOGINYET,true);

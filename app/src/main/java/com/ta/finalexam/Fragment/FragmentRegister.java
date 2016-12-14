@@ -146,7 +146,7 @@ public class FragmentRegister extends NoHeaderFragment {
                 }
 
             }
-            registerRequest = new RegisterRequest(userId, encodePass, email, imageAvatar, getActivity());
+            registerRequest = new RegisterRequest(userId, pass, email, imageAvatar, getActivity());
             registerRequest.execute();
             showCoverNetworkLoading();
         } else DialogUtil.createCloseBtnDialog(getActivity(),"Error","Hay dien du va dong thong tin yeu cau");

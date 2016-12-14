@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.ta.finalexam.Bean.ProfileBean;
 import com.ta.finalexam.R;
+import com.ta.finalexam.Ulities.manager.UserManager;
 import com.ta.finalexam.callback.OnUserEdit;
 
 import butterknife.BindView;
@@ -61,6 +62,11 @@ public class UserProfileHeaderViewHolder extends OnClickViewHolder {
         StringUtil.displayText(String.valueOf(profileBean.follow), tvFollowSum);
         StringUtil.displayText(String.valueOf(profileBean.follower), tvFollowerSum);
         StringUtil.displayText(String.valueOf(profileBean.post), tvPostSum);
+        if (profileBean.id.equals(UserManager.getCurrentUser().id)) {
+            circleEditUser.setVisibility(View.VISIBLE);
+        } else {
+            circleEditUser.setVisibility(View.GONE);
+        }
 
     }
 

@@ -243,11 +243,8 @@ public class FragmentImageUpload extends HeaderFragment implements GoogleApiClie
             if (addresses != null) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("");
+                location = addresses.get(0).getAddressLine(0);
 
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("");
-                }
-                location = strReturnedAddress.toString();
             }
         } catch (Exception e) {
             e.printStackTrace();
