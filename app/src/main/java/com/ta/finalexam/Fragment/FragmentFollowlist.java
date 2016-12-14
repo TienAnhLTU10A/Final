@@ -3,17 +3,17 @@ package com.ta.finalexam.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.Toast;
+
 
 import com.ta.finalexam.Adapter.FollowListAdapter;
 import com.ta.finalexam.Bean.FollowlistBean.User;
-import com.ta.finalexam.Bean.MemberBean;
+
 import com.ta.finalexam.Constant.HeaderOption;
 import com.ta.finalexam.R;
 import com.ta.finalexam.api.FollowlistResponse;
 import com.ta.finalexam.api.Request.FollowlistRequest;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import vn.app.base.api.volley.callback.ApiObjectCallBack;

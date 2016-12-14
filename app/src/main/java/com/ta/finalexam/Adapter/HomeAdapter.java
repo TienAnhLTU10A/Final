@@ -43,4 +43,5 @@ public class HomeAdapter extends AdapterWithItemClick<HomeViewHolder> {
     public int getItemCount() {
         return homeBeanList.size();
     }
+
 }

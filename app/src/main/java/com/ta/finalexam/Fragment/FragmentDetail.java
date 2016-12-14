@@ -7,11 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.google.android.gms.maps.model.LatLng;
-import com.ta.finalexam.Activity.MainActivity;
 import com.ta.finalexam.Adapter.ImageDetailListAdapter;
 import com.ta.finalexam.Bean.DetailBean.CommentListData;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;

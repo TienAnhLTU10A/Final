@@ -59,14 +59,14 @@ import vn.app.base.util.ImagePickerUtil;
 public class FragmentProfile extends BaseHeaderListFragment implements OnUserEdit {
     public static final String USER_ID = "USER_ID";
 
-    @BindView(R.id.recycerList)
-    RecyclerView rvList;
+//    @BindView(R.id.recycerList)
+//    RecyclerView rvList;
 
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipe_refresh_layout;
+//    @BindView(R.id.swipe_refresh_layout)
+//    SwipeRefreshLayout swipe_refresh_layout;
 
-    @BindView(R.id.fabCamera)
-    FloatingActionButton fabCamera;
+    //@BindView(R.id.fabCamera)
+    //FloatingActionButton fabCamera;
 
     private ProfileBean profileBean;
     private List<ImageListBean> imageListBean;
@@ -202,12 +202,12 @@ public class FragmentProfile extends BaseHeaderListFragment implements OnUserEdi
         mAdapter.setHeader(profileBean);
         mAdapter.setItems(imageListBean);
         rvList.setAdapter(mAdapter);
-        rvList.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+       /* rvList.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore(int currentPage) {
 
             }
-        });
+        });*/
         mAdapter.setOnUserEdit(this);
     }
 
@@ -266,8 +266,8 @@ public class FragmentProfile extends BaseHeaderListFragment implements OnUserEdi
 
     }
 
-    @OnClick(R.id.fabCamera)
-    public void goToUpload() {
-        FragmentUtil.pushFragment(getActivity(), FragmentImageUpload.newInstance(), null);
-    }
+//    @OnClick(R.id.fabCamera)
+//    public void goToUpload() {
+//        FragmentUtil.pushFragment(getActivity(), FragmentImageUpload.newInstance(), null);
+//    }
 }

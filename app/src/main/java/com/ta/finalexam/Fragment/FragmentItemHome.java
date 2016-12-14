@@ -14,8 +14,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.ta.finalexam.Adapter.HomeAdapter;
 import com.ta.finalexam.Bean.HomeBean.HomeBean;
 import com.ta.finalexam.Constant.ApiConstance;
+import com.ta.finalexam.Constant.HomeType;
 import com.ta.finalexam.R;
 import com.ta.finalexam.Ulities.animation.EndlessRecyclerOnScrollListener;
+import com.ta.finalexam.Ulities.manager.UserManager;
 import com.ta.finalexam.api.HomeResponse;
 import com.ta.finalexam.api.Request.FavouritesRequest;
 import com.ta.finalexam.api.Request.FollowRequest;
@@ -70,7 +72,6 @@ public class FragmentItemHome extends BaseHeaderListFragment {
         super.initView(root);
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvList.setItemAnimator(new DefaultItemAnimator());
-
     }
 
     @Override
@@ -136,6 +137,7 @@ public class FragmentItemHome extends BaseHeaderListFragment {
                         initialResponseHandled();
                         if (data.data.size() != 0) {
                             int count = data.data.size();
+                            Log.e("addOnScrollListener", "" + count);
                             for (int i = 0; i < count; i++) {
                                 homeBeanList.add(data.data.get(i));
                             }
@@ -223,9 +225,9 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             homeBean = homeBeanList.get(i);
             if (homeBean != null && homeBean.user.id.equals(userId)) {
                 if (status == ApiConstance.FOLLOW) {
-                    homeBeanList.get(i).user.isFollowing = true;
+                    homeBean.user.isFollowing = true;
                 } else {
-                    homeBeanList.get(i).user.isFollowing = false;
+                    homeBean.user.isFollowing = false;
                 }
             }
         }
@@ -237,10 +239,8 @@ public class FragmentItemHome extends BaseHeaderListFragment {
             homeBean = homeBeanList.get(i);
             if (homeBean != null && homeBean.image.id.equals(imageId)) {
                 if (status == ApiConstance.UN_FAVOURITE) {
-//                    homeBeanList.get(i).image.isFavourite = false;
                     homeBean.image.isFavourite = false;
                 } else {
-//                    homeBeanList.get(i).image.isFavourite = true;
                     homeBean.image.isFavourite = true;
                 }
 

@@ -12,6 +12,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.util.TextUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,9 +43,11 @@ public class MultiPartRequest<T> extends GsonRequest<T> {
         entity.setBoundary(BOUNDARY);
         //送信するリクエストを設定する
         //StringData
-        if (mStringParts != null) {
+        if (mStringParts != null ) {
             for (Map.Entry<String, String> entry : mStringParts.entrySet()) {
-                entity.addPart(entry.getKey(), new StringBody(entry.getValue(), ContentType.create("text/plain", Consts.UTF_8)));
+                if(!TextUtils.isEmpty(entry.getValue())) {
+                    entity.addPart(entry.getKey(), new StringBody(entry.getValue(), ContentType.create("text/plain", Consts.UTF_8)));
+                }
             }
         }
         //File Data
